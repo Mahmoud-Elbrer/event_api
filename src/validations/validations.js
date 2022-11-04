@@ -45,7 +45,7 @@ exports.validateAddEvent = function (event) {
   const schema = Joi.object({
     name: Joi.string().required(),
     nameEn: Joi.string().required(),
-    img: Joi.string(),
+    // img: Joi.image().required(),
   });
   return schema.validate(event);
 };

@@ -4,7 +4,7 @@ const router = express.Router();
 
 var multer = require("multer");
 var upload = multer({
-  dest: "uploads/",
+  dest: "public/images/event/",
 });
 
 //Controllers
