@@ -10,7 +10,7 @@ var upload = multer({
 });
 
 //Routes
-router.post("/", upload.single("img"), Event.addEvent);
+router.post("/", upload.single("picture"), Event.addEvent);
 router.get("/", Event.getEvent);
 router.delete("/:Id", Event.deleteEvent);
 

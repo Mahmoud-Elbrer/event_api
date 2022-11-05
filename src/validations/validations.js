@@ -36,7 +36,7 @@ exports.validateAddService = function (book) {
     event: Joi.string().required(),
     name: Joi.string().required(),
     nameEn: Joi.string().required(),
-    img: Joi.string(),
+    // img: Joi.string(),
   });
   return schema.validate(book);
 };
