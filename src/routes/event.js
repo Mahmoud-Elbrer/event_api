@@ -6,7 +6,7 @@ const Event = require("../controller/event");
 
 var multer = require("multer");
 var upload = multer({
-  dest: "public/images/event",
+  dest: "public/images/event/",
 });
 
 //Routes

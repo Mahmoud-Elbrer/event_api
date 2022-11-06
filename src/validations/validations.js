@@ -13,12 +13,13 @@ exports.validateSignUp = function (user) {
 
 exports.validateSignUpCompany = function (company) {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(50).required(),
-    email: Joi.string().min(6).max(255).required().email(),
-    img: Joi.string().required(),
+    name: Joi.string().required(),
+    email: Joi.string().min(1).max(255).required().email(),
+    //phone: Joi.string(),
+    // img: Joi.string().required(),
     password: Joi.string().min(3).max(255).required(),
-    active : Joi.boolean(),
-    isAdmin : Joi.boolean(),
+    // active : Joi.boolean(),
+    // isAdmin : Joi.boolean(),
   });
   return schema.validate(company);
 };
@@ -140,7 +141,7 @@ exports.validateAddAssets  = function (emirate) {
   const schema = Joi.object({
     name: Joi.string().required(),
     nameEn: Joi.string().required(),
-    img: Joi.string().required(),
+    // img: Joi.string().required(),
   });
   return schema.validate(emirate);
 };

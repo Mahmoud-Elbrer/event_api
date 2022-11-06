@@ -3,7 +3,11 @@ const _ = require("lodash");
 const https = require("https");
 const { Company } = require("../models/compnay");
 const Otp = require("../models/otp");
-const { validateSignIn,validateSignUpCompany,} = require("../validations/validations");
+const {
+  validateSignIn,
+  validateSignUpCompany,
+} = require("../validations/validations");
+var fs = require("fs");
 
 exports.signIn = async (req, res, next) => {
   const { error } = validateSignIn(req.body);
@@ -37,8 +41,11 @@ exports.signIn = async (req, res, next) => {
 };
 
 exports.signUp = async (req, res, next) => {
+  console.log('i am');
+  console.log(req.body);
   const { error } = validateSignUpCompany(req.body);
   if (error) return res.status(400).send(error.details[0].message);
+
 
   let company = await Company.findOne({ email: req.body.email });
   if (company)
@@ -47,9 +54,29 @@ exports.signUp = async (req, res, next) => {
       message: "البريد مسجل مسبقا | company already exists",
     });
 
-  company = Company(
-    _.pick(req.body, ["name", "email", "password", "phone", "img", "active"  ,"isAdmin"])
+  var src = fs.createReadStream(req.file.path);
+  var dest = fs.createWriteStream(
+    "public/images/company/" + req.file.originalname
   );
+  src.pipe(dest);
+  src.on("end", function () {
+    fs.unlinkSync(req.file.path);
+    //res.json("OK: received " + req.file.originalname);
+  });
+  src.on("error", function (err) {
+    res.json("Something went wrong!");
+  });
+
+  // company = Company(
+  //   _.pick(req.body, ["name", "email", "password", "phone", "img", "active"  ,"isAdmin"])
+  // );
+  company = new Company({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    phone: req.body.phone,
+    img: req.file.originalname,
+  });
 
   const salt = await bcrypt.genSalt(10); //  10 it default value
   company.password = await bcrypt.hash(company.password, salt);
@@ -63,53 +90,35 @@ exports.signUp = async (req, res, next) => {
     .send(_.pick(company, ["_id", "name", "email", "phone", "active"]));
 };
 
-exports.sendOtp = async (req, res, next) => {
-  var mathRandom = Math.floor(Math.random() * (99999 - 10000) + 10000);
-  const passwordCompany = "806807";
-  const userCompany = "sadad";
-  const message = " كود التحقق " + mathRandom + " تطبيق عقاري  ";
-  const phoneNumber = req.body.phoneNumber;
-  const requestHttps = https.request(
-    "https://sms.nilogy.com/app/gateway/gateway.php?sendmessage=1&username=محمود عبدالله&numbers=" +
-      req.body.phoneNumber +
-      "&sender=Eyatac",
-    (method = "GET"),
-    (responseHttps) => {
-      responseHttps.on("data", (d) => {
-        if (responseHttps.statusMessage === "OK") {
-          let now = new Date();
-          const newOtp = {
-            phoneNumber: phoneNumber,
-            otpCode: mathRandom,
-            otpTimesTamp: now,
-            otpTries: result[0].otpTries + 1,
-          };
-          let company = Company.findOne({ email: req.body.email });
-          let result;
-          if (company) {
-            result = Otp.updateOne(
-              { phoneNumber: req.body.phoneNumber },
-              { $set: newOtp }
-            );
-          } else {
-            result = Otp.save();
-          }
-          res.status(200).json({
-            success: true,
-            result: result,
-          });
-        }
-      });
-    }
-  );
-  requestHttps.on("error", (error) => {
-    res.status(400).json({
-      success: false,
-      error: error,
-    });
-  });
-  requestHttps.end();
+exports.getCompany = async (req, res, next) => {
+  let company = await Company.find();
+  // if (!user) return res.status(400).send("Invalid email or password");
+
+  res.status(200).json(company);
 };
+
+exports.deleteCompany = async (req, res, next) => {
+  const companyResult = await Company.findOne({ _id: req.params.Id });
+
+  const DIR = "public/images/company/" + companyResult.img;
+
+  if (!DIR) {
+    await Company.deleteOne({ _id: req.params.Id });
+  } else {
+    try {
+      fs.unlinkSync(DIR);
+      await Company.deleteOne({ _id: req.params.Id });
+    } catch (error) {
+      await Company.deleteOne({ _id: req.params.Id });
+    }
+  }
+
+  res.status(200).json({
+    success: true,
+  });
+};
+
+
 
 exports.blockCompany = async (req, res, next) => {
   let company = await Company.findOne({ email: req.body.email });

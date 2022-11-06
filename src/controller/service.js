@@ -26,7 +26,7 @@ exports.addService = async (req, res, next) => {
 
   var src = fs.createReadStream(req.file.path);
   var dest = fs.createWriteStream(
-    "public/images/service/one" + req.file.originalname
+    "public/images/service/" + req.file.originalname
   );
   src.pipe(dest);
   src.on("end", function () {
@@ -53,7 +53,20 @@ exports.addService = async (req, res, next) => {
 };
 
 exports.deleteService = async (req, res, next) => {
-  const result = await Service.deleteOne({ _id: req.params.Id });
+  const serviceResult = await Service.findOne({ _id: req.params.Id });
+
+  const DIR = "public/images/service/" + serviceResult.img;
+
+  if (!DIR) {
+    await Service.deleteOne({ _id: req.params.Id });
+  } else {
+    try {
+      fs.unlinkSync(DIR);
+      await Service.deleteOne({ _id: req.params.Id });
+    } catch (error) {
+      await Service.deleteOne({ _id: req.params.Id });
+    }
+  }
 
   res.status(200).json({
     success: true,

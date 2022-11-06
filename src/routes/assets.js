@@ -6,11 +6,11 @@ const Assets = require("../controller/assets");
 
 var multer = require("multer");
 var upload = multer({
-  dest: "public/images/assets",
+  dest: "public/images/assets/",
 });
 
 //Routes
-router.post("/", upload.single("img"), Assets.addAssets);
+router.post("/", upload.single("picture"), Assets.addAssets);
 router.get("/", Assets.getAssets);
 router.delete("/:Id", Assets.deleteAssets);
 

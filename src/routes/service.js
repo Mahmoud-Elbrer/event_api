@@ -6,7 +6,7 @@ const Service = require("../controller/service");
 
 var multer = require("multer");
 var upload = multer({
-  dest: "public/images/service/one",
+  dest: "public/images/service/",
 });
 
 //Routes

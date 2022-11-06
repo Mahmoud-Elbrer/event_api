@@ -18,7 +18,7 @@ const companySchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    require: true,
+    // require: true,
   },
   password: {
     type: String,
@@ -28,10 +28,10 @@ const companySchema = new mongoose.Schema({
   },
   img: {
     type: String,
-    require: true,
+    // require: true,
   },
-  active: Boolean,
-  isAdmin: Boolean,
+  // active: Boolean,
+  // isAdmin: Boolean,
 });
 
 // information export principle : oop
