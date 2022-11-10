@@ -41,17 +41,20 @@ const productSchema = new mongoose.Schema({
   cost: {
     type: String,
   },
-  images: [
-    {
-      imageUrl: {
-        type: String,
-        require: true,
-      },
-    },
-  ],
+  images: {
+    type: String,
+  },  
+  // images: [
+  //   {
+  //     imageUrl: {
+  //       type: String,
+  //      // require: true,
+  //     },
+  //   },
+  // ],
   available: {
     type: Boolean,
-    require: true,
+    //require: true,
   },
   additionalNotes: {
     type: String,

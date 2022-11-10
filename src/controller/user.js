@@ -59,9 +59,16 @@ exports.signUp = async (req, res, next) => {
 
   const token = user.generateAuthToken();
 
-  res
-    .header("x-auth-token", token)
-    .send(_.pick(user, ["_id", "name", "email" ,"phone"]));
+
+  res.status(200).json({
+    success: true,
+    token: token,
+    user: user,
+  });
+
+  // res
+  //   .header("x-auth-token", token)
+  //   .send(_.pick(user, ["_id", "name", "email" ,"phone"]));
 };
 
 exports.sendOtp = async (req, res, next) => {

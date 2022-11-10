@@ -37,15 +37,15 @@ exports.signIn = async (req, res, next) => {
   res.status(200).json({
     success: true,
     token: token,
+    company: company,
   });
 };
 
 exports.signUp = async (req, res, next) => {
-  console.log('i am');
+  console.log("i am");
   console.log(req.body);
   const { error } = validateSignUpCompany(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-
 
   let company = await Company.findOne({ email: req.body.email });
   if (company)
@@ -117,8 +117,6 @@ exports.deleteCompany = async (req, res, next) => {
     success: true,
   });
 };
-
-
 
 exports.blockCompany = async (req, res, next) => {
   let company = await Company.findOne({ email: req.body.email });

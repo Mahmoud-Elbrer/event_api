@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const { Product } = require("../models/product");
 const { validateAddProduct } = require("../validations/validations");
+var fs = require("fs");
 
 exports.getProduct = async (req, res, next) => {
   const page = req.params.page;
@@ -30,6 +31,20 @@ exports.getProductByEmirateId = async (req, res, next) => {
   res.status(200).json(product);
 };
 
+
+exports.getProductByServiceId = async (req, res, next) => {
+  const page = req.params.page;
+  const limit = req.params.limit;
+  const serviceId = req.params.serviceId;
+  let product = await Product.find({ service: serviceId })
+    .populate("company", "-password")
+    .populate("emirate", "-_id")
+    .limit(limit * 1)
+    .skip((page - 1) * limit);
+
+  res.status(200).json(product);
+};
+
 exports.getProductByTourismProgram = async (req, res, next) => {
   const page = req.params.page;
   const limit = req.params.limit;
@@ -50,32 +65,70 @@ exports.getProductById = async (req, res, next) => {
 };
 
 exports.addProduct = async (req, res, next) => {
+  console.log("req.body");
+  console.log(req.body);
+
   const { error } = validateAddProduct(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let product = Product(
-    _.pick(req.body, [
-      "emirate",
-      "company",
-      "event",
-      "service",
-      "productType",
-      "productTitle",
-      "productTitleEn",
-      "productDescription", //
-      "productDescriptionEn",
-      "cost",
-      "images",
-      "available",
-      "additionalNotes",
-      "additionalNotesEn",
-      "assets",
-      "location",
-      "locationEn",
-      "longitude",
-      "Latitude",
-    ])
+  var src = fs.createReadStream(req.file.path);
+  var dest = fs.createWriteStream(
+    "public/images/product/" + req.file.originalname
   );
+  src.pipe(dest);
+  src.on("end", function () {
+    fs.unlinkSync(req.file.path);
+    //res.json("OK: received " + req.file.originalname);
+  });
+  src.on("error", function (err) {
+    res.json("Something went wrong!");
+  });
+
+  // let product = Product(
+  //   _.pick(req.body, [
+  //     "emirate",
+  //     "company",
+  //     "event",
+  //     "service",
+  //     "productType",
+  //     "productTitle",
+  //     "productTitleEn",
+  //     "productDescription", //
+  //     "productDescriptionEn",
+  //     "cost",
+  //     "images",
+  //     "available",
+  //     "additionalNotes",
+  //     "additionalNotesEn",
+  //     "assets",
+  //     "location",
+  //     "locationEn",
+  //     "longitude",
+  //     "Latitude",
+  //   ])
+  // );
+
+  const product = new Product({
+    emirate: req.body.emirate,
+    company: req.body.company,
+    event: req.body.event,
+    service: req.body.service,
+    productType: req.body.productType,
+    productTitle: req.body.productTitle,
+    productTitleEn: req.body.productTitleEn,
+    productDescription: req.body.productDescription,
+    productDescriptionEn: req.body.productDescriptionEn,
+    cost: req.body.cost,
+    available: req.body.available,
+    additionalNotes: req.body.additionalNotes,
+    additionalNotesEn: req.body.additionalNotesEn,
+    assets: req.body.assets,
+    location: req.body.location,
+    locationEn: req.body.locationEn,
+    longitude: req.body.longitude,
+    Latitude: req.body.Latitude,
+    images: req.file.originalname,
+  });
 
   await product.save();
 
@@ -113,12 +166,11 @@ exports.setVisitedProduct = async (req, res, next) => {
 };
 
 exports.searchProduct = async (req, res, next) => {
-
-console.log("searchName::" );
-console.log(req.params.searchName );
+  console.log("searchName::");
+  console.log(req.params.searchName);
 
   let product = await Product.find({
-    "$or":[
+    $or: [
       { productTitle: { $regex: req.params.searchName } },
       { productTitleEn: { $regex: req.params.searchName } },
       { productDescription: { $regex: req.params.searchName } },
@@ -129,9 +181,8 @@ console.log(req.params.searchName );
 };
 
 exports.filterSearchProduct = async (req, res, next) => {
-
- const filters = req.query;
-  const filteredUsers = Product.filter(user => {
+  const filters = req.query;
+  const filteredUsers = Product.filter((user) => {
     let isValid = true;
     for (key in filters) {
       console.log(key, user[key], filters[key]);
@@ -140,12 +191,5 @@ exports.filterSearchProduct = async (req, res, next) => {
     return isValid;
   });
 
-
-
-
-
-
-    res.status(200).json(product);
-  };
-
-
+  res.status(200).json(product);
+};
