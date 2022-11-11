@@ -38,9 +38,9 @@ exports.getProductByServiceId = async (req, res, next) => {
   const serviceId = req.params.serviceId;
   let product = await Product.find({ service: serviceId })
     .populate("company", "-password")
-    .populate("emirate", "-_id")
-    .limit(limit * 1)
-    .skip((page - 1) * limit);
+    .populate("emirate", "-_id") ;
+    // .limit(limit * 1)
+    // .skip((page - 1) * limit);
 
   res.status(200).json(product);
 };
