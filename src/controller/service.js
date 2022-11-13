@@ -41,6 +41,7 @@ exports.addService = async (req, res, next) => {
     name: req.body.name,
     nameEn: req.body.nameEn,
     event: req.body.event,
+    productType: req.body.productType,
     img: req.file.originalname,
   });
 

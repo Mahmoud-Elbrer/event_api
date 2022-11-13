@@ -18,8 +18,13 @@ exports.getFavorite = async (req, res, next) => {
 };
 
 exports.addFavorite = async (req, res, next) => {
-  const { error } = validateAddFavorite(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+
+  let fav = await Favorite.findOne({ user: req.user._id  ,  product : req.params.Id });
+  if (fav)
+    return res.status(400).json({
+      success: false,
+      message: "تم الاضافة مسبقا | Already Added",
+    });
 
   const favorite = new Favorite({
     user: req.user._id,
@@ -35,7 +40,10 @@ exports.addFavorite = async (req, res, next) => {
 };
 
 exports.deleteFavorite = async (req, res, next) => {
+  console.log(req.params.Id );
   const result = await Favorite.deleteOne({ _id: req.params.Id });
+
+  console.log(result);
 
   res.status(200).json({
     success: true,

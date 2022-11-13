@@ -31,16 +31,46 @@ exports.getProductByEmirateId = async (req, res, next) => {
   res.status(200).json(product);
 };
 
-
 exports.getProductByServiceId = async (req, res, next) => {
   const page = req.params.page;
   const limit = req.params.limit;
   const serviceId = req.params.serviceId;
+
   let product = await Product.find({ service: serviceId })
     .populate("company", "-password")
-    .populate("emirate", "-_id") ;
+    .populate("emirate", "-_id");
+  // .limit(limit * 1)
+  // .skip((page - 1) * limit);
+
+  res.status(200).json(product);
+};
+
+exports.getProductByServiceIdAndProductType = async (req, res, next) => {
+  const page = req.params.page;
+  const limit = req.params.limit;
+  const serviceId = req.params.serviceId;
+  const productType = req.params.productType;
+
+  console.log(productType);
+
+  let product;
+  if (productType == "1") {
+    product = await Product.find({ service: serviceId })
+      .populate("company", "-password")
+      .populate("event")
+      .populate("service")
+      .populate("emirate", "-_id");
     // .limit(limit * 1)
     // .skip((page - 1) * limit);
+
+    // console.log(product);
+  } else if (productType == "2") {
+  } else if (productType == "3") {
+  } else {
+    res.status(600).json({
+      message: "Update App",
+    });
+  }
 
   res.status(200).json(product);
 };
@@ -113,7 +143,6 @@ exports.addProduct = async (req, res, next) => {
     company: req.body.company,
     event: req.body.event,
     service: req.body.service,
-    productType: req.body.productType,
     productTitle: req.body.productTitle,
     productTitleEn: req.body.productTitleEn,
     productDescription: req.body.productDescription,

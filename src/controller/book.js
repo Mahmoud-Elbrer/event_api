@@ -9,26 +9,30 @@ exports.getBook = async (req, res, next) => {
 };
 
 exports.addBook = async (req, res, next) => {
+
+
+console.log(req.body);
+
   const { error } = validateAddBook(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  // todo : should add time
-  // let date = new Date();
+  const createdAt = new Date();
 
-  let book = await Book(
-    _.pick(req.body, [
-      "user",
-      "product",
-      "event",
-      "service",
-      "assets",
-      "createdAt",
-      "notes",
-      "status",
-    ])
-  );
+  const book = new Book({
+    user: req.user._id,
+    product: req.body.product,
+    event: req.body.event,
+    service: req.body.service,
+    date: req.body.day,
+    hour: req.body.hour,
+    cost: req.body.cost,
+    createdAt: createdAt,
+    notes: req.body.notes,
+    longitude: req.body.longitude,
+    Latitude: req.body.Latitude,
+  });
 
-  const result = await book.save();
+  await book.save();
 
   // todo : should send notification to user oder
 

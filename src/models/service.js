@@ -14,6 +14,10 @@ const serviceSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  productType: {
+    type: String,
+    require: true,
+  },
   img: {
     type: String,
   },  

@@ -36,6 +36,7 @@ exports.validateAddService = function (book) {
   const schema = Joi.object({
     event: Joi.string().required(),
     name: Joi.string().required(),
+    productType: Joi.string().required(),
     nameEn: Joi.string().required(),
     // img: Joi.string(),
   });
@@ -99,14 +100,19 @@ exports.validateAddFavorite  = function (favorite) {
 
 exports.validateAddBook  = function (book) {
   const schema = Joi.object({
-    user: Joi.string().required(),
+    //user: Joi.string().required(),
     product: Joi.string().required(),
     event: Joi.string().required(),
     service: Joi.string().required(),
-    assets: Joi.array().required(),
-    createdAt: Joi.string().required(),
-    notes: Joi.string().required(),
-    status: Joi.number().required(),
+    //assets: Joi.array().required(),
+    date: Joi.string().required(),
+    hour: Joi.string().required(),
+    cost: Joi.string().required(),
+    // createdAt: Joi.string().required(),
+    notes: Joi.string(),
+    longitude: Joi.string().required(),
+    Latitude: Joi.string().required(),
+   // status: Joi.number().required(),
   });
   return schema.validate(book);
 };
