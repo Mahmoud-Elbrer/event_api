@@ -6,6 +6,7 @@ const Otp = require("../models/otp");
 const {
   validateSignIn,
   validateSignUp,
+  validateUpdateUser,
 } = require("../validations/validations");
 
 exports.signIn = async (req, res, next) => {
@@ -49,8 +50,9 @@ exports.signUp = async (req, res, next) => {
       message: "خطأ في البريد الالكتروني او كلمة المرور | user already exists",
     });
 
-
-  user = User(_.pick(req.body, ["name", "email", "phone", "password", "active"]));
+  user = User(
+    _.pick(req.body, ["name", "email", "phone", "password", "active"])
+  );
 
   const salt = await bcrypt.genSalt(10); //  10 it default value
   user.password = await bcrypt.hash(user.password, salt);
@@ -58,7 +60,6 @@ exports.signUp = async (req, res, next) => {
   await user.save();
 
   const token = user.generateAuthToken();
-
 
   res.status(200).json({
     success: true,
@@ -69,6 +70,70 @@ exports.signUp = async (req, res, next) => {
   // res
   //   .header("x-auth-token", token)
   //   .send(_.pick(user, ["_id", "name", "email" ,"phone"]));
+};
+
+exports.updateUserData = async (req, res, next) => {
+  const { error } = validateUpdateUser(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let user = await User.findOne({ email: req.body.email });
+  if (!user)
+    return res.status(400).json({
+      success: false,
+      message: "الحساب غير موجود | user not exists",
+    });
+
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword)
+    return res.status(400).json({
+      success: false,
+      message: "كلمة المرور القديمة غير مطابقة | The old password does not match",
+    });
+
+  //  userUpdated = User(
+  //   _.pick(req.body, ["name", "email", "phone", "password", "active"])
+  // );
+
+
+
+
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(req.body.newPassword, salt);
+
+
+  const newUser = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    password: user.password,
+  };
+
+  User.updateOne({ _id: user._id  }, { $set: newUser })
+  .then((result) => {
+    console.log("Re result");
+    console.log(result);
+    if (result) {
+      res.status(200).json({
+        message: "تم التحديث بنجاح | Update completed successfully",
+        success: true,
+      });
+    } else {
+      res.status(200).json({
+        message: "الحساب غير موجود | user not exists",
+        success: false,
+      });
+    }
+  })
+  .catch((err) => {
+    console.log("err");
+    console.log(err);
+    res.status(404).json({
+      message: "Error Connection  " + err,
+      success: false,
+    });
+  });
+
 };
 
 exports.sendOtp = async (req, res, next) => {

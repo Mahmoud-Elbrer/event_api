@@ -9,5 +9,6 @@ router.post("/signIn", User.signIn);
 router.post("/signUp", User.signUp);
 router.post("/sendOtp", User.sendOtp);
 router.get("/blockUser", User.blockUser);
+router.post("/updateUser", User.updateUserData);
 
 module.exports = router;

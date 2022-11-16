@@ -1,5 +1,6 @@
 const _ = require("lodash");
 const { Product } = require("../models/product");
+const { ProductDates } = require("../models/product_dates");
 const { validateAddProduct } = require("../validations/validations");
 var fs = require("fs");
 
@@ -65,6 +66,11 @@ exports.getProductByServiceIdAndProductType = async (req, res, next) => {
 
     // console.log(product);
   } else if (productType == "2") {
+    product = await ProductDates.find({ service: serviceId })
+    .populate("company", "-password")
+    .populate("event")
+    .populate("service")
+    .populate("emirate", "-_id");
   } else if (productType == "3") {
   } else {
     res.status(600).json({
@@ -221,4 +227,63 @@ exports.filterSearchProduct = async (req, res, next) => {
   });
 
   res.status(200).json(product);
+};
+
+
+
+
+
+
+
+
+
+exports.addProductWithDates = async (req, res, next) => {
+  console.log("productDates:::::");
+  console.log("req.body");
+  console.log(req.body);
+
+ // const { error } = validateAddProduct(req.body);
+ // if (error) return res.status(400).send(error.details[0].message);
+
+  // var src = fs.createReadStream(req.file.path);
+  // var dest = fs.createWriteStream(
+  //   "public/images/product/" + req.file.originalname
+  // );
+  // src.pipe(dest);
+  // src.on("end", function () {
+  //   fs.unlinkSync(req.file.path);
+  //   //res.json("OK: received " + req.file.originalname);
+  // });
+  // src.on("error", function (err) {
+  //   res.json("Something went wrong!");
+  // });
+
+
+  const product = new ProductDates({
+    emirate: req.body.emirate,
+    company: req.body.company,
+    event: req.body.event,
+    service: req.body.service,
+    dates: req.body.dates,
+    productTitle: req.body.productTitle,
+    productTitleEn: req.body.productTitleEn,
+    productDescription: req.body.productDescription,
+    productDescriptionEn: req.body.productDescriptionEn,
+    cost: req.body.cost,
+    available: req.body.available,
+    additionalNotes: req.body.additionalNotes,
+    additionalNotesEn: req.body.additionalNotesEn,
+    assets: req.body.assets,
+    location: req.body.location,
+    locationEn: req.body.locationEn,
+    longitude: req.body.longitude,
+    Latitude: req.body.Latitude,
+    images: "req.file.originalname",
+  });
+
+  await product.save();
+
+  res.status(200).json({
+    success: true,
+  });
 };

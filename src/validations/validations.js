@@ -11,6 +11,18 @@ exports.validateSignUp = function (user) {
   return schema.validate(user);
 };
 
+exports.validateUpdateUser = function (user) {
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(50).required(),
+    email: Joi.string(),
+    phone: Joi.string().required(),
+    password: Joi.string().min(3).max(255).required(),
+    newPassword: Joi.string().min(3).max(255).required(),
+    active : Joi.boolean(),
+  });
+  return schema.validate(user);
+};
+
 exports.validateSignUpCompany = function (company) {
   const schema = Joi.object({
     name: Joi.string().required(),

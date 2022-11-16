@@ -12,6 +12,7 @@ var upload = multer({
 
 
 router.post("/" , upload.single("picture"), Product.addProduct);
+router.post("/productDates" , upload.single("picture"), Product.addProductWithDates);
 router.get("/:page/:limit", Product.getProduct);
 router.get("/:emirateId/:page/:limit", Product.getProductByEmirateId);
 router.get("/service/:serviceId", Product.getProductByServiceId);
