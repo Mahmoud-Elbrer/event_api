@@ -11,21 +11,25 @@ var emirateRouter = require("../routes/emirate");
 var rateRouter = require("../routes/rate");
 var paypalRouter = require("../routes/paypal");
 var uploadImageRouter = require("../routes/uploadImage");
+// type product
+var blackoutDateRouter = require("../routes/blackout_date");
 const error = require("../middleware/error");
 
 module.exports = function (app) {
-  app.use("/api/user", userRouter); 
+  app.use("/api/user", userRouter);
   app.use("/api/company", companyRouter);
-  app.use("/api/event", eventRouter); 
-  app.use("/api/service", serviceRouter); 
-  app.use("/api/assets", assetsRouter); 
-  app.use("/api/product", productRouter); 
+  app.use("/api/event", eventRouter);
+  app.use("/api/service", serviceRouter);
+  app.use("/api/assets", assetsRouter);
+  app.use("/api/product", productRouter);
   app.use("/api/favorite", favoriteRouter);
   app.use("/api/book", bookRouter);
-  app.use("/api/notification", notificationRouter); 
+  app.use("/api/notification", notificationRouter);
   app.use("/api/emirate", emirateRouter);
   app.use("/api/rate", rateRouter);
-  app.use("/api/paypal", paypalRouter); 
+  app.use("/api/paypal", paypalRouter);
   app.use("/api/uploadImage", uploadImageRouter);
+  // type product
+  app.use("/api/blackoutDate", blackoutDateRouter);
   app.use(error);
 };
