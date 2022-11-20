@@ -13,6 +13,8 @@ var paypalRouter = require("../routes/paypal");
 var uploadImageRouter = require("../routes/uploadImage");
 // type product
 var blackoutDateRouter = require("../routes/blackout_date");
+var typeSelectionProductRouter = require("../routes/type_selection_product");
+var productSelectionRouter = require("../routes/product_selection");
 const error = require("../middleware/error");
 
 module.exports = function (app) {
@@ -31,5 +33,7 @@ module.exports = function (app) {
   app.use("/api/uploadImage", uploadImageRouter);
   // type product
   app.use("/api/blackoutDate", blackoutDateRouter);
+  app.use("/api/typeSelectionProduct", typeSelectionProductRouter);
+  app.use("/api/productSelection", productSelectionRouter);
   app.use(error);
 };
