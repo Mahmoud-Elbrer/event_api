@@ -6,15 +6,23 @@ var fs = require("fs");
 const uuid = require("uuid");
 
 exports.getProductSelection = async (req, res, next) => {
-  let productSelection = await ProductSelection.find();
+  let productSelection = await ProductSelection.find().populate("product");;
   // if (!user) return res.status(400).send("Invalid email or password");
 
   res.status(200).json(productSelection);
 };
 
-exports.getProductSelectionByServiceId = async (req, res, next) => {
-  const service = req.params.Id;
-  let productSelection = await ProductSelection.find({ service: service });
+exports.getProductSelectionByProductId = async (req, res, next) => {
+  const product = req.params.Id;
+  console.log(product);
+  let productSelection = await ProductSelection.find({ product: product }).populate("product");
+
+  res.status(200).json(productSelection);
+};
+
+exports.getProductSelectionByCompany = async (req, res, next) => {
+  const company = req.params.Id;
+  let productSelection = await ProductSelection.find({ company: company });
 
   res.status(200).json(productSelection);
 };
@@ -25,7 +33,7 @@ exports.addProductSelection = async (req, res, next) => {
 
   var src = fs.createReadStream(req.file.path);
   var dest = fs.createWriteStream(
-    "public/images/selection/" + req.file.originalname
+    "public/images/product/" + req.file.originalname
   );
   src.pipe(dest);
   src.on("end", function () {
@@ -37,7 +45,8 @@ exports.addProductSelection = async (req, res, next) => {
   });
 
   const productSelection = new ProductSelection({
-    service: req.body.service,
+    product: req.body.product,
+    typeSelectionProduct: req.body.typeSelectionProduct,
     selectionTitle: req.body.selectionTitle,
     selectionTitleEn: req.body.selectionTitleEn,
     selectionDescription: req.body.selectionDescription,

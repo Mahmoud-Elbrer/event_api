@@ -54,29 +54,14 @@ exports.getProductByServiceIdAndProductType = async (req, res, next) => {
 
   console.log(productType);
 
-  let product;
-  if (productType == "1") {
-    product = await Product.find({ service: serviceId })
-      .populate("company", "-password")
-      .populate("event")
-      .populate("service")
-      .populate("emirate", "-_id");
-    // .limit(limit * 1)
-    // .skip((page - 1) * limit);
 
-    // console.log(product);
-  } else if (productType == "2") {
-    product = await ProductDates.find({ service: serviceId })
-    .populate("company", "-password")
-    .populate("event")
-    .populate("service")
-    .populate("emirate", "-_id");
-  } else if (productType == "3") {
-  } else {
-    res.status(600).json({
-      message: "Update App",
-    });
-  }
+  //db.inventory.find( { $and: [ { service: serviceId, { productType: productType } ] } )
+
+  let  product = await Product.find( { $and: [ { service: serviceId , productType: productType }] } )
+  .populate("company", "-password")
+  .populate("event")
+  .populate("service")
+  .populate("emirate", "-_id");
 
   res.status(200).json(product);
 };

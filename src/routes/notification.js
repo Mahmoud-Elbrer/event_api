@@ -8,7 +8,7 @@ const auth = require("../middleware/auth");
 //Routes
 router.get("/", [auth], Notification.getNotification);
 router.delete("/", [auth], Notification.deleteNotification);
-router.post("/firebaseToken/", [auth], Notification.addFireBaseToken);
+router.post("/firebaseToken/:token", [auth], Notification.addFireBaseToken);
 router.post("/sendNotification/", [auth], Notification.sendNotification);
 
 module.exports = router;

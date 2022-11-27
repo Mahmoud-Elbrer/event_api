@@ -104,7 +104,8 @@ exports.validateAddProduct = function (product) {
 
 exports.validateAddProductSelection = function (selection) {
   const schema = Joi.object({
-    service: Joi.string().required(),
+    product: Joi.string().required(),
+    typeSelectionProduct: Joi.string().required(),
     selectionTitle: Joi.string().required(),
     selectionTitleEn: Joi.string(),
     selectionDescription : Joi.string().required(),
@@ -163,14 +164,6 @@ exports.validateAddNotification  = function (notification) {
   return schema.validate(notification);
 };
 
-
-exports.validateAddFireBaseToken  = function (notification) {
-  const schema = Joi.object({
-    user: Joi.string().required(),
-    firebaseToken: Joi.string().required(),
-  });
-  return schema.validate(notification);
-};
 
 exports.validateAddEmirate  = function (emirate) {
   const schema = Joi.object({

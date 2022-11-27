@@ -6,7 +6,7 @@ const firebaseSchema = new mongoose.Schema({
     ref: "User",
     require: true,
   },
-  firebaseToken: {
+  token: {
     type: String,
     require: true,
   },

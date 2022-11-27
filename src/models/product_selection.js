@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 
 const productSelectionSchema = new mongoose.Schema({
-  service: {
+  product: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Service",
+    ref: "Product",
+  },
+  typeSelectionProduct: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "TypeSelectionProduct",
   },
   selectionTitle: {
     type: String,
