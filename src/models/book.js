@@ -3,6 +3,87 @@ const mongoose = require("mongoose");
 
 const bookSchema = new mongoose.Schema({
   user: {
+    type: String,
+    ref: "User",
+    //require: true,
+  },
+  totalAmount: {
+    type: String,
+    require: true,
+  },
+  
+  cart: [
+    {
+      id: {
+        type: String,
+        require: true,
+      },
+      title: {
+        type: String,
+        require: true,
+      },
+      price: {
+        type: String,
+        require: true,
+      },
+      note: {
+        type: String,
+        require: true,
+      },
+      time: {
+        type: String,
+        require: true,
+      },
+      date: {
+        type: String,
+        require: true,
+      },
+      typeProduct: {
+        type: String,
+        require: true,
+      },
+      selectionId: {
+        type: String,
+      },
+      latitude: {
+        type: String,
+        require: true,
+      },
+      longitude: {
+        type: String,
+        require: true,
+      },
+      quantity: {
+        type: String,
+        require: true,
+      },
+      numHour: {
+        type: Number,
+      },
+    },
+  ],
+});
+
+const Book = mongoose.model("Book", bookSchema);
+
+exports.Book = Book;
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+const mongoose = require("mongoose");
+
+const bookSchema = new mongoose.Schema({
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     //require: true,
@@ -61,3 +142,5 @@ const bookSchema = new mongoose.Schema({
 const Book = mongoose.model("Book", bookSchema);
 
 exports.Book = Book;
+
+*/
