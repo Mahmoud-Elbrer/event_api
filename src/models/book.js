@@ -11,6 +11,14 @@ const bookSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  orderId: {
+    type: Number,
+    require: true,
+  },
+  createdAt : {
+    type: String,
+    require: true,
+  } , 
   
   cart: [
     {
