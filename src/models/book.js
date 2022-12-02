@@ -30,6 +30,10 @@ const bookSchema = new mongoose.Schema({
         type: String,
         require: true,
       },
+      titleEn: {
+        type: String,
+        require: true,
+      },
       price: {
         type: String,
         require: true,
@@ -66,6 +70,9 @@ const bookSchema = new mongoose.Schema({
         require: true,
       },
       numHour: {
+        type: Number,
+      },
+      numDay: {
         type: Number,
       },
     },

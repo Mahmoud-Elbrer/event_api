@@ -2,11 +2,12 @@ const Joi = require("joi");
 
 exports.validateSignUp = function (user) {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(50).required(),
+    name: Joi.string().min(1).max(50).required(),
     email: Joi.string(),
-    phone: Joi.string().required(),
-    password: Joi.string().min(3).max(255).required(),
+    phone: Joi.string(),
+    password: Joi.string().min(3).max(255),
     active : Joi.boolean(),
+    loginAs : Joi.string(),
   });
   return schema.validate(user);
 };

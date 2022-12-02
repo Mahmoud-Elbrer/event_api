@@ -51,7 +51,7 @@ exports.signUp = async (req, res, next) => {
     });
 
   user = User(
-    _.pick(req.body, ["name", "email", "phone", "password", "active"])
+    _.pick(req.body, ["name", "email", "phone", "password", "active" ,"loginAs"])
   );
 
   const salt = await bcrypt.genSalt(10); //  10 it default value
