@@ -15,6 +15,8 @@ var uploadImageRouter = require("../routes/uploadImage");
 var blackoutDateRouter = require("../routes/blackout_date");
 var typeSelectionProductRouter = require("../routes/type_selection_product");
 var productSelectionRouter = require("../routes/product_selection");
+var companyServicesRouter = require("../routes/company_services");
+var subscribeServiceRouter = require("../routes/subscribe_service");
 const error = require("../middleware/error");
 
 module.exports = function (app) {
@@ -35,5 +37,7 @@ module.exports = function (app) {
   app.use("/api/blackoutDate", blackoutDateRouter);
   app.use("/api/typeSelectionProduct", typeSelectionProductRouter);
   app.use("/api/productSelection", productSelectionRouter);
+  app.use("/api/companyServices", companyServicesRouter);
+  app.use("/api/subscribeService", subscribeServiceRouter);
   app.use(error);
 };

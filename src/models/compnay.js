@@ -6,13 +6,13 @@ const companySchema = new mongoose.Schema({
   name: {
     type: String,
     require: true,
-    minLength: 5,
+    minLength: 1,
     maxLength: 50,
   },
   email: {
     type: String,
     require: true,
-    minLength: 5,
+    minLength: 2,
     maxLength: 255,
     unique: true,
   },
@@ -30,8 +30,8 @@ const companySchema = new mongoose.Schema({
     type: String,
     // require: true,
   },
-  // active: Boolean,
-  // isAdmin: Boolean,
+  active: Boolean,
+  isAdmin: Boolean,
 });
 
 // information export principle : oop

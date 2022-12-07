@@ -67,14 +67,14 @@ exports.signUp = async (req, res, next) => {
     res.json("Something went wrong!");
   });
 
-  // company = Company(
-  //   _.pick(req.body, ["name", "email", "password", "phone", "img", "active"  ,"isAdmin"])
-  // );
+
   company = new Company({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
+    active: req.body.active,
+    isAdmin: req.body.isAdmin,
     img: req.file.originalname,
   });
 

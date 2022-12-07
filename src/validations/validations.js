@@ -27,12 +27,13 @@ exports.validateUpdateUser = function (user) {
 exports.validateSignUpCompany = function (company) {
   const schema = Joi.object({
     name: Joi.string().required(),
+    phone: Joi.string().required(),
     email: Joi.string().min(1).max(255).required().email(),
     //phone: Joi.string(),
     // img: Joi.string().required(),
     password: Joi.string().min(3).max(255).required(),
-    // active : Joi.boolean(),
-    // isAdmin : Joi.boolean(),
+    active : Joi.boolean(),
+     isAdmin : Joi.boolean(),
   });
   return schema.validate(company);
 };
@@ -64,6 +65,17 @@ exports.validateAddEvent = function (event) {
   });
   return schema.validate(event);
 };
+
+exports.validateAddCompanyServices = function (event) {
+  const schema = Joi.object({
+    company: Joi.string().required(),
+    service: Joi.string().required(),
+    // img: Joi.image().required(),
+  });
+  return schema.validate(event);
+};
+
+
 
 exports.validateAddTypeSelectionProduct = function (event) {
   const schema = Joi.object({
