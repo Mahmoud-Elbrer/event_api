@@ -11,6 +11,23 @@ const notificationSchema = new mongoose.Schema({
     ref: "User",
     require: true,
   },
+  orderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+    require: true,
+  },
+  title: {
+    type: String,
+    require: true,
+  },
+  titleEn: {
+    type: String,
+    require: true,
+  },
+  body: {
+    type: String,
+    require: true,
+  },
   typeNotification: {
     type: Number,
     require: true,

@@ -118,6 +118,7 @@ exports.validateAddProduct = function (product) {
 exports.validateAddProductSelection = function (selection) {
   const schema = Joi.object({
     product: Joi.string().required(),
+    company: Joi.string().required(),
     typeSelectionProduct: Joi.string().required(),
     selectionTitle: Joi.string().required(),
     selectionTitleEn: Joi.string(),

@@ -46,6 +46,7 @@ exports.addProductSelection = async (req, res, next) => {
 
   const productSelection = new ProductSelection({
     product: req.body.product,
+    company: req.body.company, //req.user._id,
     typeSelectionProduct: req.body.typeSelectionProduct,
     selectionTitle: req.body.selectionTitle,
     selectionTitleEn: req.body.selectionTitleEn,
