@@ -63,46 +63,37 @@ exports.deleteEvent = async (req, res, next) => {
   });
 };
 
-
-
-
 exports.updateEvent = async (req, res, next) => {
-
   const newEvent = {
     name: req.body.name,
     nameEn: req.body.nameEn,
   };
 
-
-  Event.updateOne({ _id: req.body.eventId  }, { $set: newEvent })
-  .then((result) => {
-    console.log("Re result");
-    console.log(result);
-    if (result) {
-      res.status(200).json({
-        message: "تم التحديث بنجاح | Update completed successfully",
-        success: true,
-      });
-    } else {
-      res.status(200).json({
-        message: "الحساب غير موجود | user not exists",
+  Event.updateOne({ _id: req.body.eventId }, { $set: newEvent })
+    .then((result) => {
+      console.log("Re result");
+      console.log(result);
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("err");
+      console.log(err);
+      res.status(404).json({
+        message: "Error Connection  " + err,
         success: false,
       });
-    }
-  })
-  .catch((err) => {
-    console.log("err");
-    console.log(err);
-    res.status(404).json({
-      message: "Error Connection  " + err,
-      success: false,
     });
-  });
-
 };
-
-
-
 
 // search method
 //  exports.searchEvent = async (req, res, next) => {

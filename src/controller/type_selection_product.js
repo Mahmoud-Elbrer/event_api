@@ -33,10 +33,48 @@ exports.addTypeSelectionProduct = async (req, res, next) => {
   });
 };
 
+
 exports.deleteTypeSelectionProduct = async (req, res, next) => {
   const result = await TypeSelectionProduct.deleteOne({ _id: req.params.id });
 
   res.status(200).json({
     success: true,
   });
+};
+
+
+
+exports.updateTypeSelectionProduct = async (req, res, next) => {
+
+
+
+console.log(req.body);
+
+  const newTypeSelection = {
+    service: req.body.service,
+    name: req.body.name,
+    nameEn: req.body.nameEn,
+  };
+
+  TypeSelectionProduct.updateOne({ _id: req.body.typeSelectionId }, { $set: newTypeSelection })
+    .then((result) => {
+      console.log(result);
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
 };

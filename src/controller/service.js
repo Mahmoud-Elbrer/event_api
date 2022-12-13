@@ -12,10 +12,9 @@ exports.getService = async (req, res, next) => {
   res.status(200).json(service);
 };
 
-
 exports.getServiceByEventId = async (req, res, next) => {
-  let service = await Service.find({ event : req.params.Id });
- // let service = await Service.find({ event : req.params.Id }) .populate("event");
+  let service = await Service.find({ event: req.params.Id });
+  // let service = await Service.find({ event : req.params.Id }) .populate("event");
 
   res.status(200).json(service);
 };
@@ -45,7 +44,6 @@ exports.addService = async (req, res, next) => {
     img: req.file.originalname,
   });
 
-
   const result = await service.save();
 
   res.status(200).json({
@@ -72,6 +70,38 @@ exports.deleteService = async (req, res, next) => {
   res.status(200).json({
     success: true,
   });
+};
+
+exports.updateService = async (req, res, next) => {
+  const newService = {
+    name: req.body.name,
+    nameEn: req.body.nameEn,
+  };
+
+  Service.updateOne({ _id: req.body.serviceId }, { $set: newService })
+    .then((result) => {
+      console.log("Re result");
+      console.log(result);
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("err");
+      console.log(err);
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
 };
 
 // search method

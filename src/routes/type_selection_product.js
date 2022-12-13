@@ -9,6 +9,7 @@ router.post('/', TypeSelectionProduct.addTypeSelectionProduct);
 router.get('/', TypeSelectionProduct.getTypeSelectionProduct);  
 router.get('/service/:service', TypeSelectionProduct.getTypeSelectionProductByService);  
 router.delete('/:id', TypeSelectionProduct.deleteTypeSelectionProduct); 
+router.patch('/', TypeSelectionProduct.updateTypeSelectionProduct); 
 
 
 module.exports = router;

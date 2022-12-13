@@ -67,7 +67,6 @@ exports.signUp = async (req, res, next) => {
     res.json("Something went wrong!");
   });
 
-
   company = new Company({
     name: req.body.name,
     email: req.body.email,
@@ -134,4 +133,32 @@ exports.blockCompany = async (req, res, next) => {
   res.status(200).json({
     success: true,
   });
+};
+
+exports.updateCompany = async (req, res, next) => {
+  const newCompany = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  Company.updateOne({ _id: req.body.companyId }, { $set: newCompany })
+    .then((result) => {
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
 };

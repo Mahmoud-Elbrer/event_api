@@ -14,5 +14,6 @@ router.post("/", upload.single("picture"), Service.addService);
 router.get("/", Service.getService);
 router.get("/:Id", Service.getServiceByEventId);
 router.delete("/:Id", Service.deleteService);
+router.patch("/", Service.updateService);
 
 module.exports = router;
