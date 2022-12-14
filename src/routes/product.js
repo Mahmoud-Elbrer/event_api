@@ -17,6 +17,7 @@ router.get("/:page/:limit", Product.getProduct);
 router.get("/:emirateId/:page/:limit", Product.getProductByEmirateId);
 router.get("/service/:serviceId", Product.getProductByServiceId);
 router.get("/service/:serviceId/productType/:productType", Product.getProductByServiceIdAndProductType);
+router.get("/company/:companyId/service/:serviceId", Product.getProductByCompanyAndByServiceId);
 router.get("/:productId", Product.getProductById);
 router.delete("/:productId", Product.deleteProduct);
 //router.post("/visitedProduct/:productId", Product.setVisitedProduct);

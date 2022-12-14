@@ -66,6 +66,29 @@ exports.getProductByServiceIdAndProductType = async (req, res, next) => {
   res.status(200).json(product);
 };
 
+
+exports.getProductByCompanyAndByServiceId = async (req, res, next) => {
+
+
+console.log(req.params.companyId);
+console.log(req.params.serviceId);
+
+  const page = req.params.page;
+  const limit = req.params.limit;
+  const companyId = req.params.companyId;
+  const serviceId = req.params.serviceId;
+
+  //db.inventory.find( { $and: [ { service: serviceId, { productType: productType } ] } )
+
+  let  product = await Product.find( { $and: [ { service: serviceId , company: companyId }] } )
+  .populate("company", "-password")
+  .populate("event")
+  .populate("service")
+  .populate("emirate", "-_id");
+
+  res.status(200).json(product);
+};
+
 exports.getProductByTourismProgram = async (req, res, next) => {
   const page = req.params.page;
   const limit = req.params.limit;
