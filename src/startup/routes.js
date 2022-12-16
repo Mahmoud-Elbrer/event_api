@@ -17,6 +17,7 @@ var typeSelectionProductRouter = require("../routes/type_selection_product");
 var productSelectionRouter = require("../routes/product_selection");
 var companyServicesRouter = require("../routes/company_services");
 var subscribeServiceRouter = require("../routes/subscribe_service");
+var categorySelectionRouter = require("../routes/category_selection");
 const error = require("../middleware/error");
 
 module.exports = function (app) {
@@ -39,5 +40,6 @@ module.exports = function (app) {
   app.use("/api/productSelection", productSelectionRouter);
   app.use("/api/companyServices", companyServicesRouter);
   app.use("/api/subscribeService", subscribeServiceRouter);
+  app.use("/api/categorySelection", categorySelectionRouter);
   app.use(error);
 };

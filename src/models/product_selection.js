@@ -9,11 +9,6 @@ const productSelectionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "TypeSelectionProduct",
   },
-  company: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Company",
-    require: true,
-  },
   selectionTitle: {
     type: String,
     require: true,

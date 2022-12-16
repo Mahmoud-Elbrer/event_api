@@ -88,7 +88,16 @@ exports.validateAddTypeSelectionProduct = function (event) {
 };
 
 
-
+exports.validateAddCategorySelection = function (event) {
+  const schema = Joi.object({
+    productSelection: Joi.string().required(),
+    name: Joi.string().required(),
+    nameEn: Joi.string().required(),
+    cost: Joi.string().required(),
+    img: Joi.string(),
+  });
+  return schema.validate(event);
+};
 
 exports.validateAddProduct = function (product) {
   const schema = Joi.object({
@@ -118,7 +127,6 @@ exports.validateAddProduct = function (product) {
 exports.validateAddProductSelection = function (selection) {
   const schema = Joi.object({
     product: Joi.string().required(),
-    company: Joi.string().required(),
     typeSelectionProduct: Joi.string().required(),
     selectionTitle: Joi.string().required(),
     selectionTitleEn: Joi.string(),

@@ -28,6 +28,9 @@ exports.getProductSelectionByCompany = async (req, res, next) => {
 };
 
 exports.addProductSelection = async (req, res, next) => {
+
+  console.log(req.body);
+
   const { error } = validateAddProductSelection(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -46,7 +49,6 @@ exports.addProductSelection = async (req, res, next) => {
 
   const productSelection = new ProductSelection({
     product: req.body.product,
-    company: req.body.company, //req.user._id,
     typeSelectionProduct: req.body.typeSelectionProduct,
     selectionTitle: req.body.selectionTitle,
     selectionTitleEn: req.body.selectionTitleEn,

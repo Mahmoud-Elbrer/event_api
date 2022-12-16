@@ -9,24 +9,16 @@ exports.getBlackoutDate = async (req, res, next) => {
 };
 
 exports.addBlackoutDate = async (req, res, next) => {
-  
-var finalString = req.body.dates.replace(/[']+/, '')
-console.log("final string: " + finalString)
-console.log(finalString);
-
 
   const blackoutDate = new BlackoutDate({
     product: req.body.product,
-    dates: JSON.parse(finalString),
+    dates: req.body.dates,
   });
 
-  console.log("blackoutDate::s");
-  console.log(blackoutDate);
-
-  console.log("final string: " + finalString)
 
   const result = await blackoutDate.save();
 
+  
   res.status(200).json({
     success: true,
     result: result,
