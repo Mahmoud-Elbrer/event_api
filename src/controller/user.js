@@ -16,33 +16,36 @@ exports.signIn = async (req, res, next) => {
   });
 
 
-  // const { error } = validateSignIn(req.body);
-  // if (error) return res.status(400).send(error.details[0].message);
 
-  // let user = await User.findOne({ email: req.body.email });
-  // if (!user)
-  //   return res.status(400).json({
-  //     success: false,
-  //     message:
-  //       "خطأ في البريد الالكتروني او كلمة المرور | Invalid email or password",
-  //   });
 
-  // const validPassword = await bcrypt.compare(req.body.password, user.password);
-  // if (!validPassword)
-  //   return res.status(400).json({
-  //     success: false,
-  //     message:
-  //       "خطأ في البريد الالكتروني او كلمة المرور | Invalid email or password",
-  //   });
 
-  // const token = user.generateAuthToken();
+  const { error } = validateSignIn(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
-  // res.status(200).json({
-  //   success: true,
-  //   token: token,
-  //   name: user.name,
-  //   email: user.email,
-  // });
+  let user = await User.findOne({ email: req.body.email });
+  if (!user)
+    return res.status(400).json({
+      success: false,
+      message:
+        "خطأ في البريد الالكتروني او كلمة المرور | Invalid email or password",
+    });
+
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword)
+    return res.status(400).json({
+      success: false,
+      message:
+        "خطأ في البريد الالكتروني او كلمة المرور | Invalid email or password",
+    });
+
+  const token = user.generateAuthToken();
+
+  res.status(200).json({
+    success: true,
+    token: token,
+    name: user.name,
+    email: user.email,
+  });
 };
 
 exports.signUp = async (req, res, next) => {
