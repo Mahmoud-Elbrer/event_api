@@ -18,7 +18,7 @@ app.use("/event", express.static("public/images/event"));
 //require("./src/startup/logging")();
 require("./src/startup/routes")(app);
 require("./src/startup/config")();
-//require("./src/startup/db")();
+require("./src/startup/db")();
 require("./src/startup/paypal_config")();
 
 // catch 404 and forward to error handler
