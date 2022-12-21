@@ -9,11 +9,7 @@ const {
   validateUpdateUser,
 } = require("../validations/validations");
 
-console.log("i am here signIn ");
-
 exports.signIn = async (req, res, next) => {
-
-  console.log("i am here ");
 
   const { error } = validateSignIn(req.body);
   if (error) return res.status(400).send(error.details[0].message);
