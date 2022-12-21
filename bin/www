@@ -11,6 +11,8 @@ var app = require('../app');
  * Get port from environment and store in Express.
  */
 
+app.set('veiw engine', 'ejs'); 
+
 app.listen(process.env.PORT || 3000, console.log("Listening at port 3000..."))
 
 // app.listen(process.env.PORT || 3000, function(){
