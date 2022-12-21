@@ -10,7 +10,7 @@ module.exports = function () {
 
 
 
-  mongoose.connect("mongodb+srv://mahmoud:6MDW5FMNfmUa4xSj@cluster0.5tjuslb.mongodb.net/test" ,  { useUnifiedTopology: true  } ).then((result) => {
+  mongoose.connect("mongodb+srv://mahmoud:6MDW5FMNfmUa4xSj@cluster0.5tjuslb.mongodb.net/test" ,  {useUnifiedTopology: true ,  useUnifiedTopology: true  } ).then((result) => {
     winston.info("Connection to MongoDB .. " + result.Error);
   });
 };
