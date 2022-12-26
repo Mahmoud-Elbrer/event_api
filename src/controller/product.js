@@ -154,6 +154,7 @@ exports.addProduct = async (req, res, next) => {
 
   const product = new Product({
     emirate: req.body.emirate,
+    emirates: req.body.emirates,
     company: req.body.company,
     event: req.body.event,
     service: req.body.service,

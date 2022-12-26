@@ -4,7 +4,7 @@ const { validateAddBook } = require("../validations/validations");
 const orderId = require("order-id")("key");
 
 exports.getBook = async (req, res, next) => {
-  let book = await Book.find({ user: req.user._id });
+  let book = await Book.find({ user : req.user._id });
 
   res.status(200).json(book);
 };

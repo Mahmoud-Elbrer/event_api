@@ -9,11 +9,17 @@ const rateSchema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
-    require: true,
   },
-  numRate: {
+  productSelection: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ProductSelection",
+  },
+  rating: {
     type: Number,
     require: true,
+  },
+  comment: {
+    type: String,
   },
 });
 

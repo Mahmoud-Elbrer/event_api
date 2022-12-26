@@ -141,9 +141,10 @@ exports.validateAddProductSelection = function (selection) {
 
 exports.validateAddRate = function (rate) {
   const schema = Joi.object({
-    user: Joi.string().required(),
-    product: Joi.string().required(),
-    numRate: Joi.number().required(),
+    product: Joi.string(),
+    productSelection: Joi.string(),
+    rating: Joi.number().required(),
+    comment: Joi.number(),
   });
   return schema.validate(rate);
 };

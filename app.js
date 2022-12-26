@@ -21,8 +21,6 @@ require("./src/startup/config")();
 require("./src/startup/db")();
 require("./src/startup/paypal_config")();
 
-console.log('hello');
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

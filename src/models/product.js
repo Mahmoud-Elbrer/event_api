@@ -6,6 +6,13 @@ const productSchema = new mongoose.Schema({
     ref: "Emirate",
     require: true,
   },
+  emirates: [
+    {
+      id: {
+        type: String,
+      },
+    },
+  ],
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Company",

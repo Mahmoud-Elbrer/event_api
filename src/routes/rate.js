@@ -9,5 +9,7 @@ const auth = require("../middleware/auth");
 router.post("/", [auth], Rate.addRate);
 router.get("/", [auth], Rate.getRate);
 router.delete("/:Id", [auth], Rate.deleteRate);
+router.get("/reviewProductRate/:productId" , Rate.reviewProduct);
+router.get("/reviewSelectionProductRate/:productSelectionId" , Rate.reviewSelectionProduct);
 
 module.exports = router;
