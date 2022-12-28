@@ -32,6 +32,9 @@ exports.validateSignUpCompany = function (company) {
     //phone: Joi.string(),
     // img: Joi.string().required(),
     password: Joi.string().min(3).max(255).required(),
+    typeCompany : Joi.string().required(),
+    aboutCompany : Joi.string(),
+    aboutCompanyEn : Joi.string(),
     active : Joi.boolean(),
      isAdmin : Joi.boolean(),
   });

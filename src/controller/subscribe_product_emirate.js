@@ -11,6 +11,12 @@ exports.getSubscribeProductEmirate = async (req, res, next) => {
     .populate("product")
     .populate("service");
 
+   // console.log(subscribeProductEmirate);
+    let x ; 
+    subscribeProductEmirate.forEach(element => {
+      console.log(element);
+    });
+
 
   res.status(200).json(subscribeProductEmirate);
 };

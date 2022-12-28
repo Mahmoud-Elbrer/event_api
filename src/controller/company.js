@@ -73,6 +73,9 @@ exports.signUp = async (req, res, next) => {
     password: req.body.password,
     phone: req.body.phone,
     active: req.body.active,
+    aboutCompany: req.body.aboutCompany,
+    aboutCompanyEn: req.body.aboutCompanyEn,
+    typeCompany: req.body.typeCompany,
     isAdmin: req.body.isAdmin,
     img: req.file.originalname,
   });

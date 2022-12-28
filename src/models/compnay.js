@@ -30,6 +30,16 @@ const companySchema = new mongoose.Schema({
     type: String,
     // require: true,
   },
+  aboutCompany: {
+    type: String,
+  },
+  aboutCompanyEn: {
+    type: String,
+  },
+  typeCompany: {
+    type: String,
+    // require: true,
+  },
   active: Boolean,
   isAdmin: Boolean,
 });
