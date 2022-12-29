@@ -2,14 +2,26 @@ const _ = require("lodash");
 const { CompanyEmirate } = require("../models/company_emirate");
 const { validateAddCompanyEmirate } = require("../validations/validations");
 
-exports.getCompanyEmirate = async (req, res, next) => {
+exports.getCompanyEmirate = async (req, res, next) => {  
   let companyEmirate = await CompanyEmirate.find({ emirate: req.params.emirateId  })
     .populate("company" , "-password")
     .populate("emirate");
 
 
-  res.status(200).json(companyEmirate);
+    var newAr = []; 
+    for(var attributename in companyEmirate){
+      // console.log(attributename+": "+companyEmirate[attributename]['company']['email']);
+      if(companyEmirate[attributename]['company']['companyType'] == req.params.companyType) {
+         newAr = companyEmirate ; 
+      }
+  }
+
+  //console.log(newAr);
+ // res.status(200).json(companyEmirate);
+  res.status(200).json(newAr);
 };
+
+
 
 exports.addCompanyEmirate = async (req, res, next) => {
   const companyEmirate = CompanyEmirate(_.pick(req.body, [ "company" ,"emirate"]));

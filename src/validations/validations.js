@@ -35,8 +35,8 @@ exports.validateSignUpCompany = function (company) {
     typeCompany : Joi.string().required(),
     aboutCompany : Joi.string(),
     aboutCompanyEn : Joi.string(),
-    active : Joi.boolean(),
-     isAdmin : Joi.boolean(),
+   // active : Joi.boolean(),
+    // isAdmin : Joi.boolean(),
   });
   return schema.validate(company);
 };

@@ -6,7 +6,7 @@ const CompanyEmirate = require("../controller/company_emirate");
 
 //Routes
 router.post("/", CompanyEmirate.addCompanyEmirate);
-router.get("/:emirateId", CompanyEmirate.getCompanyEmirate);
+router.get("/:emirateId/:companyType", CompanyEmirate.getCompanyEmirate);
 router.delete("/:Id", CompanyEmirate.deleteCompanyEmirate);
 
 module.exports = router;

@@ -6,14 +6,14 @@ const companySchema = new mongoose.Schema({
   name: {
     type: String,
     require: true,
-    minLength: 1,
-    maxLength: 50,
+     minLength: 1,
+    // maxLength: 50,
   },
   email: {
     type: String,
     require: true,
     minLength: 2,
-    maxLength: 255,
+   //maxLength: 255,
     unique: true,
   },
   phone: {
