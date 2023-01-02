@@ -33,8 +33,9 @@ exports.validateSignUpCompany = function (company) {
     // img: Joi.string().required(),
     password: Joi.string().min(3).max(255).required(),
     typeCompany : Joi.string().required(),
-    aboutCompany : Joi.string(),
-    aboutCompanyEn : Joi.string(),
+    aboutCompany : Joi.string().min(0),
+    aboutCompanyEn : Joi.string().min(0),
+    percent : Joi.string().min(0),
    // active : Joi.boolean(),
     // isAdmin : Joi.boolean(),
   });
@@ -51,7 +52,6 @@ exports.validateSignIn = function (user) {
 
 exports.validateAddService = function (book) {
   const schema = Joi.object({
-    event: Joi.string().required(),
     name: Joi.string().required(),
     productType: Joi.string().required(),
     nameEn: Joi.string().required(),

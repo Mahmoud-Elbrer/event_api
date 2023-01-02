@@ -8,6 +8,7 @@ const Emirate = require('../controller/emirate');
 router.post('/', Emirate.addEmirate);
 router.get('/', Emirate.getEmirate);  
 router.delete('/:id', Emirate.deleteEmirate); 
+router.patch("/", Emirate.updateEmirate);
 
 
 module.exports = router;

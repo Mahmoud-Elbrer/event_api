@@ -29,3 +29,32 @@ exports.deleteEmirate = async (req, res, next) => {
     success: true,
   });
 };
+
+
+exports.updateEmirate = async (req, res, next) => {
+  const newEmirate = {
+    name: req.body.name,
+    nameEn: req.body.nameEn,
+  };
+
+  Emirate.updateOne({ _id: req.body.emirateId }, { $set: newEmirate })
+    .then((result) => {
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
+};

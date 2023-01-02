@@ -75,6 +75,7 @@ exports.signUp = async (req, res, next) => {
     aboutCompany: req.body.aboutCompany,
     aboutCompanyEn: req.body.aboutCompanyEn,
     typeCompany: req.body.typeCompany,
+    percent: req.body.percent,
    // isAdmin: req.body.isAdmin,
    // active: req.body.active,
     img: req.file.originalname,

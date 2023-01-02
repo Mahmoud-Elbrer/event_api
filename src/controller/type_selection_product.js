@@ -45,11 +45,6 @@ exports.deleteTypeSelectionProduct = async (req, res, next) => {
 
 
 exports.updateTypeSelectionProduct = async (req, res, next) => {
-
-
-
-console.log(req.body);
-
   const newTypeSelection = {
     service: req.body.service,
     name: req.body.name,
@@ -58,7 +53,7 @@ console.log(req.body);
 
   TypeSelectionProduct.updateOne({ _id: req.body.typeSelectionId }, { $set: newTypeSelection })
     .then((result) => {
-      console.log(result);
+      //console.log(result);
       if (result) {
         res.status(200).json({
           message: "تم التحديث بنجاح | Update completed successfully",

@@ -40,6 +40,11 @@ const companySchema = new mongoose.Schema({
     type: String,
     // require: true,
   },
+  percent: {
+    type: String,
+    // require: true,
+  },
+  
   active: Boolean,
   isAdmin: Boolean,
 });

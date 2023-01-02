@@ -4,7 +4,7 @@ const { validateAddCompanyEmirate } = require("../validations/validations");
 
 exports.getCompanyEmirate = async (req, res, next) => {  
   let companyEmirate = await CompanyEmirate.find({ emirate: req.params.emirateId  })
-    .populate("company" , "-password")
+    .populate("company")
     .populate("emirate");
 
 

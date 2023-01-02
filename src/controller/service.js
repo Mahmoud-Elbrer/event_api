@@ -39,7 +39,6 @@ exports.addService = async (req, res, next) => {
   const service = new Service({
     name: req.body.name,
     nameEn: req.body.nameEn,
-    event: req.body.event,
     productType: req.body.productType,
     img: req.file.originalname,
   });
