@@ -69,18 +69,21 @@ exports.getProductByServiceIdAndProductType = async (req, res, next) => {
 
 exports.getProductByCompanyAndByServiceId = async (req, res, next) => {
 
-
-console.log(req.params.companyId);
-console.log(req.params.serviceId);
+  console.log('hereeee');
 
   const page = req.params.page;
   const limit = req.params.limit;
-  const companyId = req.params.companyId;
+ // const companyId = req.params.companyId;
   const serviceId = req.params.serviceId;
 
   //db.inventory.find( { $and: [ { service: serviceId, { productType: productType } ] } )
 
-  let  product = await Product.find( { $and: [ { service: serviceId , company: companyId }] } )
+
+  console.log("i am am ");
+  console.log(req.user._id);
+  console.log(serviceId);
+
+  let  product = await Product.find( { $and: [ { service: serviceId , company: req.user._id  }] } )
   .populate("company", "-password")
   .populate("event")
   .populate("service")

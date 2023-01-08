@@ -20,7 +20,7 @@ exports.addCompanyServices = async (req, res, next) => {
   if (error) return res.status(400).send(error.details[0].message);
 
 
-  let comp = await CompanyServices.findOne({ service: req.body.service  });
+  let comp = await CompanyServices.findOne({ service: req.body.service , company: req.body.company   });
   if (comp)
     return res.status(400).json({
       success: false,

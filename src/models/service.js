@@ -18,9 +18,14 @@ const serviceSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  isPercent: {
+    type: Boolean,
+    // require: true,
+  },
   img: {
     type: String,
   },  
+  
 });
 
 const Service = mongoose.model("Service", serviceSchema);

@@ -13,6 +13,8 @@ exports.addBook = async (req, res, next) => {
   // const { error } = validateAddBook(req.body);
   // if (error) return res.status(400).send(error.details[0].message);
 
+  console.log(req.body);
+
   let date_ob = new Date();
   let date = ("0" + date_ob.getDate()).slice(-2);
   let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
@@ -26,7 +28,9 @@ exports.addBook = async (req, res, next) => {
 
   const book = new Book({
     user: req.user._id,
-    totalAmount: req.body.totalAmount,
+    totalCartAmount: req.body.totalCartAmount,
+    organizingCompanyId: req.body.organizingCompanyId,
+    organizingCompanyIdAmount: req.body.organizingCompanyIdAmount,
     orderId: orderId.getTime(id),
     createdAt: createdAt,
     cart: req.body.cart,
