@@ -100,11 +100,12 @@ exports.sendNotification = async (req, res, next) => {
   };
 
   fcm.send(message, function (err, response) {
+    console.log(err);
     if (err) return res.status(400).json({ success: false });
 
 
     const notification = Notification(
-      _.pick(req.body, ["senderId", "receiverId", "title" ,"titleEn"  , "body", "orderId" ,"typeNotification"])
+      _.pick(req.body, ["senderId", "receiverId", "title" ,"titleEn" , "body", "orderId" ,"typeNotification"])
     );
 
     const result = notification.save();

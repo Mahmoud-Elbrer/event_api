@@ -1,28 +1,28 @@
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
-  emirate: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Emirate",
-    require: true,
-  },
-  emirates: [
-    {
-      id: {
-        type: String,
-      },
-    },
-  ],
+  // emirate: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Emirate",
+  //   require: true,
+  // },
+  // emirates: [
+  //   {
+  //     id: {
+  //       type: String,
+  //     },
+  //   },
+  // ],
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Company",
     require: true,
   },
-  event: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Event",
-    require: true,
-  },
+  // event: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Event",
+  //   require: true,
+  // },
   service: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Service",
@@ -34,13 +34,19 @@ const productSchema = new mongoose.Schema({
   productTitleEn: {
     type: String,
   },
-
   productDescription: {
     type: String,
     require: true,
   },
   productDescriptionEn: {
     type: String,
+  },
+  services: {
+    type: Array,
+    require: true,
+  },
+  servicesEn: {
+    type: Array,
   },
   cost: {
     type: String,
@@ -64,6 +70,9 @@ const productSchema = new mongoose.Schema({
     type: String,
   },
   additionalNotesEn: {
+    type: String,
+  },
+  numberTables: {
     type: String,
   },
   assets: [

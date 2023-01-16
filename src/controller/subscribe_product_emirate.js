@@ -30,8 +30,11 @@ exports.addSubscribeProductEmirate = async (req, res, next) => {
   //     message: "تم الاضافة مسبقا | Already Added",
   //   });
 
+
+  console.log('i am here ');
+  console.log(req.body);
  
-  const subscribeProductEmirate = SubscribeProductEmirate(_.pick(req.body, [  "product" , "service" ,"emirate"]));
+  const subscribeProductEmirate = SubscribeProductEmirate(_.pick(req.body, [  "product" ,"emirate"]));
 
   const result = await subscribeProductEmirate.save();
 

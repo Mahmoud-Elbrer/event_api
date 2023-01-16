@@ -13,8 +13,6 @@ exports.addBook = async (req, res, next) => {
   // const { error } = validateAddBook(req.body);
   // if (error) return res.status(400).send(error.details[0].message);
 
-  console.log(req.body);
-
   let date_ob = new Date();
   let date = ("0" + date_ob.getDate()).slice(-2);
   let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);

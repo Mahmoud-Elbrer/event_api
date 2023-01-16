@@ -8,7 +8,8 @@ exports.getPay = async (req, res, next) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: "http://192.168.137.1:3000/api/paypal/successPayment",
+      //return_url: "http://192.168.137.1:3000/api/paypal/successPayment",
+      return_url: "https://fair-erin-firefly-belt.cyclic.app/api/paypal/successPayment",
       cancel_url: "http://cancel.url",
     },
     transactions: [

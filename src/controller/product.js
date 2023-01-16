@@ -54,41 +54,36 @@ exports.getProductByServiceIdAndProductType = async (req, res, next) => {
 
   console.log(productType);
 
-
   //db.inventory.find( { $and: [ { service: serviceId, { productType: productType } ] } )
 
-  let  product = await Product.find( { $and: [ { service: serviceId , productType: productType }] } )
-  .populate("company", "-password")
-  .populate("event")
-  .populate("service")
-  .populate("emirate", "-_id");
+  let product = await Product.find({
+    $and: [{ service: serviceId, productType: productType }],
+  })
+    .populate("company", "-password")
+    .populate("event")
+    .populate("service")
+    .populate("emirate", "-_id");
 
   res.status(200).json(product);
 };
 
-
 exports.getProductByCompanyAndByServiceId = async (req, res, next) => {
-
-  console.log('hereeee');
+  console.log("hereeee");
 
   const page = req.params.page;
   const limit = req.params.limit;
- // const companyId = req.params.companyId;
+  // const companyId = req.params.companyId;
   const serviceId = req.params.serviceId;
 
   //db.inventory.find( { $and: [ { service: serviceId, { productType: productType } ] } )
 
-
-  console.log("i am am ");
-  console.log(req.user._id);
-  console.log(serviceId);
-
-  let  product = await Product.find( { $and: [ { service: serviceId , company: req.user._id  }] } )
-  .populate("company", "-password")
-  .populate("event")
-  .populate("service")
-  .populate("emirate", "-_id");
-
+  let product = await Product.find({
+    $and: [{ service: serviceId, company: req.user._id }],
+  })
+    // .populate("company", "-password")
+    // .populate("event")
+    .populate("service");
+  //.populate("emirate", "-_id")
   res.status(200).json(product);
 };
 
@@ -112,8 +107,17 @@ exports.getProductById = async (req, res, next) => {
 };
 
 exports.addProduct = async (req, res, next) => {
-  console.log("req.body");
-  console.log(req.body);
+
+  let resultServices = req.body.services
+    .replace("(", "")
+    .replace(")", "");
+
+    let resultServicesEn = req.body.servicesEn
+    .replace("(", "")
+    .replace(")", "");
+
+  req.body.services = resultServices.split(",");
+  req.body.servicesEn = resultServicesEn.split(",");
 
   const { error } = validateAddProduct(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -131,45 +135,21 @@ exports.addProduct = async (req, res, next) => {
     res.json("Something went wrong!");
   });
 
-  // let product = Product(
-  //   _.pick(req.body, [
-  //     "emirate",
-  //     "company",
-  //     "event",
-  //     "service",
-  //     "productType",
-  //     "productTitle",
-  //     "productTitleEn",
-  //     "productDescription", //
-  //     "productDescriptionEn",
-  //     "cost",
-  //     "images",
-  //     "available",
-  //     "additionalNotes",
-  //     "additionalNotesEn",
-  //     "assets",
-  //     "location",
-  //     "locationEn",
-  //     "longitude",
-  //     "Latitude",
-  //   ])
-  // );
-
   const product = new Product({
-    emirate: req.body.emirate,
-    emirates: req.body.emirates,
-    company: req.body.company,
-    event: req.body.event,
+    company: req.user._id,
     service: req.body.service,
     productTitle: req.body.productTitle,
     productTitleEn: req.body.productTitleEn,
     productDescription: req.body.productDescription,
     productDescriptionEn: req.body.productDescriptionEn,
+    services: req.body.services,
+    servicesEn: req.body.servicesEn,
     cost: req.body.cost,
     available: req.body.available,
     additionalNotes: req.body.additionalNotes,
     additionalNotesEn: req.body.additionalNotesEn,
     assets: req.body.assets,
+    numberTables: req.body.numberTables,
     location: req.body.location,
     locationEn: req.body.locationEn,
     longitude: req.body.longitude,
@@ -177,10 +157,14 @@ exports.addProduct = async (req, res, next) => {
     images: req.file.originalname,
   });
 
-  await product.save();
+  const result = await product.save();
+
+  console.log('last rea');
+  console.log(result);
 
   res.status(200).json({
     success: true,
+    product: result,
   });
 };
 
@@ -241,21 +225,13 @@ exports.filterSearchProduct = async (req, res, next) => {
   res.status(200).json(product);
 };
 
-
-
-
-
-
-
-
-
 exports.addProductWithDates = async (req, res, next) => {
   console.log("productDates:::::");
   console.log("req.body");
   console.log(req.body);
 
- // const { error } = validateAddProduct(req.body);
- // if (error) return res.status(400).send(error.details[0].message);
+  // const { error } = validateAddProduct(req.body);
+  // if (error) return res.status(400).send(error.details[0].message);
 
   // var src = fs.createReadStream(req.file.path);
   // var dest = fs.createWriteStream(
@@ -269,7 +245,6 @@ exports.addProductWithDates = async (req, res, next) => {
   // src.on("error", function (err) {
   //   res.json("Something went wrong!");
   // });
-
 
   const product = new ProductDates({
     emirate: req.body.emirate,

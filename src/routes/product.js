@@ -12,7 +12,7 @@ var upload = multer({
 });
 
 
-router.post("/" , upload.single("picture"), Product.addProduct);
+router.post("/" , [ auth ,  upload.single("picture")], Product.addProduct);
 router.post("/productDates" , upload.single("picture"), Product.addProductWithDates);
 router.get("/:page/:limit", Product.getProduct);
 router.get("/:emirateId/:page/:limit", Product.getProductByEmirateId);
@@ -25,4 +25,4 @@ router.delete("/:productId", Product.deleteProduct);
 router.copy("/searchByName/:searchName", Product.searchProduct);
 
 
-module.exports = router;
+module.exports = router ;
