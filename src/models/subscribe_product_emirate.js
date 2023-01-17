@@ -6,11 +6,11 @@ const subscribeProductEmirateSchema = new mongoose.Schema({
     ref: "Product",
     require: true,
   },
-  // service: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Service",
-  //   require: true,
-  // },
+  service: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Service",
+    require: true,
+  },
   emirate: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Emirate",
