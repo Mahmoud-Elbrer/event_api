@@ -8,8 +8,7 @@ exports.getSubscribeProductEmirate = async (req, res, next) => {
   console.log(req.params.emirateId );
 
   let subscribeProductEmirate = await SubscribeProductEmirate.find({ service: req.params.serviceId , emirate: req.params.emirateId  })
-    .populate("product")
-    .populate("service");
+    .populate("product");
 
    // console.log(subscribeProductEmirate);
     let x ; 

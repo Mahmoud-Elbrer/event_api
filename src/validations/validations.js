@@ -120,7 +120,7 @@ exports.validateAddProduct = function (product) {
     available: Joi.boolean(),
     additionalNotes: Joi.string(),
     additionalNotesEn: Joi.string(),
-    numberTables: Joi.string(),
+    numberGuests: Joi.string(),
     //assets: Joi.array(),
     location: Joi.string().required(),
     locationEn: Joi.string().required(),

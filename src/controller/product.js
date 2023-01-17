@@ -149,7 +149,7 @@ exports.addProduct = async (req, res, next) => {
     additionalNotes: req.body.additionalNotes,
     additionalNotesEn: req.body.additionalNotesEn,
     assets: req.body.assets,
-    numberTables: req.body.numberTables,
+    numberGuests: req.body.numberGuests,
     location: req.body.location,
     locationEn: req.body.locationEn,
     longitude: req.body.longitude,

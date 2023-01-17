@@ -72,7 +72,7 @@ const productSchema = new mongoose.Schema({
   additionalNotesEn: {
     type: String,
   },
-  numberTables: {
+  numberGuests: {
     type: String,
   },
   assets: [
