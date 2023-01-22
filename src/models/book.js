@@ -7,6 +7,10 @@ const bookSchema = new mongoose.Schema({
     ref: "User",
     //require: true,
   },
+  paymentId: {
+    type: String,
+    require: true,
+  },
   totalCartAmount: {
     type: String,
     require: true,

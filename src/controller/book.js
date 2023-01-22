@@ -26,6 +26,7 @@ exports.addBook = async (req, res, next) => {
 
   const book = new Book({
     user: req.user._id,
+    paymentId: req.body.paymentId,
     totalCartAmount: req.body.totalCartAmount,
     organizingCompanyId: req.body.organizingCompanyId,
     organizingCompanyIdAmount: req.body.organizingCompanyIdAmount,
