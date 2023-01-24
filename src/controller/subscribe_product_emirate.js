@@ -23,18 +23,18 @@ exports.getSubscribeProductEmirate = async (req, res, next) => {
 
 exports.addSubscribeProductEmirate = async (req, res, next) => {
 
-  // let sub = await SubscribeProductEmirate.findOne({ product: req.body.product  ,  emirate : req.body.emirate });
-  // if (sub)
-  //   return res.status(400).json({
-  //     success: false,
-  //     message: "تم الاضافة مسبقا | Already Added",
-  //   });
+  let sub = await SubscribeProductEmirate.findOne({ product: req.body.product  ,  emirate : req.body.emirate });
+  if (sub)
+    return res.status(400).json({
+      success: false,
+      message: "تم الاضافة مسبقا | Already Added",
+    });
 
 
   console.log('i am here ');
   console.log(req.body);
  
-  const subscribeProductEmirate = SubscribeProductEmirate(_.pick(req.body, [  "product" ,"emirate"]));
+  const subscribeProductEmirate = SubscribeProductEmirate(_.pick(req.body, [  "product" ,"service" ,"emirate"]));
 
   const result = await subscribeProductEmirate.save();
 

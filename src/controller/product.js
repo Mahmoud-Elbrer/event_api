@@ -10,8 +10,8 @@ exports.getProduct = async (req, res, next) => {
   const category = req.params.category;
   let product = await Product.find()
     .populate("company", "-password")
-    .populate("emirate", "-_id")
-    .populate("event")
+    //.populate("emirate", "-_id")
+   // .populate("event")
     .populate("service")
     .limit(limit * 1)
     .skip((page - 1) * limit);
