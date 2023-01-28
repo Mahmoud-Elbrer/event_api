@@ -22,7 +22,7 @@ router.put("/companyService/:serviceId" , [auth], Product.getProductByCompanyAnd
 router.get("/:productId", Product.getProductById);
 router.delete("/:productId", Product.deleteProduct);
 //router.post("/visitedProduct/:productId", Product.setVisitedProduct);
-router.copy("/searchByName/:searchName", Product.searchProduct);
+router.head("/searchByName/:searchName", Product.searchProduct);
 
 
 module.exports = router ;
