@@ -3,22 +3,28 @@ const { CompanyEmirate } = require("../models/company_emirate");
 const { validateAddCompanyEmirate } = require("../validations/validations");
 
 exports.getCompanyEmirate = async (req, res, next) => {  
+
+
+console.log(req.params.emirateId);
+
   let companyEmirate = await CompanyEmirate.find({ emirate: req.params.emirateId  })
     .populate("company")
     .populate("emirate");
 
+    console.log(companyEmirate);
 
-  //   var newAr = []; 
-  //   for(var attributename in companyEmirate){
-  //     // console.log(attributename+": "+companyEmirate[attributename]['company']['email']);
-  //     if(companyEmirate[attributename]['company']['companyType'] == req.params.companyType) {
-  //        newAr = companyEmirate ; 
-  //     }
-  // }
+    var newAr = []; 
+    for(var attributename in companyEmirate){
+      // console.log(attributename+": "+companyEmirate[attributename]['company']['email']);
+      if(companyEmirate[attributename]['company']['typeCompany'] == req.params.companyType) {
+         newAr = companyEmirate ; 
+      }
 
-  //console.log(newAr);
+  }
+
+  console.log(newAr);
+  res.status(200).json(newAr);
  // res.status(200).json(companyEmirate);
-  res.status(200).json(companyEmirate);
 };
 
 
