@@ -208,6 +208,8 @@ exports.searchProduct = async (req, res, next) => {
       { productDescriptionEn: { $regex: req.params.searchName } },
     ],
   });
+  
+  
   res.status(200).json(product);
 };
 
