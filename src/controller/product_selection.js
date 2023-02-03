@@ -54,6 +54,13 @@ exports.addProductSelection = async (req, res, next) => {
     selectionTitleEn: req.body.selectionTitleEn,
     selectionDescription: req.body.selectionDescription,
     selectionDescriptionEn: req.body.selectionDescriptionEn,
+
+    // services: req.body.selectionDescriptionEn,
+    // servicesEn: req.body.selectionDescriptionEn,
+    // categories: req.body.selectionDescriptionEn,
+    // categoriesEn: req.body.selectionDescriptionEn,
+    // categoriesCost: req.body.selectionDescriptionEn,
+
     cost: req.body.cost,
     img: req.file.originalname,
   });
