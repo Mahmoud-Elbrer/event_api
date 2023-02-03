@@ -3,10 +3,6 @@ const { SubscribeProductEmirate } = require("../models/subscribe_product_emirate
 const { validateAddSubscribeProductEmirate } = require("../validations/validations");
 
 exports.getSubscribeProductEmirate = async (req, res, next) => {
-
-  console.log(req.params.serviceId );
-  console.log(req.params.emirateId );
-
   let subscribeProductEmirate = await SubscribeProductEmirate.find({ service: req.params.serviceId , emirate: req.params.emirateId  })
     .populate("product")
     .populate("service");
@@ -21,8 +17,16 @@ exports.getSubscribeProductEmirate = async (req, res, next) => {
   res.status(200).json(subscribeProductEmirate);
 };
 
-exports.addSubscribeProductEmirate = async (req, res, next) => {
 
+exports.getEmirateByProductId = async (req, res, next) => {
+  let emirate = await SubscribeProductEmirate.find({ product: req.params.productId })
+    .populate("emirate");
+
+
+  res.status(200).json(emirate);
+};
+
+exports.addSubscribeProductEmirate = async (req, res, next) => {
   let sub = await SubscribeProductEmirate.findOne({ product: req.body.product  ,  emirate : req.body.emirate });
   if (sub)
     return res.status(400).json({
@@ -30,9 +34,6 @@ exports.addSubscribeProductEmirate = async (req, res, next) => {
       message: "تم الاضافة مسبقا | Already Added",
     });
 
-
-  console.log('i am here ');
-  console.log(req.body);
  
   const subscribeProductEmirate = SubscribeProductEmirate(_.pick(req.body, [  "product" ,"service" ,"emirate"]));
 

@@ -5,6 +5,7 @@ module.exports = function () {
   // mongoose.connect("mongodb://localhost/eventDB" ,  { useNewUrlParser: true } ).then((result) => {
   //   winston.info("Connection to MongoDB .. " + result.Error);
   // });
+  
 
   // mongodb://localhost:27017
   // cloud mongodb 

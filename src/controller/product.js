@@ -11,7 +11,7 @@ exports.getProduct = async (req, res, next) => {
   let product = await Product.find()
     .populate("company", "-password")
     //.populate("emirate", "-_id")
-   // .populate("event")
+    // .populate("event")
     .populate("service")
     .limit(limit * 1)
     .skip((page - 1) * limit);
@@ -108,19 +108,15 @@ exports.getProductById = async (req, res, next) => {
 
 exports.addProduct = async (req, res, next) => {
 
-  let resultServices = req.body.services
-    .replace("(", "")
-    .replace(")", "");
+  let resultServices = req.body.services.replace("(", "").replace(")", "");
 
-    let resultServicesEn = req.body.servicesEn
-    .replace("(", "")
-    .replace(")", "");
+  let resultServicesEn = req.body.servicesEn.replace("(", "").replace(")", "");
 
   req.body.services = resultServices.split(",");
   req.body.servicesEn = resultServicesEn.split(",");
 
-  const { error } = validateAddProduct(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  // const { error } = validateAddProduct(req.body);
+  // if (error) return res.status(400).send(error.details[0].message);
 
   var src = fs.createReadStream(req.file.path);
   var dest = fs.createWriteStream(
@@ -158,9 +154,6 @@ exports.addProduct = async (req, res, next) => {
   });
 
   const result = await product.save();
-
-  console.log('last rea');
-  console.log(result);
 
   res.status(200).json({
     success: true,
@@ -208,8 +201,7 @@ exports.searchProduct = async (req, res, next) => {
       { productDescriptionEn: { $regex: req.params.searchName } },
     ],
   });
-  
-  
+
   res.status(200).json(product);
 };
 
@@ -276,3 +268,150 @@ exports.addProductWithDates = async (req, res, next) => {
     success: true,
   });
 };
+
+exports.updateProduct = async (req, res, next) => {
+
+  //console.log(req.body);
+  console.log("hi boy");
+
+  const newProduct = {
+    company: req.body.company,
+    service: req.body.service,
+    productTitle: req.body.productTitle,
+    productTitleEn: req.body.productTitleEn,
+    productDescription: req.body.productDescription,
+    productDescriptionEn: req.body.productDescriptionEn,
+    // services: req.body.services,
+    // servicesEn: req.body.servicesEn,
+    cost: req.body.cost,
+    available: req.body.available,
+    additionalNotes: req.body.additionalNotes,
+    additionalNotesEn: req.body.additionalNotesEn,
+    assets: req.body.assets,
+    numberGuests: req.body.numberGuests,
+    location: req.body.location,
+    locationEn: req.body.locationEn,
+    longitude: req.body.longitude,
+    Latitude: req.body.Latitude,
+  };
+
+  Product.updateOne({ _id: req.body.productId }, { $set: newProduct })
+    .then((result) => {
+      if (result) {
+        console.log(result);
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
+};
+
+
+exports.updateServicesProduct = async (req, res, next) => {
+
+  //console.log(req.body);
+  console.log("hi boy servcies");
+
+
+  let resultServices = req.body.services.replace("(", "").replace(")", "");
+
+  let resultServicesEn = req.body.servicesEn.replace("(", "").replace(")", "");
+
+  req.body.services = resultServices.split(",");
+  req.body.servicesEn = resultServicesEn.split(",");
+
+  const newProduct = {
+    services: req.body.services,
+    servicesEn: req.body.servicesEn,
+  };
+
+  Product.updateOne({ _id: req.body.productId }, { $set: newProduct })
+    .then((result) => {
+      if (result) {
+        console.log(result);
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
+};
+
+
+exports.deleteServicesProduct = async (req, res, next) => {
+  console.log('ju');
+  let product = await Product.find({ _id: req.params.productId });
+
+
+  console.log(product);
+  console.log(product[0]['services']);
+  console.log(product[0]['services'][0]);
+
+  //let newProduct =  product[0]['services'].removeAStringDemo.updateOne( { $pull: { "Score":"John" }});
+
+
+    product[0]['services'].splice(req.params.index, 1);
+    console.log(product[0]['services']);
+
+    const newProduct = {
+      services: product[0]['services'],
+      servicesEn: product[0]['services'],
+    };
+
+
+    console.log(newProduct);
+    
+    Product.updateOne({ _id: req.params.productId }, { $set: newProduct })
+      .then((result) => {
+        if (result) {
+          console.log(result);
+          res.status(200).json({
+            message: "تم التحديث بنجاح | Update completed successfully",
+            success: true,
+          });
+        } else {
+          res.status(200).json({
+            message: "الحساب غير موجود | user not exists",
+            success: false,
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(404).json({
+          message: "Error Connection  " + err,
+          success: false,
+        });
+      });
+
+
+
+
+
+ // await Product.deleteOne({ _id: req.params.productId });
+
+
+};
+

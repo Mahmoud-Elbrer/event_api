@@ -9,3 +9,8 @@
 7  == Card                                                                         
 
 -->
+
+<!-- company Type
+1  ==  admin
+2  ==  normal company (services company)
+3  ==   organizing company  -->

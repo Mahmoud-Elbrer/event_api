@@ -23,6 +23,8 @@ router.get("/:productId", Product.getProductById);
 router.delete("/:productId", Product.deleteProduct);
 //router.post("/visitedProduct/:productId", Product.setVisitedProduct);
 router.post("/searchByName/:searchName", Product.searchProduct);
+router.put("/updateProduct", Product.updateProduct);
+router.delete("/deleteServicesProduct/:productId/:index", Product.deleteServicesProduct);
 
 
 module.exports = router ;
