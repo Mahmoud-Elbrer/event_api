@@ -12,6 +12,14 @@ exports.getProductSelection = async (req, res, next) => {
   res.status(200).json(productSelection);
 };
 
+exports.getProductSelectionByTypeSelection = async (req, res, next) => {
+  const product = req.params.productId;
+  const typeSelectionId = req.params.typeSelectionId;
+  let productSelection = await ProductSelection.find({ product: product ,typeSelectionProduct : typeSelectionId }).populate("product");
+
+  res.status(200).json(productSelection);
+};
+
 exports.getProductSelectionByProductId = async (req, res, next) => {
   const product = req.params.Id;
   console.log(product);
@@ -20,6 +28,9 @@ exports.getProductSelectionByProductId = async (req, res, next) => {
   res.status(200).json(productSelection);
 };
 
+
+
+// for admin
 exports.getProductSelectionByCompany = async (req, res, next) => {
   const company = req.params.Id;
   let productSelection = await ProductSelection.find({ company: company });
@@ -98,3 +109,37 @@ exports.deleteProductSelection = async (req, res, next) => {
 //   let productSelection = await ProductSelection.find({ name: new RegExp(req.params.name, "i") });
 //   res.status(200).json(productSelection);
 // };
+
+
+exports.updateProductSelection = async (req, res, next) => {
+  const newProductSelection = {
+    //typeSelectionProduct: req.body.typeSelectionProduct,
+    selectionTitle: req.body.selectionTitle,
+    selectionTitleEn: req.body.selectionTitleEn,
+    selectionDescription: req.body.selectionDescription,
+    selectionDescriptionEn: req.body.selectionDescriptionEn,
+    cost: req.body.cost,
+  };
+
+  ProductSelection.updateOne({ _id: req.body.productSelectionId }, { $set: newProductSelection })
+    .then((result) => {
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
+};
+
