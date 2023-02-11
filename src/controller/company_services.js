@@ -3,7 +3,10 @@ const { CompanyServices } = require("../models/company_services");
 const { validateAddCompanyServices } = require("../validations/validations");
 
 exports.getCompanyServices = async (req, res, next) => {
-  let companyServices = await CompanyServices.find().populate("service");
+  let companyServices = await CompanyServices.find({company : req.user._id}).populate("service");
+
+  console.log(companyServices);
+  console.log(companyServices.length);
 
   res.status(200).json(companyServices);
 };

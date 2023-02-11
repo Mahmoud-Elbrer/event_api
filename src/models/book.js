@@ -85,6 +85,33 @@ const bookSchema = new mongoose.Schema({
       numDay: {
         type: Number,
       },
+      titleTextCard: {
+        type: String,
+        require: true,
+      },
+      bodyTextCard: {
+        type: String,
+        require: true,
+      },
+      senderNameTextCard: {
+        type: String,
+        require: true,
+      },
+      categories: {
+        type: String,
+        require: true,
+      },
+      categoriesEn: {
+        type: String,
+        require: true,
+      },
+      categoriesCost: {
+        type: String,
+        require: true,
+      },
+      statusOrder : {
+        type: Number,
+      }, 
     },
   ],
 });

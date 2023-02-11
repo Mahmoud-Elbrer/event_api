@@ -4,9 +4,24 @@ const { validateAddBook } = require("../validations/validations");
 const orderId = require("order-id")("key");
 
 exports.getBook = async (req, res, next) => {
-  let book = await Book.find({ user : req.user._id });
+  let book = await Book.find({ user: req.user._id });
 
   res.status(200).json(book);
+};
+
+exports.getOrderCompany = async (req, res, next) => {
+  let book = await Book.find();
+
+  var newAr = [];
+  for (var index in book) {
+    for (const key in book[index].cart) {
+      if (book[index].cart[key]["id"] == "638288384fbad7fad3c46d4f") {
+        newAr.push(book[index].cart[key]);
+      }
+    }
+  }
+
+  res.status(200).json(newAr);
 };
 
 exports.addBook = async (req, res, next) => {
@@ -20,7 +35,18 @@ exports.addBook = async (req, res, next) => {
   let hours = date_ob.getHours();
   let minutes = date_ob.getMinutes();
   let seconds = date_ob.getSeconds();
-  const createdAt = year +"-" +month +"-" +date +" " +hours + ":" +minutes +":" +seconds;
+  const createdAt =
+    year +
+    "-" +
+    month +
+    "-" +
+    date +
+    " " +
+    hours +
+    ":" +
+    minutes +
+    ":" +
+    seconds;
 
   const id = orderId.generate();
 

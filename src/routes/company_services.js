@@ -6,8 +6,8 @@ const CompanyServices = require('../controller/company_services');
 const auth = require("../middleware/auth");
 
 //Routes
-router.post('/', CompanyServices.addCompanyServices);
-router.get('/', CompanyServices.getCompanyServices);  
+router.post('/',  CompanyServices.addCompanyServices);
+router.get('/', [auth] , CompanyServices.getCompanyServices);  
 router.get('/:companyId', CompanyServices.getCompanyServicesById);  
 router.delete('/:id', CompanyServices.deleteCompanyServices); 
 

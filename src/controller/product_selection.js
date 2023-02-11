@@ -42,8 +42,17 @@ exports.addProductSelection = async (req, res, next) => {
 
   console.log(req.body);
 
-  const { error } = validateAddProductSelection(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+
+  let resultCategories = req.body.categories.replace("(", "").replace(")", "");
+  let resultCategoriesEn = req.body.categoriesEn.replace("(", "").replace(")", "");
+  let resultCategoriesCost = req.body.categoriesCost.replace("(", "").replace(")", "");
+
+  req.body.categories = resultCategories.split(",");
+  req.body.categoriesEn = resultCategoriesEn.split(",");
+  req.body.categoriesCost = resultCategoriesCost.split(",");
+
+  // const { error } = validateAddProductSelection(req.body);
+  // if (error) return res.status(400).send(error.details[0].message);
 
   var src = fs.createReadStream(req.file.path);
   var dest = fs.createWriteStream(
@@ -68,9 +77,9 @@ exports.addProductSelection = async (req, res, next) => {
 
     // services: req.body.selectionDescriptionEn,
     // servicesEn: req.body.selectionDescriptionEn,
-    // categories: req.body.selectionDescriptionEn,
-    // categoriesEn: req.body.selectionDescriptionEn,
-    // categoriesCost: req.body.selectionDescriptionEn,
+    categories: req.body.selectionDescriptionEn,
+    categoriesEn: req.body.selectionDescriptionEn,
+    categoriesCost: req.body.selectionDescriptionEn,
 
     cost: req.body.cost,
     img: req.file.originalname,
