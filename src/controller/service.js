@@ -20,28 +20,28 @@ exports.getServiceByEventId = async (req, res, next) => {
 };
 
 exports.addService = async (req, res, next) => {
-//  const { error } = validateAddService(req.body);
-//  if (error) return res.status(400).send(error.details[0].message);
+ const { error } = validateAddService(req.body);
+ if (error) return res.status(400).send(error.details[0].message);
 
-//   var src = fs.createReadStream(req.file.path);
-//   var dest = fs.createWriteStream(
-//     "public/images/service/" + req.file.originalname
-//   );
-//   src.pipe(dest);
-//   src.on("end", function () {
-//     fs.unlinkSync(req.file.path);
-//     //res.json("OK: received " + req.file.originalname);
-//   });
-//   src.on("error", function (err) {
-//     res.json("Something went wrong!");
-//   });
+  var src = fs.createReadStream(req.file.path);
+  var dest = fs.createWriteStream(
+    "public/images/service/" + req.file.originalname
+  );
+  src.pipe(dest);
+  src.on("end", function () {
+    fs.unlinkSync(req.file.path);
+    //res.json("OK: received " + req.file.originalname);
+  });
+  src.on("error", function (err) {
+    res.json("Something went wrong!");
+  });
 
   const service = new Service({
     name: req.body.name,
     nameEn: req.body.nameEn,
     productType: req.body.productType,
     isPercent: req.body.isPercent,
-    img: "req.file.originalname",
+    img: req.file.originalname,
   });
 
   const result = await service.save();
