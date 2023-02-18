@@ -18,5 +18,6 @@ router.get("/company/:Id", ProductSelection.getProductSelectionByCompany);
 router.get("/typeSelection/:productId/:typeSelectionId", ProductSelection.getProductSelectionByTypeSelection);
 router.delete("/:Id", ProductSelection.deleteProductSelection);
 router.patch("/", ProductSelection.updateProductSelection);
+router.put("/update/updateImgProductSelection/:productSelectionId", upload.single("picture"), ProductSelection.updateImgProductSelection);
 
 module.exports = router;

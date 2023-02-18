@@ -25,6 +25,7 @@ router.delete("/:productId", Product.deleteProduct);
 router.post("/searchByName/:searchName", Product.searchProduct);
 router.put("/updateProduct", Product.updateProduct);
 router.delete("/deleteServicesProduct/:productId/:index", Product.deleteServicesProduct);
+router.put("/update/updateImageProduct/:productId" , [auth,   upload.single("picture")], Product.updateImgProduct);
 
 
 module.exports = router ;

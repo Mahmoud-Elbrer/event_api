@@ -21,7 +21,10 @@ exports.getOrderCompany = async (req, res, next) => {
     }
   }
 
-  res.status(200).json(newAr);
+  res.status(200).json({
+    user : book.user ,
+    cart :newAr
+  });
 };
 
 exports.addBook = async (req, res, next) => {

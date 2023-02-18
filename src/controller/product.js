@@ -107,7 +107,6 @@ exports.getProductById = async (req, res, next) => {
 };
 
 exports.addProduct = async (req, res, next) => {
-
   let resultServices = req.body.services.replace("(", "").replace(")", "");
 
   let resultServicesEn = req.body.servicesEn.replace("(", "").replace(")", "");
@@ -270,7 +269,6 @@ exports.addProductWithDates = async (req, res, next) => {
 };
 
 exports.updateProduct = async (req, res, next) => {
-
   //console.log(req.body);
   console.log("hi boy");
 
@@ -318,12 +316,9 @@ exports.updateProduct = async (req, res, next) => {
     });
 };
 
-
 exports.updateServicesProduct = async (req, res, next) => {
-
   //console.log(req.body);
   console.log("hi boy servcies");
-
 
   let resultServices = req.body.services.replace("(", "").replace(")", "");
 
@@ -360,58 +355,98 @@ exports.updateServicesProduct = async (req, res, next) => {
     });
 };
 
-
 exports.deleteServicesProduct = async (req, res, next) => {
-  console.log('ju');
+  console.log("ju");
   let product = await Product.find({ _id: req.params.productId });
 
-
   console.log(product);
-  console.log(product[0]['services']);
-  console.log(product[0]['services'][0]);
+  console.log(product[0]["services"]);
+  console.log(product[0]["services"][0]);
 
   //let newProduct =  product[0]['services'].removeAStringDemo.updateOne( { $pull: { "Score":"John" }});
 
+  product[0]["services"].splice(req.params.index, 1);
+  console.log(product[0]["services"]);
 
-    product[0]['services'].splice(req.params.index, 1);
-    console.log(product[0]['services']);
+  const newProduct = {
+    services: product[0]["services"],
+    servicesEn: product[0]["services"],
+  };
 
-    const newProduct = {
-      services: product[0]['services'],
-      servicesEn: product[0]['services'],
-    };
+  console.log(newProduct);
 
-
-    console.log(newProduct);
-    
-    Product.updateOne({ _id: req.params.productId }, { $set: newProduct })
-      .then((result) => {
-        if (result) {
-          console.log(result);
-          res.status(200).json({
-            message: "تم التحديث بنجاح | Update completed successfully",
-            success: true,
-          });
-        } else {
-          res.status(200).json({
-            message: "الحساب غير موجود | user not exists",
-            success: false,
-          });
-        }
-      })
-      .catch((err) => {
-        res.status(404).json({
-          message: "Error Connection  " + err,
+  Product.updateOne({ _id: req.params.productId }, { $set: newProduct })
+    .then((result) => {
+      if (result) {
+        console.log(result);
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
           success: false,
         });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
       });
+    });
 
-
-
-
-
- // await Product.deleteOne({ _id: req.params.productId });
-
+  // await Product.deleteOne({ _id: req.params.productId });
 
 };
 
+
+exports.updateImgProduct  = async (req, res, next) => {
+  console.log(" i am updateImageProduct");
+
+  var src = fs.createReadStream(req.file.path);
+  var dest = fs.createWriteStream(
+    "public/images/product/" + req.file.originalname
+  );
+  src.pipe(dest);
+  src.on("end", function () {
+    fs.unlinkSync(req.file.path);
+    //res.json("OK: received " + req.file.originalname);
+  });
+  src.on("error", function (err) {
+    res.json("Something went wrong!");
+  });
+
+  const newProduct = {
+    images: req.file.originalname,
+  };
+
+  console.log(newProduct);
+
+  Product.updateOne({ _id: req.params.productId }, { $set: newProduct })
+    .then((result) => {
+      if (result) {
+        console.log("result");
+        console.log(req.params.productId);
+        console.log(result);
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+
+        // todo : remove old image
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
+};
