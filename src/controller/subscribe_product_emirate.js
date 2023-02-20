@@ -10,8 +10,9 @@ exports.getSubscribeProductEmirate = async (req, res, next) => {
    // console.log(subscribeProductEmirate);
     let x ; 
     subscribeProductEmirate.forEach(element => {
-      console.log(element);
+     // console.log(element);
     });
+    
 
 
   res.status(200).json(subscribeProductEmirate);
@@ -49,7 +50,7 @@ exports.deleteSubscribeProductEmirate = async (req, res, next) => {
   console.log(req.params.Id );
   const result = await SubscribeProductEmirate.deleteOne({ _id: req.params.Id });
 
-  console.log(result);
+//  console.log(result);
 
   res.status(200).json({
     success: true,

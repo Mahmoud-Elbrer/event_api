@@ -8,6 +8,8 @@ const { User } = require("../models/user");
 var constants = require("../helpers/constants");
 
 exports.getNotification = async (req, res, next) => {
+  console.log( "getNotification");
+  console.log( req.user._id);
   let notification = await Notification.find({
     receiverId: req.user._id,
   }) ; 
@@ -15,7 +17,9 @@ exports.getNotification = async (req, res, next) => {
 
   res.status(200).json(notification);
 };
-
+// 6367b0426204b92607a80d3b
+// 6367b0426204b92607a80d3b
+//6364b5c953566a395538cb67
 exports.deleteNotification = async (req, res, next) => {
   const result = await Notification.deleteOne({ _id: req.params.id });
 
@@ -66,7 +70,7 @@ exports.addFireBaseToken = async (req, res, next) => {
 };
 
 exports.sendNotification = async (req, res, next) => {
-  let user = await Firebase.findOne({ user: req.body.senderId });
+  let user = await Firebase.findOne({ user: req.user._id });
 
   let statusTitle;
 
@@ -103,7 +107,7 @@ exports.sendNotification = async (req, res, next) => {
     console.log(err);
     if (err) return res.status(400).json({ success: false });
 
-
+     re.body.senderId = req.user._id; 
     const notification = Notification(
       _.pick(req.body, ["senderId", "receiverId", "title" ,"titleEn" , "body", "orderId" ,"typeNotification"])
     );

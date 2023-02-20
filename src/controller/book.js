@@ -12,19 +12,31 @@ exports.getBook = async (req, res, next) => {
 exports.getOrderCompany = async (req, res, next) => {
   let book = await Book.find();
 
+ //console.log("i am in getOrderCompany");
+
   var newAr = [];
   for (var index in book) {
     for (const key in book[index].cart) {
-      if (book[index].cart[key]["id"] == "638288384fbad7fad3c46d4f") {
-        newAr.push(book[index].cart[key]);
+     // if (book[index].cart[key]["id"] == "638282244fbad7fad3c46d24") {
+      if (book[index].cart[key]["id"] == req.user._id) {
+        var cartUser = book[index].cart[key] ; 
+        var bookUser = book[index].user; 
+        var object = { user  : bookUser , item :  cartUser}; 
+        newAr.push(object);
       }
     }
   }
 
-  res.status(200).json({
-    user : book.user ,
-    cart :newAr
-  });
+  res.status(200).json(newAr);
+};
+
+
+exports.getOrganizedCorporateOrder = async (req, res, next) => {
+  let book = await Book.find({ organizingCompanyId: req.user._id });
+ // let book = await Book.find({ organizingCompanyId: "63ad976ad5110219b7d1999d" });
+
+  console.log(book);
+  res.status(200).json(book);
 };
 
 exports.addBook = async (req, res, next) => {

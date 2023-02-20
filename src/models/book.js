@@ -7,6 +7,10 @@ const bookSchema = new mongoose.Schema({
     ref: "User",
     //require: true,
   },
+  paymentMethode: {
+    type: String,
+    require: true,
+  },
   paymentId: {
     type: String,
     require: true,
@@ -32,7 +36,11 @@ const bookSchema = new mongoose.Schema({
   
   cart: [
     {
-      id: {
+      productId: {
+        type: String,
+        require: true,
+      },
+      company: {
         type: String,
         require: true,
       },
@@ -52,6 +60,11 @@ const bookSchema = new mongoose.Schema({
         type: String,
         require: true,
       },
+      image: {
+        type: String,
+        require: true,
+      },
+    
       time: {
         type: String,
         require: true,
@@ -106,6 +119,10 @@ const bookSchema = new mongoose.Schema({
         require: true,
       },
       categoriesCost: {
+        type: String,
+        require: true,
+      },
+      dressColor: {
         type: String,
         require: true,
       },
