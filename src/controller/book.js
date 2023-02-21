@@ -2,6 +2,12 @@ const _ = require("lodash");
 const { Book } = require("../models/book");
 const { validateAddBook } = require("../validations/validations");
 const orderId = require("order-id")("key");
+// for Notification
+const config = require("config");
+var FCM = require("fcm-node");
+var fcm = new FCM(config.get("serverKey"));
+const { Notification } = require("../models/notification");
+const { Firebase } = require("../models/firebase");
 
 exports.getBook = async (req, res, next) => {
   let book = await Book.find({ user: req.user._id });
@@ -12,16 +18,14 @@ exports.getBook = async (req, res, next) => {
 exports.getOrderCompany = async (req, res, next) => {
   let book = await Book.find();
 
- //console.log("i am in getOrderCompany");
-
   var newAr = [];
   for (var index in book) {
     for (const key in book[index].cart) {
-     // if (book[index].cart[key]["id"] == "638282244fbad7fad3c46d24") {
-      if (book[index].cart[key]["id"] == req.user._id) {
-        var cartUser = book[index].cart[key] ; 
-        var bookUser = book[index].user; 
-        var object = { user  : bookUser , item :  cartUser}; 
+      // if (book[index].cart[key]["id"] == "638282244fbad7fad3c46d24") {
+      if (book[index].cart[key]["company"] == req.user._id) {
+        var cartUser = book[index].cart[key];
+        var bookUser = book[index].user;
+        var object = { user: bookUser, item: cartUser };
         newAr.push(object);
       }
     }
@@ -30,10 +34,9 @@ exports.getOrderCompany = async (req, res, next) => {
   res.status(200).json(newAr);
 };
 
-
 exports.getOrganizedCorporateOrder = async (req, res, next) => {
-  let book = await Book.find({ organizingCompanyId: req.user._id });
- // let book = await Book.find({ organizingCompanyId: "63ad976ad5110219b7d1999d" });
+  let book = await Book.find({ organizingCompanyId: req.user._id }); //  63ad97e6d5110219b7d199a0
+  // let book = await Book.find({ organizingCompanyId: "63ad976ad5110219b7d1999d" });
 
   console.log(book);
   res.status(200).json(book);
@@ -79,6 +82,7 @@ exports.addBook = async (req, res, next) => {
   const result = await book.save();
 
   // todo : should send notification to user oder
+  functionName(req, req.body.cart, req.user._id);
 
   res.status(200).json({
     success: true,
@@ -94,3 +98,58 @@ exports.deleteBook = async (req, res, next) => {
   });
   d;
 };
+
+
+
+
+
+
+
+async function functionName(req, cart, userId) {
+  for (const key in cart) {
+    console.log(cart[key]["company"]);
+
+    let user = await Firebase.findOne({ user: cart[key]["company"] });
+
+    let statusTitle = "You Have request | لديك طلب ";
+    req.body.body = cart[key]["titleEn"] + " | " + cart[key]["title"];
+
+    var toke = user.token;
+    var message = {
+      to: toke, // token[0].firebaseToken,
+      notification: {
+        title: statusTitle,
+        body: req.body.body,
+      },
+
+      data: {
+        title: statusTitle + req.body.title,
+        body: req.body.body,
+      },
+    };
+
+    fcm.send(message, function (err, response) {
+      if (err) console.log(err);
+
+      req.body.senderId = userId;
+      req.body.receiverId = cart[key]["company"];
+      req.body.title = cart[key]["title"];
+      req.body.titleEn = cart[key]["titleEn"];
+      req.body.orderId = cart[key]["orderId"];
+      req.body.typeNotification = 0;
+      const notification = Notification(
+        _.pick(req.body, [
+          "senderId",
+          "receiverId",
+          "title",
+          "titleEn",
+          "body",
+          "orderId",
+          "typeNotification",
+        ])
+      );
+
+      notification.save();
+    });
+  }
+}

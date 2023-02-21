@@ -8,11 +8,9 @@ const { User } = require("../models/user");
 var constants = require("../helpers/constants");
 
 exports.getNotification = async (req, res, next) => {
-  console.log( "getNotification");
-  console.log( req.user._id);
   let notification = await Notification.find({
     receiverId: req.user._id,
-  }) ; 
+  });
   //.populate("senderId", "name email");
 
   res.status(200).json(notification);
@@ -70,7 +68,7 @@ exports.addFireBaseToken = async (req, res, next) => {
 };
 
 exports.sendNotification = async (req, res, next) => {
-  let user = await Firebase.findOne({ user: req.user._id });
+  let user = await Firebase.findOne({ user: req.body.receiverId });
 
   let statusTitle;
 
@@ -104,12 +102,20 @@ exports.sendNotification = async (req, res, next) => {
   };
 
   fcm.send(message, function (err, response) {
-    console.log(err);
     if (err) return res.status(400).json({ success: false });
 
-     re.body.senderId = req.user._id; 
+    // re.body.receiverId = req.body.receiverId;
+    req.body.senderId = req.user._id;
     const notification = Notification(
-      _.pick(req.body, ["senderId", "receiverId", "title" ,"titleEn" , "body", "orderId" ,"typeNotification"])
+      _.pick(req.body, [
+        "senderId",
+        "receiverId",
+        "title",
+        "titleEn",
+        "body",
+        "orderId",
+        "typeNotification",
+      ])
     );
 
     const result = notification.save();
