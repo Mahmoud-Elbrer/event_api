@@ -126,6 +126,10 @@ const bookSchema = new mongoose.Schema({
         type: String,
         require: true,
       },
+      dressMeasurement: {
+        type: String,
+        require: true,
+      },
       statusOrder : {
         type: Number,
       }, 
