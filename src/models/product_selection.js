@@ -27,10 +27,12 @@ const productSelectionSchema = new mongoose.Schema({
   cost: {
     type: String,
   },
-  img: {
-    type: String,
-    // require: true,
-  },  
+  img: String,  
+  img1: String,  
+  img2: String,  
+  img3: String,  
+  img4: String,  
+  img5: String,  
   categories: {
     type: Array,
   },

@@ -82,7 +82,7 @@ exports.addBook = async (req, res, next) => {
   const result = await book.save();
 
   // todo : should send notification to user oder
-  functionName(req, req.body.cart, req.user._id);
+  sendNotification(req, req.body.cart, req.user._id);
 
   res.status(200).json({
     success: true,
@@ -105,7 +105,7 @@ exports.deleteBook = async (req, res, next) => {
 
 
 
-async function functionName(req, cart, userId) {
+async function sendNotification(req, cart, userId) {
   for (const key in cart) {
     console.log(cart[key]["company"]);
 
