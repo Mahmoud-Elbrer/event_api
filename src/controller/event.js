@@ -95,8 +95,53 @@ exports.updateEvent = async (req, res, next) => {
     });
 };
 
-// search method
-//  exports.searchEvent = async (req, res, next) => {
-//   let event = await Event.find({ name: new RegExp(req.params.name, "i") });
-//   res.status(200).json(event);
-// };
+
+
+exports.updateImgEvent  = async (req, res, next) => {
+  console.log(" i am updateImgEvent");
+
+  var src = fs.createReadStream(req.file.path);
+  var dest = fs.createWriteStream(
+    "public/images/event/" + req.file.originalname
+  );
+  src.pipe(dest);
+  src.on("end", function () {
+    fs.unlinkSync(req.file.path);
+    //res.json("OK: received " + req.file.originalname);
+  });
+  src.on("error", function (err) {
+    res.json("Something went wrong!");
+  });
+
+  const newProduct = {
+    img: req.file.originalname,
+  };
+
+  console.log(newProduct);
+
+  Event.updateOne({ _id: req.params.eventId }, { $set: newProduct })
+    .then((result) => {
+      if (result) {
+        console.log("result");
+        console.log(req.params.eventId);
+        console.log(result);
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+
+        // todo : remove old image
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
+};
