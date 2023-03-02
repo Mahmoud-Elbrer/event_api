@@ -100,6 +100,15 @@ exports.getCompany = async (req, res, next) => {
   res.status(200).json(company);
 };
 
+
+exports.getCompanyById = async (req, res, next) => {
+  let company = await Company.findOne({ _id: req.params.Id });
+  // if (!user) return res.status(400).send("Invalid email or password");
+
+  res.status(200).json(company);
+};
+
+
 exports.deleteCompany = async (req, res, next) => {
   const companyResult = await Company.findOne({ _id: req.params.Id });
 

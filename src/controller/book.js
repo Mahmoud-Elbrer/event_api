@@ -18,6 +18,8 @@ exports.getBook = async (req, res, next) => {
 exports.getOrderCompany = async (req, res, next) => {
   let book = await Book.find();
 
+  //console.log(book);
+
   var newAr = [];
   for (var index in book) {
     for (const key in book[index].cart) {
@@ -25,11 +27,18 @@ exports.getOrderCompany = async (req, res, next) => {
       if (book[index].cart[key]["company"] == req.user._id) {
         var cartUser = book[index].cart[key];
         var bookUser = book[index].user;
-        var object = { user: bookUser, item: cartUser };
+        var organizingCompanyId = book[index].organizingCompanyId;
+        var object = {
+          user: bookUser,
+          organizingCompany: organizingCompanyId,
+          item: cartUser,
+        };
         newAr.push(object);
       }
     }
   }
+
+  //console.log(newAr);
 
   res.status(200).json(newAr);
 };
@@ -83,6 +92,10 @@ exports.addBook = async (req, res, next) => {
 
   // todo : should send notification to user oder
   sendNotification(req, req.body.cart, req.user._id);
+  if (req.body.organizingCompanyId == "") {
+  } else {
+    sendNotification(req, req.body.cart, req.user._id);
+  }
 
   res.status(200).json({
     success: true,
@@ -98,12 +111,6 @@ exports.deleteBook = async (req, res, next) => {
   });
   d;
 };
-
-
-
-
-
-
 
 async function sendNotification(req, cart, userId) {
   for (const key in cart) {

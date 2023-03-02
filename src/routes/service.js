@@ -16,6 +16,6 @@ router.get("/", Service.getService);
 router.get("/:Id", Service.getServiceByEventId);
 router.delete("/:Id", Service.deleteService);
 router.patch("/", Service.updateService);
-router.put("/updateImgService/:serviceId", [auth,   upload.single("picture")], Service.updateImgService);
+router.put("/updateImgService/:serviceId", [auth, upload.single("picture")] , Service.updateImgService);
 
 module.exports = router;
