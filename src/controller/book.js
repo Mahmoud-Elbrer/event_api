@@ -28,11 +28,7 @@ exports.getOrderCompany = async (req, res, next) => {
         var cartUser = book[index].cart[key];
         var bookUser = book[index].user;
         var organizingCompanyId = book[index].organizingCompanyId;
-        var object = {
-          user: bookUser,
-          organizingCompany: organizingCompanyId,
-          item: cartUser,
-        };
+        var object = { user: bookUser, organizingCompany : organizingCompanyId , item: cartUser };
         newAr.push(object);
       }
     }
@@ -44,7 +40,7 @@ exports.getOrderCompany = async (req, res, next) => {
 };
 
 exports.getOrganizedCorporateOrder = async (req, res, next) => {
-  let book = await Book.find({ organizingCompanyId: req.user._id }); //  63ad97e6d5110219b7d199a0
+  let book = await Book.find({ organizingCompanyId: req.user._id}); //  63ad97e6d5110219b7d199a0
   // let book = await Book.find({ organizingCompanyId: "63ad976ad5110219b7d1999d" });
 
   console.log(book);
@@ -92,10 +88,12 @@ exports.addBook = async (req, res, next) => {
 
   // todo : should send notification to user oder
   sendNotification(req, req.body.cart, req.user._id);
-  if (req.body.organizingCompanyId == "") {
-  } else {
+  if(req.body.organizingCompanyId == ''){
+
+  }else {
     sendNotification(req, req.body.cart, req.user._id);
   }
+ 
 
   res.status(200).json({
     success: true,
@@ -111,6 +109,10 @@ exports.deleteBook = async (req, res, next) => {
   });
   d;
 };
+
+
+
+
 
 async function sendNotification(req, cart, userId) {
   for (const key in cart) {
@@ -160,3 +162,6 @@ async function sendNotification(req, cart, userId) {
     });
   }
 }
+
+
+

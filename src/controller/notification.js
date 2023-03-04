@@ -75,16 +75,16 @@ exports.sendNotification = async (req, res, next) => {
   switch (req.body.typeNotification) {
     case constants.ACCEPTED:
       statusTitle = " تم استلام طلبك ";
-      req.body.body = "Your request has been received | تم استلام طلبك ";
+      req.body.body = "تم استلام طلبك  | Your request has been received";
       break;
-    case constants.ANOTHER_CONSTANT:
-      statusTitle = " تم استلام طلبك ";
-      req.body.body = "Your request has been received | تم استلام طلبك ";
+    case constants.REJECTED:
+      statusTitle = " تم رفض طلبك ";
+      req.body.body = "تم رفض طلبك  | Your request has been rejected";
       break;
     default:
       statusTitle = " تم استلام طلبك ";
-      req.body.body = "Your request has been received | تم استلام طلبك ";
-      console.log(`Sorry, we are out of ${expr}.`);
+      req.body.body = "تم استلام طلبك  | Your request has been received";
+      //console.log(`Sorry, we are out of ${expr}.`);
   }
 
   var toke = user.token;
