@@ -10,23 +10,7 @@ const {
 } = require("../validations/validations");
 
 
-const apiKey = 'u50che23';
-const apiSecret  = 'jxucimbk';
-var smsglobal = require('smsglobal')(apiKey, apiSecret );
-
 exports.signIn = async (req, res, next) => {
-
-  var payload = {
-    origin: '0521479725',
-    destination: '0521479725',
-    message: 'This is a test message'
-}
-
-smsglobal.sms.send(payload, function (error, response) {
-    console.log("response");
-    console.log(error);
-    console.log(error);
-});
 
   const { error } = validateSignIn(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -160,22 +144,26 @@ exports.sendOtp = async (req, res, next) => {
   var mathRandom = Math.floor(Math.random() * (99999 - 10000) + 10000);
   const passwordCompany = "806807";
   const userCompany = "sadad";
-  const message = " كود التحقق " + mathRandom + " تطبيق عقاري  ";
+  const message = " كود التحقق " + mathRandom + " تطبيق  ";
   const phoneNumber = req.body.phoneNumber;
   const requestHttps = https.request(
-    "https://sms.nilogy.com/app/gateway/gateway.php?sendmessage=1&username=محمود عبدالله&numbers=" +
-      req.body.phoneNumber +
-      "&sender=Eyatac",
-    (method = "GET"),
+    "https://globalsms.edsfze.com:1010/API/SendSMS?username=Edssample&apiId=yomOzOmR&json=True&destination=971"+ req.body.phoneNumber  +"&source=AD-OGLE&text=" + message,
+   // "https://globalsms.edsfze.com:1010/API//SendSMS?username=Edssample&apiId=GW@FHr~4#8TZ&json=True&destination=971" + req.body.phoneNumber + "&source=AD-OGLE&text="  + message,
+    (method = "POST"),
     (responseHttps) => {
       responseHttps.on("data", (d) => {
+
+console.log("responseHttps");
+console.log(responseHttps.statusMessage);
+console.log(responseHttps.statusCode);
+
         if (responseHttps.statusMessage === "OK") {
           let now = new Date();
           const newOtp = {
             phoneNumber: phoneNumber,
             otpCode: mathRandom,
             otpTimesTamp: now,
-            otpTries: result[0].otpTries + 1,
+           // otpTries: result[0].otpTries + 1,
           };
           let user = User.findOne({ email: req.body.email });
           let result;
