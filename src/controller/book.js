@@ -9,6 +9,11 @@ var fcm = new FCM(config.get("serverKey"));
 const { Notification } = require("../models/notification");
 const { Firebase } = require("../models/firebase");
 
+var sid = "AC5d34df3e97524353de4e70ae8c4e3f17";
+var auth_token = "e4afd18c9495ba850899f94cf2bf311b";
+
+var twilio = require("twilio")(sid, auth_token);
+
 exports.getBook = async (req, res, next) => {
   let book = await Book.find({ user: req.user._id });
 
@@ -161,6 +166,22 @@ async function sendNotification(req, cart, userId) {
       notification.save();
     });
   }
+}
+
+
+
+async function sendSms(){
+  
+  twilio.messages
+    .create({
+      from: "+971521479726",
+      to: "+971521479726",
+      body: "this is a testing message",
+    })
+    .then(function(res) {console.log("message has sent!")})
+    .catch(function(err)  {
+      console.log(err);
+    });
 }
 
 

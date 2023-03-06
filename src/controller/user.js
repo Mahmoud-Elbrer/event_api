@@ -9,7 +9,24 @@ const {
   validateUpdateUser,
 } = require("../validations/validations");
 
+
+const apiKey = 'u50che23';
+const apiSecret  = 'jxucimbk';
+var smsglobal = require('smsglobal')(apiKey, apiSecret );
+
 exports.signIn = async (req, res, next) => {
+
+  var payload = {
+    origin: '0521479725',
+    destination: '0521479725',
+    message: 'This is a test message'
+}
+
+smsglobal.sms.send(payload, function (error, response) {
+    console.log("response");
+    console.log(error);
+    console.log(error);
+});
 
   const { error } = validateSignIn(req.body);
   if (error) return res.status(400).send(error.details[0].message);
