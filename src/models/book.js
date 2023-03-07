@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 
 const bookSchema = new mongoose.Schema({
@@ -29,11 +28,11 @@ const bookSchema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  createdAt : {
+  createdAt: {
     type: String,
     require: true,
-  } , 
-  
+  },
+
   cart: [
     {
       productId: {
@@ -64,7 +63,7 @@ const bookSchema = new mongoose.Schema({
         type: String,
         require: true,
       },
-    
+
       time: {
         type: String,
         require: true,
@@ -130,9 +129,18 @@ const bookSchema = new mongoose.Schema({
         type: String,
         require: true,
       },
-      statusOrder : {
+      choices: {
+        type: String,
+        require: true,
+      },
+      choicesEn: {
+        type: String,
+        require: true,
+      },
+
+      statusOrder: {
         type: Number,
-      }, 
+      },
     },
   ],
 });
@@ -140,16 +148,6 @@ const bookSchema = new mongoose.Schema({
 const Book = mongoose.model("Book", bookSchema);
 
 exports.Book = Book;
-
-
-
-
-
-
-
-
-
-
 
 /*
 

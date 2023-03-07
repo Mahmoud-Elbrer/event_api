@@ -6,8 +6,8 @@ exports.validateSignUp = function (user) {
     email: Joi.string(),
     phone: Joi.string(),
     password: Joi.string().min(3).max(255),
-    active : Joi.boolean(),
-    loginAs : Joi.string(),
+    loginAs : Joi.string().empty('').default(''),
+    verifiedUser : Joi.boolean().default(false),
   });
   return schema.validate(user);
 };
@@ -44,8 +44,8 @@ exports.validateSignUpCompany = function (company) {
 
 exports.validateSignIn = function (user) {
   const schema = Joi.object({
-    email: Joi.string().min(6).max(255),
-    password: Joi.string().min(3).max(255),
+    email: Joi.string(),
+    password: Joi.string(),
   });
   return schema.validate(user);
 };
