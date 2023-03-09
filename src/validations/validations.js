@@ -3,7 +3,7 @@ const Joi = require("joi");
 exports.validateSignUp = function (user) {
   const schema = Joi.object({
     name: Joi.string().min(1).max(50).required(),
-    email: Joi.string(),
+    email: Joi.string().optional().min(0),
     phone: Joi.string(),
     password: Joi.string().min(3).max(255),
     loginAs : Joi.string().empty('').default(''),

@@ -36,28 +36,34 @@ exports.signIn = async (req, res, next) => {
     token: token,
     name: user.name,
     email: user.email,
+    phone: user.phone,
+    // verifiedUser: user.verifiedUser,
   });
 };
 
 exports.signUp = async (req, res, next) => {
+  console.log(req.body);
   const { error } = validateSignUp(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-
-
-  console.log(req.body.phone);
 
   let user = await User.findOne({ phone: req.body.phone });
   if (user)
     return res.status(400).json({
       success: false,
-      message: "خطأ في البريد الالكتروني او كلمة المرور | user already exists",
+      message: "رقم الهاتف مسجل مسبقا | user already exists",
       user: user,
       token: user.generateAuthToken(), //  i am use this for social media return
     });
 
-
   user = User(
-    _.pick(req.body, ["name", "email", "phone", "password", "loginAs" ,"verifiedUser"])
+    _.pick(req.body, [
+      "name",
+      "email",
+      "phone",
+      "password",
+      "loginAs",
+      "verifiedUser",
+    ])
   );
 
   const salt = await bcrypt.genSalt(10); //  10 it default value
@@ -72,10 +78,6 @@ exports.signUp = async (req, res, next) => {
     token: token,
     user: user,
   });
-
-  // res
-  //   .header("x-auth-token", token)
-  //   .send(_.pick(user, ["_id", "name", "email" ,"phone"]));
 };
 
 exports.updateUserData = async (req, res, next) => {
@@ -138,54 +140,56 @@ exports.updateUserData = async (req, res, next) => {
 };
 
 exports.sendOtp = async (req, res, next) => {
-  var mathRandom = Math.floor(Math.random() * (99999 - 10000) + 10000);
+  console.log("i am in send otp");
+  var mathRandom = Math.floor(Math.random() * (9999 - 1000) + 1000);
   const passwordCompany = "806807";
   const userCompany = "sadad";
   const message = "Your Event App verification code is : " + mathRandom;
-  const phone = req.body.phone;
+  const phone = req.params.phone;
+
   const requestHttps = https.request(
     "https://globalsms.edsfze.com:1010/API/SendSMS?username=Edssample&apiId=yomOzOmR&json=True&destination=971" +
-      req.body.phone +
+      phone +
       "&source=AD-OGLE&text=" +
       message,
     // "https://globalsms.edsfze.com:1010/API//SendSMS?username=Edssample&apiId=GW@FHr~4#8TZ&json=True&destination=971" + req.body.phone + "&source=AD-OGLE&text="  + message,
     (method = "POST"),
-    (responseHttps) => {
-      responseHttps.on("data", (d) => {
-        console.log("responseHttps");
-        console.log(responseHttps.statusMessage);
-        console.log(responseHttps.statusCode);
+    async (responseHttps) => {
+      // responseHttps.on("data", (d) => {
+      console.log("responseHttps");
+      console.log(responseHttps.statusMessage);
+      console.log(responseHttps.statusCode);
 
-        if (responseHttps.statusMessage === "OK") {
-          let user = User.findOne({ user: req.user._id });
-          let result;
-          let now = new Date();
+      if (responseHttps.statusCode == 200) {
+        let user = await User.findOne({ phone: "0" + phone });
+        let now = new Date();
+        let result;
 
-          if (user) {
-            const newOtp = {
-              phone: phone,
-              otpCode: mathRandom,
-              otpTimesTamp: now,
-              otpTries: user.otpTries + 1,
-            };
+        if (user) {
+          const newOtp = {
+            phone: phone,
+            otpCode: mathRandom,
+            otpTimesTamp: now,
+            otpTries: user.otpTries + 1,
+          };
 
-            result = Otp.updateOne({ phone: req.body.phone }, { $set: newOtp });
-          } else {
-            const otp = new Otp({
-              phone: phone,
-              otpCode: mathRandom,
-              otpTimesTamp: now,
-              otpTries: 1, // this for first  Tries
-            });
-
-            result = otp.save();
-          }
-          res.status(200).json({
-            success: true,
-            result: result,
+          result = Otp.updateOne({ phone: phone }, { $set: newOtp });
+        } else {
+          const otp = new Otp({
+            phone: phone,
+            otpCode: mathRandom,
+            otpTimesTamp: now,
+            otpTries: 1, // this for first  Tries
           });
+
+          result = otp.save();
         }
-      });
+
+        res.status(200).json({
+          success: true,
+          result: result,
+        });
+      }
     }
   );
   requestHttps.on("error", (error) => {
@@ -205,17 +209,15 @@ exports.verifyOtp = async (req, res, next) => {
       message: "الرقم غير مسجل  | Invalid Phone",
     });
 
-  if (otp.phone = req.body.phone && otp.otpCode == req.body.otpCode) {
+  if ((otp.phone = req.body.phone && otp.otpCode == req.body.code)) {
     res.status(200).json({
       success: true,
     });
-  // todo : verify user => verifyUser =  true 
-
+    // todo : verify user => verifyUser =  true
   } else {
     return res.status(400).json({
       success: false,
-      message:
-        "خطأ في البريد الالكتروني او كلمة المرور | Invalid email or password",
+      message: "لا يتطابق الكود المرسل | Invalid email or password",
     });
   }
 

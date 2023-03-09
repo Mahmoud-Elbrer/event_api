@@ -9,6 +9,8 @@ const auth = require("../middleware/auth");
 router.post("/signIn", User.signIn);
 router.post("/signUp", User.signUp);
 router.post("/sendOtp",[auth], User.sendOtp);
+router.post("/verifyOtp" , User.verifyOtp);
+router.post("/sendOtp/:phone" , User.sendOtp);
 router.get("/blockUser", User.blockUser);
 router.post("/updateUser", User.updateUserData);
 
