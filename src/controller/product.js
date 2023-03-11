@@ -107,6 +107,12 @@ exports.getProductById = async (req, res, next) => {
 };
 
 exports.addProduct = async (req, res, next) => {
+
+
+
+// console.log(req.body);
+
+
   let resultServices = req.body.services.replace("(", "").replace(")", "");
 
   let resultServicesEn = req.body.servicesEn.replace("(", "").replace(")", "");
@@ -156,7 +162,7 @@ exports.addProduct = async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    product: result,
+   product: result,
   });
 };
 

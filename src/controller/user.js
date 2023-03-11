@@ -149,7 +149,7 @@ exports.sendOtp = async (req, res, next) => {
 
   const requestHttps = https.request(
     "https://globalsms.edsfze.com:1010/API/SendSMS?username=Edssample&apiId=yomOzOmR&json=True&destination=971" +
-      phone +
+      phone.substring(1) +
       "&source=AD-OGLE&text=" +
       message,
     // "https://globalsms.edsfze.com:1010/API//SendSMS?username=Edssample&apiId=GW@FHr~4#8TZ&json=True&destination=971" + req.body.phone + "&source=AD-OGLE&text="  + message,
@@ -161,7 +161,7 @@ exports.sendOtp = async (req, res, next) => {
       console.log(responseHttps.statusCode);
 
       if (responseHttps.statusCode == 200) {
-        let user = await User.findOne({ phone: "0" + phone });
+        let user = await User.findOne({ phone: phone });
         let now = new Date();
         let result;
 
@@ -187,9 +187,15 @@ exports.sendOtp = async (req, res, next) => {
 
         res.status(200).json({
           success: true,
-          result: result,
+          message: 'تم إرسال الكود | The code has been sent',
+        });
+      }else {
+        res.status(200).json({
+          success: false ,
+          message: 'فشل في إرسال الكود ، حاول مرة أخرى | Failed to send the code, try again',
         });
       }
+      
     }
   );
   requestHttps.on("error", (error) => {
