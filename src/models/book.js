@@ -140,7 +140,7 @@ const bookSchema = new mongoose.Schema({
       weight: {
         type: String,
       },
-      statusOrder: {
+      status: {
         type: Number,
       },
     },

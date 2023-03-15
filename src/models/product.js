@@ -41,10 +41,22 @@ const productSchema = new mongoose.Schema({
   productDescriptionEn: {
     type: String,
   },
-  services: {
-    type: Array,
-    require: true,
-  },
+
+  services: [
+    {
+      name: {
+        type: String,
+      },
+      nameEn: {
+        type: String,
+      },
+    },
+  ],
+
+  // services: {
+  //   type: Array,
+  //   require: true,
+  // },
   servicesEn: {
     type: Array,
   },
@@ -53,7 +65,7 @@ const productSchema = new mongoose.Schema({
   },
   images: {
     type: String,
-  },  
+  },
   // images: [
   //   {
   //     imageUrl: {

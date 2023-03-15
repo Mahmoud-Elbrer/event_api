@@ -14,6 +14,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 //app.use('/images', express.static('images'));
 app.use("/event", express.static("public/images/event"));
+app.use("/banner", express.static("public/images/banner"));
 
 //require("./src/startup/logging")();
 require("./src/startup/routes")(app);

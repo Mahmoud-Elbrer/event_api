@@ -7,8 +7,9 @@ const auth = require("../middleware/auth");
 
 //Routes
 router.get("/", [auth], Book.getBook);
-router.get("/orderCompany/", [auth], Book.getOrderCompany);
-router.get("/organizedCorporateOrder/", [auth], Book.getOrganizedCorporateOrder);
+router.get("/orderCompany/status/:status", [auth], Book.getOrderCompany);
+router.get("/organizedCorporateOrder/:status", [auth], Book.getOrganizedCorporateOrder);
+router.put("/updateStatusCompany/", Book.updateStatusCompany);
 router.post("/",[auth], Book.addBook);
 router.delete("/:Id", [auth], Book.deleteBook);
 

@@ -21,6 +21,7 @@ var subscribeProductServiceRouter = require("../routes/subscribe_product_service
 var subscribeProductEmirateRouter = require("../routes/subscribe_product_emirate");
 var categorySelectionRouter = require("../routes/category_selection");
 var companyEmirateRouter = require("../routes/company_emirate");
+var bannerRouter = require("../routes/banner");
 const error = require("../middleware/error");
 
 module.exports = function (app) {
@@ -47,5 +48,6 @@ module.exports = function (app) {
   app.use("/api/subscribeProductEmirate", subscribeProductEmirateRouter);
   app.use("/api/categorySelection", categorySelectionRouter);
   app.use("/api/companyEmirate", companyEmirateRouter);
+  app.use("/api/banner", bannerRouter);
   app.use(error);
 };

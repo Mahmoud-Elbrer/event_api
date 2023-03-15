@@ -42,6 +42,7 @@ exports.signIn = async (req, res, next) => {
 };
 
 exports.signUp = async (req, res, next) => {
+  console.log("sign uo");
   console.log(req.body);
   const { error } = validateSignUp(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -72,6 +73,8 @@ exports.signUp = async (req, res, next) => {
   await user.save();
 
   const token = user.generateAuthToken();
+
+  console.log(token);
 
   res.status(200).json({
     success: true,
@@ -195,7 +198,7 @@ exports.sendOtp = async (req, res, next) => {
           message: 'فشل في إرسال الكود ، حاول مرة أخرى | Failed to send the code, try again',
         });
       }
-      
+
     }
   );
   requestHttps.on("error", (error) => {

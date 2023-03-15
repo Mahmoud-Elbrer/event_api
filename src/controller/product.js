@@ -110,18 +110,29 @@ exports.addProduct = async (req, res, next) => {
 
 
 
-// console.log(req.body);
+console.log(req.body.services);
+// console.log(JSON.parse(req.body.services));
+// var myArray = [];
+// for(var i in req.body.services) {
+//     myArray.push(req.body.services[i]);
+// }
+// //req.body.services = JSON.parse(req.body.services); 
+// console.log("after");
+// console.log(myArray);
 
 
-  let resultServices = req.body.services.replace("(", "").replace(")", "");
+  // req.body.services.replace("[", "").replace("]", "");
 
-  let resultServicesEn = req.body.servicesEn.replace("(", "").replace(")", "");
+  // let resultServicesEn = req.body.servicesEn.replace("(", "").replace(")", "");
 
-  req.body.services = resultServices.split(",");
-  req.body.servicesEn = resultServicesEn.split(",");
+ // req.body.services = resultServices .split(",");
+  // req.body.servicesEn = resultServicesEn.split(",");
 
-  // const { error } = validateAddProduct(req.body);
-  // if (error) return res.status(400).send(error.details[0].message);
+  // console.log('after');
+  // console.log(req.body.services);
+
+  // // const { error } = validateAddProduct(req.body);
+  // // if (error) return res.status(400).send(error.details[0].message);
 
   var src = fs.createReadStream(req.file.path);
   var dest = fs.createWriteStream(
@@ -136,6 +147,9 @@ exports.addProduct = async (req, res, next) => {
     res.json("Something went wrong!");
   });
 
+  console.log("last");
+  console.log(req.body.services);
+
   const product = new Product({
     company: req.user._id,
     service: req.body.service,
@@ -143,8 +157,8 @@ exports.addProduct = async (req, res, next) => {
     productTitleEn: req.body.productTitleEn,
     productDescription: req.body.productDescription,
     productDescriptionEn: req.body.productDescriptionEn,
-    services: req.body.services,
-    servicesEn: req.body.servicesEn,
+    services: req.body.services.replace('"`"', ''),
+    //servicesEn: req.body.servicesEn,
     cost: req.body.cost,
     available: req.body.available,
     additionalNotes: req.body.additionalNotes,
@@ -159,6 +173,8 @@ exports.addProduct = async (req, res, next) => {
   });
 
   const result = await product.save();
+
+  console.log(result);
 
   res.status(200).json({
     success: true,
