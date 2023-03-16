@@ -140,7 +140,10 @@ const bookSchema = new mongoose.Schema({
       weight: {
         type: String,
       },
-      status: {
+      statusCompany: {
+        type: Number,
+      },
+      statusOrganizedCompany: {
         type: Number,
       },
     },
