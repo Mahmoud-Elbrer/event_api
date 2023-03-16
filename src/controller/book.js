@@ -8,7 +8,7 @@ var FCM = require("fcm-node");
 var fcm = new FCM(config.get("serverKey"));
 const { Notification } = require("../models/notification");
 const { Firebase } = require("../models/firebase");
-const { createMongooseSchema } =  require('convert-json-schema-to-mongoose');
+const { createMongooseSchema } = require("convert-json-schema-to-mongoose");
 
 var sid = "AC5d34df3e97524353de4e70ae8c4e3f17";
 var auth_token = "e4afd18c9495ba850899f94cf2bf311b";
@@ -33,11 +33,18 @@ exports.getOrderCompany = async (req, res, next) => {
   for (var index in book) {
     for (const key in book[index].cart) {
       // if (book[index].cart[key]["id"] == "638282244fbad7fad3c46d24") {
-      if (book[index].cart[key]["company"] == req.user._id && book[index].cart[key]["price"] === req.params.status) {
+      if (
+        book[index].cart[key]["company"] == req.user._id &&
+        book[index].cart[key]["price"] === req.params.status
+      ) {
         var cartUser = book[index].cart[key];
         var bookUser = book[index].user;
         var organizingCompanyId = book[index].organizingCompanyId;
-        var object = { user: bookUser, organizingCompany : organizingCompanyId , item: cartUser };
+        var object = {
+          user: bookUser,
+          organizingCompany: organizingCompanyId,
+          item: cartUser,
+        };
         newAr.push(object);
       }
     }
@@ -51,98 +58,52 @@ exports.getOrderCompany = async (req, res, next) => {
 exports.getOrganizedCorporateOrder = async (req, res, next) => {
   console.log("status1");
   console.log(req.params.status);
-  let book = await Book.find({ organizingCompanyId: req.user._id}); //  63ad97e6d5110219b7d199a0
+  let book = await Book.find({ organizingCompanyId: req.user._id }); //  63ad97e6d5110219b7d199a0
   // let book = await Book.find({ organizingCompanyId: "63ad976ad5110219b7d1999d" });
 
   console.log(book);
   res.status(200).json(book);
 };
 
-
 exports.updateStatusCompany = async (req, res, next) => {
-
-
-  console.log(req.body.orderId);
-  
-  let book = await Book.find({ productId: req.body.productId });
-
- // res.status(200).json(book);
-
-//   var d = new MyRichObject();
-//  let sss =  d.copyInto(book[0].cart)
-//var convert = createMongooseSchema(book[0].cart) ;
-
-
-
-
+  let book = await Book.find({ orderId: req.body.orderId });
 
   for (const key in book[0].cart) {
-    //console.log(book[0].cart[0].productId);
-    console.log(book[0].cart[key]);
     console.log(book[0].cart[key].id);
-    if (book[0].cart[key].id == "638a23594cd8990717d18f3c") {
-      console.log("i am ");
-      //const element = book[0].cart[key];
-      book[0].cart[key].price = "80" ;
-    //  res.status(200).json(book[0].cart[key]);
-
-      const newUser = {
-        "orderId" : 33332222
-      };
-
-      //console.log( book[0].cart[key]);
-
-
-      Book.updateOne({ _id: "638a23594cd8990717d18f3c" }, { $set: newUser})
-      .then((result) => {
-        console.log("Re result");
-        console.log(result);
-        if (result) {
-          res.status(200).json({
-            message: "تم التحديث بنجاح | Update completed successfully",
-            success: true,
-          });
-        } else {
-          res.status(200).json({
-            message: "الحساب غير موجود | user not exists",
-            success: false,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("err");
-        console.log(err);
-        res.status(404).json({
-          message: "Error Connection  " + err,
-          success: false,
-        });
-      });
-
-      // console.log(createMongooseSchema (book[0].cart[key].price));
-      
+    if (book[0].cart[key].id == req.body.itemId) {
+      book[0].cart[key].status = req.body.status;
     }
   }
 
-
-
-//let item  =  book[0].cart.find({ productId: "638282244fbad7fad3c46d24" })
-
-//res.status(200).json(item);
-    // let cart;
-    // const cartItem = await cartService.findCart({ userId: req.user.id, productId: req.body.id });   //Your Condition to find cart item.
-    // if (!cartItem)
-    //     cart = await cartService.createCart(req.body);
-    // else
-    //     cart = await cartService.updateCart({ productId: req.body.id, quantity: cartItem.quantity + 1, userId: req.user.id });
-    // if (!cart)
-    //     return res.status(422).json({ success: false, message: 'Failed To Add Into Cart' });
-    // res.json({ success: true, message: 'Item Added Into Cart' });
+  Book.updateOne({ orderId: req.body.orderId }, { $set: book[0] })
+    .then((result) => {
+      console.log("Re result");
+      console.log(result);
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+          cart: book[0].cart,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("err");
+      console.log(err);
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
 };
 
-
 exports.updateStatusOrgCompany = async (req, res, next) => {
-console.log('HI');
-
+  console.log("HI");
 
   const newUser = {
     orderId: 234234,
@@ -172,7 +133,7 @@ console.log('HI');
         success: false,
       });
     });
-} ;
+};
 
 exports.addBook = async (req, res, next) => {
   // const { error } = validateAddBook(req.body);
@@ -215,12 +176,10 @@ exports.addBook = async (req, res, next) => {
 
   // todo : should send notification to user oder
   sendNotification(req, req.body.cart, req.user._id);
-  if(req.body.organizingCompanyId == ''){
-
-  }else {
+  if (req.body.organizingCompanyId == "") {
+  } else {
     sendNotification(req, req.body.cart, req.user._id);
   }
- 
 
   res.status(200).json({
     success: true,
@@ -236,10 +195,6 @@ exports.deleteBook = async (req, res, next) => {
   });
   d;
 };
-
-
-
-
 
 async function sendNotification(req, cart, userId) {
   for (const key in cart) {
@@ -290,21 +245,17 @@ async function sendNotification(req, cart, userId) {
   }
 }
 
-
-
-async function sendSms(){
-  
+async function sendSms() {
   twilio.messages
     .create({
       from: "+971521479726",
       to: "+971521479726",
       body: "this is a testing message",
     })
-    .then(function(res) {console.log("message has sent!")})
-    .catch(function(err)  {
+    .then(function (res) {
+      console.log("message has sent!");
+    })
+    .catch(function (err) {
       console.log(err);
     });
 }
-
-
-

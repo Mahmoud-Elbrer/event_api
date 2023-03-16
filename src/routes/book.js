@@ -9,7 +9,7 @@ const auth = require("../middleware/auth");
 router.get("/", [auth], Book.getBook);
 router.get("/orderCompany/status/:status", [auth], Book.getOrderCompany);
 router.get("/organizedCorporateOrder/:status", [auth], Book.getOrganizedCorporateOrder);
-router.put("/updateStatusCompany/", Book.updateStatusCompany);
+router.put("/updateStatusCompany/", [auth], Book.updateStatusCompany);
 router.post("/",[auth], Book.addBook);
 router.delete("/:Id", [auth], Book.deleteBook);
 
