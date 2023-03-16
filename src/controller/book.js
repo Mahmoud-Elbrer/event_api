@@ -26,22 +26,21 @@ exports.getOrderCompany = async (req, res, next) => {
 
   console.log("i am in getOrderCompany");
   console.log(req.user._id);
+  console.log(req.params.status);
 
   //console.log(book);
 
   var newAr = [];
   for (var index in book) {
     for (const key in book[index].cart) {
-      // if (book[index].cart[key]["id"] == "638282244fbad7fad3c46d24") {
-      if (
-        book[index].cart[key]["company"] == req.user._id &&
-        book[index].cart[key]["price"] === req.params.status
-      ) {
+      if ( book[index].cart[key]["company"] == req.user._id && book[index].cart[key]["statusCompany"] == req.params.status) {
         var cartUser = book[index].cart[key];
         var bookUser = book[index].user;
+        var orderId = book[index].orderId;
         var organizingCompanyId = book[index].organizingCompanyId;
         var object = {
           user: bookUser,
+          orderId: orderId,
           organizingCompany: organizingCompanyId,
           item: cartUser,
         };
@@ -56,8 +55,8 @@ exports.getOrderCompany = async (req, res, next) => {
 };
 
 exports.getOrganizedCorporateOrder = async (req, res, next) => {
-  console.log("status1");
-  console.log(req.params.status);
+  // console.log("status1");
+  // console.log(req.params.status);
   let book = await Book.find({ organizingCompanyId: req.user._id }); //  63ad97e6d5110219b7d199a0
   // let book = await Book.find({ organizingCompanyId: "63ad976ad5110219b7d1999d" });
 
@@ -66,12 +65,24 @@ exports.getOrganizedCorporateOrder = async (req, res, next) => {
 };
 
 exports.updateStatusCompany = async (req, res, next) => {
+
+console.log("this body");
+console.log(req.body);
+
+
+
   let book = await Book.find({ orderId: req.body.orderId });
 
   for (const key in book[0].cart) {
+
     console.log(book[0].cart[key].id);
     if (book[0].cart[key].id == req.body.itemId) {
-      book[0].cart[key].status = req.body.status;
+      if(req.user.typeCompany  == "1" || req.user.typeCompany  == "2"){
+        book[0].cart[key].statusCompany = req.body.status;
+      }else {
+        book[0].cart[key].statusOrganizedCompany = req.body.status;
+      }
+      
     }
   }
 

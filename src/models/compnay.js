@@ -53,7 +53,7 @@ const companySchema = new mongoose.Schema({
 
 companySchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
-    { _id: this._id , name: this.name },
+    { _id: this._id , name: this.name , typeCompany : this.typeCompany },
     config.get("jwtPrivateKey"),
     { expiresIn: "300 days" }
   );
