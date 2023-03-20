@@ -101,7 +101,7 @@ exports.getProductByTourismProgram = async (req, res, next) => {
 };
 
 exports.getProductById = async (req, res, next) => {
-  let product = await Product.find({ _id: req.params.productId });
+  let product = await Product.find({ _id: req.params.productId }).populate("service");
 
   res.status(200).json(product);
 };
@@ -119,17 +119,20 @@ console.log(req.body.services);
 // //req.body.services = JSON.parse(req.body.services); 
 // console.log("after");
 // console.log(myArray);
+console.log(req.body);
 
 
-  // req.body.services.replace("[", "").replace("]", "");
+  let resultServices =  req.body.services.replace("(", "").replace("[", "").replace(")", "").replace("]", "");
+  let resultServicesEn =  req.body.servicesEn.replace("(", "").replace("[", "").replace(")", "").replace("]", "");
 
+  // let resultServices = req.body.services.replace("(", "").replace(")", "");
   // let resultServicesEn = req.body.servicesEn.replace("(", "").replace(")", "");
 
- // req.body.services = resultServices .split(",");
-  // req.body.servicesEn = resultServicesEn.split(",");
+ req.body.services = resultServices .split(",");
+  req.body.servicesEn = resultServicesEn.split(",");
 
-  // console.log('after');
-  // console.log(req.body.services);
+  console.log('after');
+  console.log(req.body.services);
 
   // // const { error } = validateAddProduct(req.body);
   // // if (error) return res.status(400).send(error.details[0].message);
@@ -157,8 +160,8 @@ console.log(req.body.services);
     productTitleEn: req.body.productTitleEn,
     productDescription: req.body.productDescription,
     productDescriptionEn: req.body.productDescriptionEn,
-    services: req.body.services.replace('"`"', ''),
-    //servicesEn: req.body.servicesEn,
+    services: req.body.services,
+    servicesEn: req.body.servicesEn,
     cost: req.body.cost,
     available: req.body.available,
     additionalNotes: req.body.additionalNotes,

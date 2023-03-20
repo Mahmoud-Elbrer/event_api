@@ -42,21 +42,21 @@ const productSchema = new mongoose.Schema({
     type: String,
   },
 
-  services: [
-    {
-      name: {
-        type: String,
-      },
-      nameEn: {
-        type: String,
-      },
-    },
-  ],
+  // services: [
+  //   {
+  //     name: {
+  //       type: String,
+  //     },
+  //     nameEn: {
+  //       type: String,
+  //     },
+  //   },
+  // ],
 
-  // services: {
-  //   type: Array,
-  //   require: true,
-  // },
+  services: {
+    type: Array,
+    require: true,
+  },
   servicesEn: {
     type: Array,
   },

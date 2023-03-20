@@ -18,3 +18,10 @@
 1  ==  admin
 2  ==  normal company (services company)
 3  ==   organizing company  -->
+
+<!--  -->
+<!-- Status Order
+1  ==  pending
+2  ==  accepted
+3  ==  rejected
+4  ==   executed  -->

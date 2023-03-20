@@ -1,4 +1,6 @@
 module.exports = Object.freeze({
-    ACCEPTED: '1',
-    REJECTED: '2'
+    PENDING: '1',
+    ACCEPTED: '2',
+    REJECTED: '3' , 
+    EXECUTED: '4' , 
 });

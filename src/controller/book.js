@@ -65,12 +65,6 @@ exports.getOrganizedCorporateOrder = async (req, res, next) => {
 };
 
 exports.updateStatusCompany = async (req, res, next) => {
-
-console.log("this body");
-console.log(req.body);
-
-
-
   let book = await Book.find({ orderId: req.body.orderId });
 
   for (const key in book[0].cart) {
