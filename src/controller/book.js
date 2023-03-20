@@ -55,6 +55,7 @@ exports.getOrderCompany = async (req, res, next) => {
 };
 
 exports.getOrganizedCorporateOrder = async (req, res, next) => {
+  console.log("am org");
   // console.log("status1");
   // console.log(req.params.status);
   let book = await Book.find({ organizingCompanyId: req.user._id }); //  63ad97e6d5110219b7d199a0
