@@ -109,6 +109,11 @@ const bookSchema = new mongoose.Schema({
         type: String,
         require: true,
       },
+      wifeNameTextCard: {
+        type: String,
+        require: true,
+      },
+      
       categories: {
         type: String,
         require: true,

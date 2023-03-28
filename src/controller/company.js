@@ -21,6 +21,13 @@ exports.signIn = async (req, res, next) => {
         "خطأ في البريد الالكتروني او كلمة المرور | Invalid email or password",
     });
 
+  if (!company.active || company.active == false)
+    return res.status(400).json({
+      success: false,
+      message:
+        "لم يتم تفعيل حسابك بعد | Your account has not been activated",
+    });
+
   const validPassword = await bcrypt.compare(
     req.body.password,
     company.password
@@ -76,8 +83,8 @@ exports.signUp = async (req, res, next) => {
     aboutCompanyEn: req.body.aboutCompanyEn,
     typeCompany: req.body.typeCompany,
     percent: req.body.percent,
-   // isAdmin: req.body.isAdmin,
-   // active: req.body.active,
+    // isAdmin: req.body.isAdmin,
+    // active: req.body.active,
     img: req.file.originalname,
   });
 
@@ -100,14 +107,12 @@ exports.getCompany = async (req, res, next) => {
   res.status(200).json(company);
 };
 
-
 exports.getCompanyById = async (req, res, next) => {
   let company = await Company.findOne({ _id: req.params.Id });
   // if (!user) return res.status(400).send("Invalid email or password");
 
   res.status(200).json(company);
 };
-
 
 exports.deleteCompany = async (req, res, next) => {
   const companyResult = await Company.findOne({ _id: req.params.Id });
@@ -131,11 +136,11 @@ exports.deleteCompany = async (req, res, next) => {
 };
 
 exports.blockCompany = async (req, res, next) => {
-  let company = await Company.findOne({ email: req.body.email });
-  if (!company) return res.status(400).send("Invalid email or password");
+  let company = await Company.findOne({ _id: req.params.Id });
+  if (!company) return res.status(400).send("Company not found |  الشركة غير موجودة");
 
   await Company.updateOne(
-    { email: req.body.email },
+    { _id: req.params.Id },
     {
       $set: {
         active: !company.active,
@@ -145,6 +150,7 @@ exports.blockCompany = async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    active: !company.active,
   });
 };
 

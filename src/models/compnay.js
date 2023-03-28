@@ -6,14 +6,14 @@ const companySchema = new mongoose.Schema({
   name: {
     type: String,
     require: true,
-     minLength: 1,
+    minLength: 1,
     // maxLength: 50,
   },
   email: {
     type: String,
     require: true,
     minLength: 2,
-   //maxLength: 255,
+    //maxLength: 255,
     unique: true,
   },
   phone: {
@@ -44,8 +44,11 @@ const companySchema = new mongoose.Schema({
     type: String,
     // require: true,
   },
-  
-  active: Boolean,
+
+  active: {
+    type: Boolean,
+    default: false,
+  },
   isAdmin: Boolean,
 });
 
@@ -53,7 +56,7 @@ const companySchema = new mongoose.Schema({
 
 companySchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
-    { _id: this._id , name: this.name , typeCompany : this.typeCompany },
+    { _id: this._id, name: this.name, typeCompany: this.typeCompany },
     config.get("jwtPrivateKey"),
     { expiresIn: "300 days" }
   );

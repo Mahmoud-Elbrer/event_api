@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/event", express.static("public/images/event"));
 app.use("/banner", express.static("public/images/banner"));
 
-//require("./src/startup/logging")();
+require("./src/startup/logging")();
 require("./src/startup/routes")(app);
 require("./src/startup/config")();
 require("./src/startup/db")();

@@ -3,13 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www" ,
-    "start-prod": "node ./bin/www" 
+    "start": "node ./bin/www",
+    "start-prod": "node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "config": "^3.3.6",
-    "convert-json-schema-to-mongoose": "^0.3.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
@@ -26,8 +25,6 @@
     "order-id": "^2.1.2",
     "paypal-rest-sdk": "^1.8.1",
     "sharp": "^0.30.4",
-    "smsglobal": "^1.2.4",
-    "twilio": "^4.8.0",
     "util": "^0.12.4",
     "uuid": "^9.0.0",
     "winston": "^3.3.3",

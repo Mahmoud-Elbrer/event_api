@@ -8,12 +8,6 @@ var FCM = require("fcm-node");
 var fcm = new FCM(config.get("serverKey"));
 const { Notification } = require("../models/notification");
 const { Firebase } = require("../models/firebase");
-const { createMongooseSchema } = require("convert-json-schema-to-mongoose");
-
-var sid = "AC5d34df3e97524353de4e70ae8c4e3f17";
-var auth_token = "e4afd18c9495ba850899f94cf2bf311b";
-
-var twilio = require("twilio")(sid, auth_token);
 
 exports.getBook = async (req, res, next) => {
   let book = await Book.find({ user: req.user._id });
@@ -33,7 +27,10 @@ exports.getOrderCompany = async (req, res, next) => {
   var newAr = [];
   for (var index in book) {
     for (const key in book[index].cart) {
-      if ( book[index].cart[key]["company"] == req.user._id && book[index].cart[key]["statusCompany"] == req.params.status) {
+      if (
+        book[index].cart[key]["company"] == req.user._id &&
+        book[index].cart[key]["statusCompany"] == req.params.status
+      ) {
         var cartUser = book[index].cart[key];
         var bookUser = book[index].user;
         var orderId = book[index].orderId;
@@ -69,15 +66,13 @@ exports.updateStatusCompany = async (req, res, next) => {
   let book = await Book.find({ orderId: req.body.orderId });
 
   for (const key in book[0].cart) {
-
     console.log(book[0].cart[key].id);
     if (book[0].cart[key].id == req.body.itemId) {
-      if(req.user.typeCompany  == "1" || req.user.typeCompany  == "2"){
+      if (req.user.typeCompany == "1" || req.user.typeCompany == "2") {
         book[0].cart[key].statusCompany = req.body.status;
-      }else {
+      } else {
         book[0].cart[key].statusOrganizedCompany = req.body.status;
       }
-      
     }
   }
 
@@ -91,39 +86,58 @@ exports.updateStatusCompany = async (req, res, next) => {
           success: true,
           cart: book[0].cart,
         });
-      } else {
-        res.status(200).json({
-          message: "الحساب غير موجود | user not exists",
-          success: false,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log("err");
-      console.log(err);
-      res.status(404).json({
-        message: "Error Connection  " + err,
-        success: false,
-      });
-    });
-};
 
-exports.updateStatusOrgCompany = async (req, res, next) => {
-  console.log("HI");
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
+        const createdAt =
+          year +
+          "-" +
+          month +
+          "-" +
+          date +
+          " " +
+          hours +
+          ":" +
+          minutes +
+          ":" +
+          seconds;
 
-  const newUser = {
-    orderId: 234234,
-  };
-
-  Book.updateOne({ _id: "638a23594cd8990717d18f3b" }, { $set: newUser })
-    .then((result) => {
-      console.log("Re result");
-      console.log(result);
-      if (result) {
-        res.status(200).json({
-          message: "تم التحديث بنجاح | Update completed successfully",
-          success: true,
-        });
+        let productName = book[0].cart[key].title ;
+        let productNameEn = book[0].cart[key].titleEn;
+        if (req.user.typeCompany == "1" || req.user.typeCompany == "2") {
+          // company
+          // req, receiverId, senderId , createdAt , orderId  ,itemId ,  productName  ,  statusCompany   ,statusOrganizedCompany
+          sendNotificationUpdatedStatus(
+            req,
+            book[0].organizingCompanyId,
+            book[0].cart[key].company,
+            createdAt,
+            book[0]._id,
+            book[0].cart[key]._id,
+            productName,
+            productNameEn,
+            book[0].cart[key].statusCompany,
+            0
+          );
+        } else {
+          sendNotificationUpdatedStatus(
+            req,
+            book[0].cart[key].company,
+            book[0].organizingCompanyId,
+            createdAt,
+            book[0]._id,
+            book[0].cart[key]._id,
+            0,
+            productName,
+            productNameEn,
+            book[0].cart[key].statusOrganizedCompany
+          );
+        }
       } else {
         res.status(200).json({
           message: "الحساب غير موجود | user not exists",
@@ -181,10 +195,10 @@ exports.addBook = async (req, res, next) => {
   const result = await book.save();
 
   // todo : should send notification to user oder
-  sendNotification(req, req.body.cart, req.user._id);
+  sendNotification(req, req.body.cart, req.user._id, createdAt, 1, 1);
   if (req.body.organizingCompanyId == "") {
   } else {
-    sendNotification(req, req.body.cart, req.user._id);
+    sendNotification(req, req.body.cart, req.user._id, createdAt, 1, 1);
   }
 
   res.status(200).json({
@@ -202,25 +216,31 @@ exports.deleteBook = async (req, res, next) => {
   d;
 };
 
-async function sendNotification(req, cart, userId) {
+async function sendNotification(
+  req,
+  cart,
+  userId,
+  createdAt,
+  statusCompany,
+  statusOrganizedCompany
+) {
   for (const key in cart) {
     console.log(cart[key]["company"]);
 
     let user = await Firebase.findOne({ user: cart[key]["company"] });
 
-    let statusTitle = "You Have request | لديك طلب ";
-    req.body.body = cart[key]["titleEn"] + " | " + cart[key]["title"];
+    let title = "You Have request | لديك طلب ";
 
     var toke = user.token;
     var message = {
       to: toke, // token[0].firebaseToken,
       notification: {
-        title: statusTitle,
+        title: title,
         body: req.body.body,
       },
 
       data: {
-        title: statusTitle + req.body.title,
+        title: title,
         body: req.body.body,
       },
     };
@@ -230,19 +250,23 @@ async function sendNotification(req, cart, userId) {
 
       req.body.senderId = userId;
       req.body.receiverId = cart[key]["company"];
-      req.body.title = cart[key]["title"];
-      req.body.titleEn = cart[key]["titleEn"];
+      req.body.title = title;
+      req.body.body = cart[key]["titleEn"] + " | " + cart[key]["title"];
       req.body.orderId = cart[key]["orderId"];
-      req.body.typeNotification = 0;
+      req.body.createdAt = createdAt;
+      // req.body.itemId = cart[key]["cart"][];
+      req.body.statusCompany = statusCompany;
+      req.body.statusOrganizedCompany = statusOrganizedCompany;
       const notification = Notification(
         _.pick(req.body, [
           "senderId",
           "receiverId",
-          "title",
-          "titleEn",
-          "body",
           "orderId",
-          "typeNotification",
+          "createdAt",
+          "title",
+          "body",
+          "statusCompany",
+          "statusOrganizedCompany",
         ])
       );
 
@@ -251,17 +275,91 @@ async function sendNotification(req, cart, userId) {
   }
 }
 
-async function sendSms() {
-  twilio.messages
-    .create({
-      from: "+971521479726",
-      to: "+971521479726",
-      body: "this is a testing message",
-    })
-    .then(function (res) {
-      console.log("message has sent!");
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
+async function sendNotificationUpdatedStatus(
+  req,
+  receiverId,
+  senderId,
+  createdAt,
+  orderId,
+  itemId,
+  productName,
+  productNameEn,
+  statusCompany,
+  statusOrganizedCompany
+) {
+  let user = await Firebase.findOne({ user: receiverId });
+
+  let title;
+  if (statusOrganizedCompany = 0) {
+    // here company
+    switch (statusCompany) {
+      case 2:
+        title = "Order Accepted | تم قبول الطلب ";
+        req.body.body = productNameEn + "Order Accepted  |  تم قبول الطلب ";
+        break;
+      case 3:
+        title = "Order Rejected | تم رفض الطلب ";
+        req.body.body = productNameEn + "Order Accepted | تم قبول الطلب ";
+        break;
+      default:
+        break;
+    }
+  } else {
+    // here company Org
+    switch (statusOrganizedCompany) {
+      case 2:
+        title = "Order Accepted | تم قبول الطلب ";
+        req.body.body = productNameEn + "Order Accepted | تم قبول الطلب ";
+        break;
+      case 3:
+        title = "Order Rejected | تم رفض الطلب ";
+        req.body.body =productNameEn + "Order Accepted | تم قبول الطلب ";
+        break;
+      default:
+        break;
+    }
+  }
+
+  var toke = user.token;
+  var message = {
+    to: toke, // token[0].firebaseToken,
+    notification: {
+      title: title,
+      body: req.body.body,
+    },
+
+    data: {
+      title: title,
+      body: req.body.body,
+    },
+  };
+
+  fcm.send(message, function (err, response) {
+    if (err) console.log(err);
+
+    req.body.senderId = senderId;
+    req.body.receiverId = receiverId;
+    req.body.title = title;
+    req.body.body = productName;
+    req.body.orderId = orderId;
+    req.body.itemId = itemId;
+    req.body.createdAt = createdAt;
+    req.body.statusCompany = statusCompany;
+    req.body.statusOrganizedCompany = statusOrganizedCompany;
+    const notification = Notification(
+      _.pick(req.body, [
+        "senderId",
+        "receiverId",
+        "orderId",
+        "itemId",
+        "createdAt",
+        "title",
+        "body",
+        "statusCompany",
+        "statusOrganizedCompany",
+      ])
+    );
+
+    notification.save();
+  });
 }

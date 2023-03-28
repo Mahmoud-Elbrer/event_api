@@ -13,14 +13,17 @@ const notificationSchema = new mongoose.Schema({
   },
   orderId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
+    ref: "Book",
     require: true,
   },
-  title: {
+  itemId: {
+    type: String,
+  },
+  createdAt: {
     type: String,
     require: true,
   },
-  titleEn: {
+  title: {
     type: String,
     require: true,
   },
@@ -28,9 +31,11 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  typeNotification: {
+  statusCompany: {
     type: Number,
-    require: true,
+  },
+  statusOrganizedCompany: {
+    type: Number,
   },
 });
 
