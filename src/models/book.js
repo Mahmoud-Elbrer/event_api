@@ -35,6 +35,9 @@ const bookSchema = new mongoose.Schema({
 
   cart: [
     {
+      code: {
+        type: String,
+      },
       productId: {
         type: String,
         require: true,

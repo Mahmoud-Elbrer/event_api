@@ -24,8 +24,7 @@ exports.signIn = async (req, res, next) => {
   if (!company.active || company.active == false)
     return res.status(400).json({
       success: false,
-      message:
-        "لم يتم تفعيل حسابك بعد | Your account has not been activated",
+      message: "لم يتم تفعيل حسابك بعد | Your account has not been activated",
     });
 
   const validPassword = await bcrypt.compare(
@@ -137,7 +136,8 @@ exports.deleteCompany = async (req, res, next) => {
 
 exports.blockCompany = async (req, res, next) => {
   let company = await Company.findOne({ _id: req.params.Id });
-  if (!company) return res.status(400).send("Company not found |  الشركة غير موجودة");
+  if (!company)
+    return res.status(400).send("Company not found |  الشركة غير موجودة");
 
   await Company.updateOne(
     { _id: req.params.Id },
