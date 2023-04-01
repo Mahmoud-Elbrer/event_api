@@ -9,7 +9,7 @@ var fcm = new FCM(config.get("serverKey"));
 const { Notification } = require("../models/notification");
 const { Firebase } = require("../models/firebase");
 
-exports.getBook = async (req, res, next) => {
+exports.getBook = async (req, res, next) => { 
   let book = await Book.find({ user: req.user._id });
 
   res.status(200).json(book);
@@ -17,10 +17,6 @@ exports.getBook = async (req, res, next) => {
 
 exports.getOrderCompany = async (req, res, next) => {
   let book = await Book.find();
-
-  console.log("i am in getOrderCompany");
-  console.log(req.user._id);
-  console.log(req.params.status);
 
   //console.log(book);
 
@@ -52,9 +48,6 @@ exports.getOrderCompany = async (req, res, next) => {
 };
 
 exports.getOrganizedCorporateOrder = async (req, res, next) => {
-  console.log("am org");
-  // console.log("status1");
-  // console.log(req.params.status);
   let book = await Book.find({ organizingCompanyId: req.user._id }); //  63ad97e6d5110219b7d199a0
   // let book = await Book.find({ organizingCompanyId: "63ad976ad5110219b7d1999d" });
 
@@ -138,6 +131,79 @@ exports.updateStatusCompany = async (req, res, next) => {
             book[0].cart[key].statusOrganizedCompany
           );
         }
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("err");
+      console.log(err);
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
+};
+
+
+exports.replaceCompany = async (req, res, next) => {
+  let book = await Book.find({ orderId: req.body.orderId });
+
+  for (const key in book[0].cart) {
+    console.log(book[0].cart[key].id);
+    if (book[0].cart[key].id == req.body.itemId) {
+      book[0].cart[key].company = req.body.company;
+    }
+  }
+
+  Book.updateOne({ orderId: req.body.orderId }, { $set: book[0] })
+    .then((result) => {
+      console.log("Re result");
+      console.log(result);
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+          cart: book[0].cart,
+        });
+      } else {
+        res.status(200).json({
+          message: "الحساب غير موجود | user not exists",
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("err");
+      console.log(err);
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
+};
+
+
+exports.replaceOrganizedCompany = async (req, res, next) => {
+  console.log("replaceOrganizedCompany");
+  let book = await Book.find({ orderId: req.body.orderId });
+
+  book[0].organizingCompanyId = req.body.organizingCompanyId;
+
+
+  Book.updateOne({ orderId: req.body.orderId }, { $set: book[0] })
+    .then((result) => {
+      console.log("Re result");
+      console.log(result);
+      if (result) {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+          cart: book[0].cart,
+        });
       } else {
         res.status(200).json({
           message: "الحساب غير موجود | user not exists",

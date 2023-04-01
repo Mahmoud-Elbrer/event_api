@@ -13,6 +13,11 @@ const productSchema = new mongoose.Schema({
   //     },
   //   },
   // ],
+
+  
+  code: {
+    type: String,
+  },
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Company",

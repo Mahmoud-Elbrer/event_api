@@ -4,10 +4,14 @@ const { validateAddProductSelection } = require("../validations/validations");
 var fs = require("fs");
 //import { v4 as uuidv4 } from 'uuid';
 const uuid = require("uuid");
+const orderId = require("order-id")("key");
 
 
 
 exports.addProductSelection = async (req, res, next) => {
+
+  const code = orderId.generate();
+  const codeProduct = orderId.getTime(code);
 
   console.log(req.body);
   console.log(req.files[0].filename);
@@ -40,6 +44,7 @@ exports.addProductSelection = async (req, res, next) => {
   // });
 
   const productSelection = new ProductSelection({
+    code: codeProduct,
     product: req.body.product,
     typeSelectionProduct: req.body.typeSelectionProduct,
     selectionTitle: req.body.selectionTitle,

@@ -3,6 +3,7 @@ const { Product } = require("../models/product");
 const { ProductDates } = require("../models/product_dates");
 const { validateAddProduct } = require("../validations/validations");
 var fs = require("fs");
+const orderId = require("order-id")("key");
 
 exports.getProduct = async (req, res, next) => {
   const page = req.params.page;
@@ -101,37 +102,46 @@ exports.getProductByTourismProgram = async (req, res, next) => {
 };
 
 exports.getProductById = async (req, res, next) => {
-  let product = await Product.find({ _id: req.params.productId }).populate("service");
+  let product = await Product.find({ _id: req.params.productId }).populate(
+    "service"
+  );
 
   res.status(200).json(product);
 };
 
 exports.addProduct = async (req, res, next) => {
+  const code = orderId.generate();
+  const codeProduct = orderId.getTime(code);
 
+  console.log(req.body.services);
+  // console.log(JSON.parse(req.body.services));
+  // var myArray = [];
+  // for(var i in req.body.services) {
+  //     myArray.push(req.body.services[i]);
+  // }
+  // //req.body.services = JSON.parse(req.body.services);
+  // console.log("after");
+  // console.log(myArray);
+  console.log(req.body);
 
-
-console.log(req.body.services);
-// console.log(JSON.parse(req.body.services));
-// var myArray = [];
-// for(var i in req.body.services) {
-//     myArray.push(req.body.services[i]);
-// }
-// //req.body.services = JSON.parse(req.body.services); 
-// console.log("after");
-// console.log(myArray);
-console.log(req.body);
-
-
-  let resultServices =  req.body.services.replace("(", "").replace("[", "").replace(")", "").replace("]", "");
-  let resultServicesEn =  req.body.servicesEn.replace("(", "").replace("[", "").replace(")", "").replace("]", "");
+  let resultServices = req.body.services
+    .replace("(", "")
+    .replace("[", "")
+    .replace(")", "")
+    .replace("]", "");
+  let resultServicesEn = req.body.servicesEn
+    .replace("(", "")
+    .replace("[", "")
+    .replace(")", "")
+    .replace("]", "");
 
   // let resultServices = req.body.services.replace("(", "").replace(")", "");
   // let resultServicesEn = req.body.servicesEn.replace("(", "").replace(")", "");
 
- req.body.services = resultServices .split(",");
+  req.body.services = resultServices.split(",");
   req.body.servicesEn = resultServicesEn.split(",");
 
-  console.log('after');
+  console.log("after");
   console.log(req.body.services);
 
   // // const { error } = validateAddProduct(req.body);
@@ -154,6 +164,7 @@ console.log(req.body);
   console.log(req.body.services);
 
   const product = new Product({
+    code: codeProduct,
     company: req.user._id,
     service: req.body.service,
     productTitle: req.body.productTitle,
@@ -181,7 +192,7 @@ console.log(req.body);
 
   res.status(200).json({
     success: true,
-   product: result,
+    product: result,
   });
 };
 
@@ -423,11 +434,9 @@ exports.deleteServicesProduct = async (req, res, next) => {
     });
 
   // await Product.deleteOne({ _id: req.params.productId });
-
 };
 
-
-exports.updateImgProduct  = async (req, res, next) => {
+exports.updateImgProduct = async (req, res, next) => {
   console.log(" i am updateImageProduct");
 
   var src = fs.createReadStream(req.file.path);

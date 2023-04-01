@@ -113,6 +113,21 @@ exports.getCompanyById = async (req, res, next) => {
   res.status(200).json(company);
 };
 
+exports.getCompanyByType = async (req, res, next) => {
+  console.log("getCompanyByType");
+  //let company = await Company.find({ typeCompany: req.params.typeCompany  , typeCompany: 1 });
+if(req.params.typeCompany ==  1){
+  req.params.typeCompany = 2 ; 
+}
+
+  let company = await Company.find({
+    $or: [{ typeCompany: req.params.typeCompany}],
+  });
+  // if (!user) return res.status(400).send("Invalid email or password");
+
+  res.status(200).json(company);
+};
+
 exports.deleteCompany = async (req, res, next) => {
   const companyResult = await Company.findOne({ _id: req.params.Id });
 

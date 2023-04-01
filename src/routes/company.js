@@ -15,7 +15,8 @@ router.post("/signIn",Company.signIn);
 router.post("/signUp", upload.single("picture"),  Company.signUp);
 router.delete("/:Id", Company.deleteCompany);
 router.get("/", Company.getCompany);
-router.get("/company/:Id", Company.getCompanyById);
+router.get("/companyById/:Id", Company.getCompanyById);
+router.get("/companyType/:typeCompany", Company.getCompanyByType);
 router.put("/blockCompany/:Id", Company.blockCompany);
 router.patch("/", Company.updateCompany);
 
