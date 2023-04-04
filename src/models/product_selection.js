@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 
 const productSelectionSchema = new mongoose.Schema({
-  code: {
-    type: String,
-  },
   product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",

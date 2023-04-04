@@ -3,7 +3,6 @@ const { Product } = require("../models/product");
 const { ProductDates } = require("../models/product_dates");
 const { validateAddProduct } = require("../validations/validations");
 var fs = require("fs");
-const orderId = require("order-id")("key");
 
 exports.getProduct = async (req, res, next) => {
   const page = req.params.page;
@@ -110,8 +109,8 @@ exports.getProductById = async (req, res, next) => {
 };
 
 exports.addProduct = async (req, res, next) => {
-  const code = orderId.generate();
-  const codeProduct = orderId.getTime(code);
+  // const code = orderId.generate();
+  // const codeProduct = orderId.getTime(code);
 
   console.log(req.body.services);
   // console.log(JSON.parse(req.body.services));
@@ -164,7 +163,6 @@ exports.addProduct = async (req, res, next) => {
   console.log(req.body.services);
 
   const product = new Product({
-    code: codeProduct,
     company: req.user._id,
     service: req.body.service,
     productTitle: req.body.productTitle,
