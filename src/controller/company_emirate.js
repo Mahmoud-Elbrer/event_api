@@ -9,23 +9,20 @@ console.log('log i am here ');
 console.log('log i am here ');
 
   let companyEmirate = await CompanyEmirate.find({
-    
+     emirate : req.params.emirateId 
   }).populate("company").populate("emirate");
 
 
   // console.log(companyEmirate);
 
-  // var newAr = [];
-  // for (var attributename in companyEmirate) {
-  //   if (
-  //     companyEmirate[attributename]["company"]["typeCompany"] ==
-  //     req.params.companyType
-  //   ) {
-  //     newAr = companyEmirate;
-  //   }
-  // }
+  var newAr = [];
+  for (var attributename in companyEmirate) {
+    if (companyEmirate[attributename]["company"]["typeCompany"] ==req.params.companyType) {
+      newAr = companyEmirate;
+    }
+  }
 
-  res.status(200).json(companyEmirate);
+  res.status(200).json(newAr);
   // res.status(200).json(companyEmirate);
 };
 
