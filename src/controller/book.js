@@ -2,14 +2,10 @@ const _ = require("lodash");
 const { Book } = require("../models/book");
 const { validateAddBook } = require("../validations/validations");
 const orderId = require("order-id")("key");
-// for Notification
-const config = require("config");
-var FCM = require("fcm-node");
-var fcm = new FCM(config.get("serverKey"));
-const { Notification } = require("../models/notification");
-const { Firebase } = require("../models/firebase");
+var send_notification = require('../helpers/send_notification');
+var constants = require("../helpers/constants");
 
-exports.getBook = async (req, res, next) => { 
+exports.getBook = async (req, res, next) => {
   let book = await Book.find({ user: req.user._id });
 
   res.status(200).json(book);
@@ -58,14 +54,23 @@ exports.getOrganizedCorporateOrder = async (req, res, next) => {
 exports.updateStatusCompany = async (req, res, next) => {
   let book = await Book.find({ orderId: req.body.orderId });
 
+  let getTitle;
+  let getTitleEn;
+  let getCompany;
+  let getOrderId;
+
   for (const key in book[0].cart) {
-    console.log(book[0].cart[key].id);
+    // console.log(book[0].cart[key].id);
     if (book[0].cart[key].id == req.body.itemId) {
       if (req.user.typeCompany == "1" || req.user.typeCompany == "2") {
         book[0].cart[key].statusCompany = req.body.status;
       } else {
         book[0].cart[key].statusOrganizedCompany = req.body.status;
       }
+      getTitle = book[0].cart[key].title;
+      getTitle = book[0].cart[key].titleEn;
+      getOrderId = book[0].cart[key].id;
+      getCompany = book[0].cart[key].company;
     }
   }
 
@@ -100,36 +105,49 @@ exports.updateStatusCompany = async (req, res, next) => {
           ":" +
           seconds;
 
-        let productName = book[0].cart[key].title ;
-        let productNameEn = book[0].cart[key].titleEn;
         if (req.user.typeCompany == "1" || req.user.typeCompany == "2") {
           // company
           // req, receiverId, senderId , createdAt , orderId  ,itemId ,  productName  ,  statusCompany   ,statusOrganizedCompany
-          sendNotificationUpdatedStatus(
+
+          // req,
+          // receiverId,
+          // senderId,
+          // createdAt,
+          // orderId,
+          // itemId,
+          // productName,
+          // productNameEn,
+          // statusCompany,
+          // statusOrganizedCompany
+
+          send_notification.sendNotificationUpdatedStatus(
             req,
             book[0].organizingCompanyId,
-            book[0].cart[key].company,
+            getCompany,
             createdAt,
             book[0]._id,
-            book[0].cart[key]._id,
-            productName,
-            productNameEn,
-            book[0].cart[key].statusCompany,
+            getOrderId,
+            getTitle,
+            getTitleEn,
+            req.body.status, // statusCompany
             0
-          );
+          ) ;
+
+    
         } else {
-          sendNotificationUpdatedStatus(
+          send_notification.sendNotificationUpdatedStatus(
             req,
-            book[0].cart[key].company,
+            getCompany,
             book[0].organizingCompanyId,
             createdAt,
             book[0]._id,
-            book[0].cart[key]._id,
+            getOrderId,
             0,
-            productName,
-            productNameEn,
-            book[0].cart[key].statusOrganizedCompany
-          );
+            getTitle,
+            getTitleEn,
+            req.body.status // statusOrganizedCompany
+          ) ;
+
         }
       } else {
         res.status(200).json({
@@ -148,14 +166,14 @@ exports.updateStatusCompany = async (req, res, next) => {
     });
 };
 
-
 exports.replaceCompany = async (req, res, next) => {
   let book = await Book.find({ orderId: req.body.orderId });
 
   for (const key in book[0].cart) {
-    console.log(book[0].cart[key].id);
+    //console.log(book[0].cart[key].id);
     if (book[0].cart[key].id == req.body.itemId) {
       book[0].cart[key].company = req.body.company;
+      book[0].cart[key].statusCompany = constants.PENDING;
     }
   }
 
@@ -186,13 +204,15 @@ exports.replaceCompany = async (req, res, next) => {
     });
 };
 
-
 exports.replaceOrganizedCompany = async (req, res, next) => {
   console.log("replaceOrganizedCompany");
   let book = await Book.find({ orderId: req.body.orderId });
 
   book[0].organizingCompanyId = req.body.organizingCompanyId;
 
+  for (const key in book[0].cart) {
+    book[0].cart[key].statusOrganizedCompany = constants.PENDING;
+  }
 
   Book.updateOne({ orderId: req.body.orderId }, { $set: book[0] })
     .then((result) => {
@@ -261,10 +281,10 @@ exports.addBook = async (req, res, next) => {
   const result = await book.save();
 
   // todo : should send notification to user oder
-  sendNotification(req, req.body.cart, req.user._id, createdAt, 1, 1);
+  send_notification.sendNotificationBooking(req, req.body.cart, req.user._id, createdAt, 1, 1);
   if (req.body.organizingCompanyId == "") {
   } else {
-    sendNotification(req, req.body.cart, req.user._id, createdAt, 1, 1);
+    send_notification.sendNotificationBooking(req, req.body.cart, organizingCompanyId, createdAt, 1, 1);
   }
 
   res.status(200).json({
@@ -282,150 +302,5 @@ exports.deleteBook = async (req, res, next) => {
   d;
 };
 
-async function sendNotification(
-  req,
-  cart,
-  userId,
-  createdAt,
-  statusCompany,
-  statusOrganizedCompany
-) {
-  for (const key in cart) {
-    console.log(cart[key]["company"]);
 
-    let user = await Firebase.findOne({ user: cart[key]["company"] });
 
-    let title = "You Have request | لديك طلب ";
-
-    var toke = user.token;
-    var message = {
-      to: toke, // token[0].firebaseToken,
-      notification: {
-        title: title,
-        body: req.body.body,
-      },
-
-      data: {
-        title: title,
-        body: req.body.body,
-      },
-    };
-
-    fcm.send(message, function (err, response) {
-      if (err) console.log(err);
-
-      req.body.senderId = userId;
-      req.body.receiverId = cart[key]["company"];
-      req.body.title = title;
-      req.body.body = cart[key]["titleEn"] + " | " + cart[key]["title"];
-      req.body.orderId = cart[key]["orderId"];
-      req.body.createdAt = createdAt;
-      // req.body.itemId = cart[key]["cart"][];
-      req.body.statusCompany = statusCompany;
-      req.body.statusOrganizedCompany = statusOrganizedCompany;
-      const notification = Notification(
-        _.pick(req.body, [
-          "senderId",
-          "receiverId",
-          "orderId",
-          "createdAt",
-          "title",
-          "body",
-          "statusCompany",
-          "statusOrganizedCompany",
-        ])
-      );
-
-      notification.save();
-    });
-  }
-}
-
-async function sendNotificationUpdatedStatus(
-  req,
-  receiverId,
-  senderId,
-  createdAt,
-  orderId,
-  itemId,
-  productName,
-  productNameEn,
-  statusCompany,
-  statusOrganizedCompany
-) {
-  let user = await Firebase.findOne({ user: receiverId });
-
-  let title;
-  if (statusOrganizedCompany = 0) {
-    // here company
-    switch (statusCompany) {
-      case 2:
-        title = "Order Accepted | تم قبول الطلب ";
-        req.body.body = productNameEn + "Order Accepted  |  تم قبول الطلب ";
-        break;
-      case 3:
-        title = "Order Rejected | تم رفض الطلب ";
-        req.body.body = productNameEn + "Order Accepted | تم قبول الطلب ";
-        break;
-      default:
-        break;
-    }
-  } else {
-    // here company Org
-    switch (statusOrganizedCompany) {
-      case 2:
-        title = "Order Accepted | تم قبول الطلب ";
-        req.body.body = productNameEn + "Order Accepted | تم قبول الطلب ";
-        break;
-      case 3:
-        title = "Order Rejected | تم رفض الطلب ";
-        req.body.body =productNameEn + "Order Accepted | تم قبول الطلب ";
-        break;
-      default:
-        break;
-    }
-  }
-
-  var toke = user.token;
-  var message = {
-    to: toke, // token[0].firebaseToken,
-    notification: {
-      title: title,
-      body: req.body.body,
-    },
-
-    data: {
-      title: title,
-      body: req.body.body,
-    },
-  };
-
-  fcm.send(message, function (err, response) {
-    if (err) console.log(err);
-
-    req.body.senderId = senderId;
-    req.body.receiverId = receiverId;
-    req.body.title = title;
-    req.body.body = productName;
-    req.body.orderId = orderId;
-    req.body.itemId = itemId;
-    req.body.createdAt = createdAt;
-    req.body.statusCompany = statusCompany;
-    req.body.statusOrganizedCompany = statusOrganizedCompany;
-    const notification = Notification(
-      _.pick(req.body, [
-        "senderId",
-        "receiverId",
-        "orderId",
-        "itemId",
-        "createdAt",
-        "title",
-        "body",
-        "statusCompany",
-        "statusOrganizedCompany",
-      ])
-    );
-
-    notification.save();
-  });
-}
