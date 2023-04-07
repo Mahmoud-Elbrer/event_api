@@ -9,7 +9,7 @@ var constants = require("../helpers/constants");
 
 exports.getNotification = async (req, res, next) => {
   let notification = await Notification.find({
-    //receiverId: req.user._id,
+    receiverId: req.user._id,
   });
   //.populate("senderId", "name email");
 
