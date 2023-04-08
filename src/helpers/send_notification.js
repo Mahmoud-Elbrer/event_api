@@ -21,17 +21,18 @@ module.exports = {
     let user = await Firebase.findOne({ user: receiverId });
     let title;
     req.body.body = productNameEn + " | " + productName;
-    if ((statusOrganizedCompany = 0)) {
+    if (statusOrganizedCompany = 0) {
+        // الرسالة دي جاية من الشركة 
       // here company
       switch (statusCompany) {
         case 2:
-          title = "Order Accepted | تم قبول الطلب ";
+          title = "Order Accepted from company |  تم قبول الطلب من الشركة";
           break;
         case 3:
-          title = "Order Rejected | تم رفض الطلب ";
+          title = "Order Rejected from company | تم رفض الطلب من الشركة";
           break;
         case 4:
-          title = "Order Executed | تم تنفيذ الطلب ";
+          title = "Order Executed from company | تم تنفيذ الطلب من الشركة";
           break;
         default:
           break;
@@ -40,13 +41,13 @@ module.exports = {
       // here company Org
       switch (statusOrganizedCompany) {
         case 2:
-          title = "Order Accepted | تم قبول الطلب ";
+          title = "Order Accepted from Organized Company| تم قبول الطلب من الشركة";
           break;
         case 3:
-          title = "Order Rejected | تم رفض الطلب ";
+          title = "Order Rejected from Organized Company | تم رفض الطلب من الشركة";
           break;
         case 4:
-          title = "Order Executed | تم تنفيذ الطلب ";
+          title = "Order Executed from Organized Company | تم تنفيذ الطلب من الشركة";
           break;
         default:
           break;
