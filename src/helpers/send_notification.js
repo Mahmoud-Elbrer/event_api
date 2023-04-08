@@ -4,6 +4,7 @@ var FCM = require("fcm-node");
 var fcm = new FCM(config.get("serverKey"));
 const { Notification } = require("../models/notification");
 const { Firebase } = require("../models/firebase");
+var send_sms = require("../helpers/send_sms");
 
 module.exports = {
   sendNotificationUpdatedStatus: async function (
@@ -21,8 +22,8 @@ module.exports = {
     let user = await Firebase.findOne({ user: receiverId });
     let title;
     req.body.body = productNameEn + " | " + productName;
-    if (statusOrganizedCompany = 0) {
-        // الرسالة دي جاية من الشركة 
+    if ((statusOrganizedCompany = 0)) {
+      // الرسالة دي جاية من الشركة
       // here company
       switch (statusCompany) {
         case 2:
@@ -41,13 +42,16 @@ module.exports = {
       // here company Org
       switch (statusOrganizedCompany) {
         case 2:
-          title = "Order Accepted from Organized Company| تم قبول الطلب من الشركة";
+          title =
+            "Order Accepted from Organized Company| تم قبول الطلب من الشركة";
           break;
         case 3:
-          title = "Order Rejected from Organized Company | تم رفض الطلب من الشركة";
+          title =
+            "Order Rejected from Organized Company | تم رفض الطلب من الشركة";
           break;
         case 4:
-          title = "Order Executed from Organized Company | تم تنفيذ الطلب من الشركة";
+          title =
+            "Order Executed from Organized Company | تم تنفيذ الطلب من الشركة";
           break;
         default:
           break;
@@ -157,6 +161,11 @@ module.exports = {
 
         notification.save();
       });
+
+      send_sms.sendSms(
+        "0521479726",
+        title + " " + cart[key]["title"] + " " + cart[key]["titleEn"]
+      );
     }
   },
 };

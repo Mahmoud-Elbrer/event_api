@@ -92,34 +92,9 @@ exports.updateStatusCompany = async (req, res, next) => {
         let hours = date_ob.getHours();
         let minutes = date_ob.getMinutes();
         let seconds = date_ob.getSeconds();
-        const createdAt =
-          year +
-          "-" +
-          month +
-          "-" +
-          date +
-          " " +
-          hours +
-          ":" +
-          minutes +
-          ":" +
-          seconds;
+        const createdAt = year +  "-" + month + "-" +  date +" " +hours + ":" +  minutes + ":" + seconds;
 
         if (req.user.typeCompany == "1" || req.user.typeCompany == "2") {
-          // company
-          // req, receiverId, senderId , createdAt , orderId  ,itemId ,  productName  ,  statusCompany   ,statusOrganizedCompany
-
-          // req,
-          // receiverId,
-          // senderId,
-          // createdAt,
-          // orderId,
-          // itemId,
-          // productName,
-          // productNameEn,
-          // statusCompany,
-          // statusOrganizedCompany
-
           send_notification.sendNotificationUpdatedStatus(
             req,
             book[0].organizingCompanyId,
@@ -132,8 +107,6 @@ exports.updateStatusCompany = async (req, res, next) => {
             req.body.status, // statusCompany
             0
           ) ;
-
-    
         } else {
           send_notification.sendNotificationUpdatedStatus(
             req,
@@ -280,7 +253,7 @@ exports.addBook = async (req, res, next) => {
 
   const result = await book.save();
 
-  res.status(200).json({
+    res.status(200).json({
     success: true,
     result: result,
   });
@@ -291,7 +264,6 @@ exports.addBook = async (req, res, next) => {
   } else {
     send_notification.sendNotificationBooking(req, req.body.cart, organizingCompanyId, createdAt, 1, 1);
   }
-
 
 };
 
