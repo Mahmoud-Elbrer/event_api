@@ -280,6 +280,11 @@ exports.addBook = async (req, res, next) => {
 
   const result = await book.save();
 
+  res.status(200).json({
+    success: true,
+    result: result,
+  });
+
   // todo : should send notification to user oder
   send_notification.sendNotificationBooking(req, req.body.cart, req.user._id, createdAt, 1, 1);
   if (req.body.organizingCompanyId == "") {
@@ -287,10 +292,7 @@ exports.addBook = async (req, res, next) => {
     send_notification.sendNotificationBooking(req, req.body.cart, organizingCompanyId, createdAt, 1, 1);
   }
 
-  res.status(200).json({
-    success: true,
-    result: result,
-  });
+
 };
 
 exports.deleteBook = async (req, res, next) => {
