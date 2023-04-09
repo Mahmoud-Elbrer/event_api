@@ -267,6 +267,41 @@ exports.addBook = async (req, res, next) => {
 
 };
 
+
+
+exports.searchOrderCompany = async (req, res, next) => {
+  console.log("searchOrderCompany");
+  let book = await Book.find();
+
+  //console.log(book);
+
+  var newAr = [];
+  for (var index in book) {
+    for (const key in book[index].cart) {
+      if (
+        book[index].cart[key]["company"] == req.user._id &&
+        book[index].cart[key]["code"] == req.params.code
+      ) {
+        var cartUser = book[index].cart[key];
+        var bookUser = book[index].user;
+        var orderId = book[index].orderId;
+        var organizingCompanyId = book[index].organizingCompanyId;
+        var object = {
+          user: bookUser,
+          orderId: orderId,
+          organizingCompany: organizingCompanyId,
+          item: cartUser,
+        };
+        newAr.push(object);
+      }
+    }
+  }
+
+  //console.log(newAr);
+
+  res.status(200).json(newAr);
+};
+
 exports.deleteBook = async (req, res, next) => {
   const result = await Book.deleteOne({ _id: req.params.Id });
 

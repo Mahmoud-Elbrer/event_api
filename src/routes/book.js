@@ -13,6 +13,7 @@ router.put("/updateStatusCompany/", [auth], Book.updateStatusCompany);
 router.post("/replace/replaceCompany", [auth], Book.replaceCompany);
 router.post("/replace/replaceOrganizedCompany", [auth], Book.replaceOrganizedCompany);
 router.post("/",[auth], Book.addBook);
+router.get("/searchOrderCompany/code/:code", [auth], Book.searchOrderCompany);
 router.delete("/:Id", [auth], Book.deleteBook);
 
 module.exports = router;

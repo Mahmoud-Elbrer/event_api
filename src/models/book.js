@@ -38,9 +38,9 @@ const bookSchema = new mongoose.Schema({
       code: {
         type: String,
       },
-      codeProduct: {
-        type: String,
-      },
+      // codeProduct: {
+      //   type: String,
+      // },
       productId: {
         type: String,
         require: true,

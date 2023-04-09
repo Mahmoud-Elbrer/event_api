@@ -3,7 +3,7 @@ const https = require("https");
 module.exports = {
   sendSms: async function (phone , message ) {
 
-    
+
     const requestHttps = https.request(
       "https://globalsms.edsfze.com:1010/API/SendSMS?username=Edssample&apiId=yomOzOmR&json=True&destination=971" +
         phone.substring(1) +
@@ -18,23 +18,14 @@ module.exports = {
         console.log(responseHttps.statusCode);
 
         if (responseHttps.statusCode == 200) {
-          res.status(200).json({
-            success: true,
-            message: "The SMS has been sent",
-          });
+          // The SMS has been sent
         } else {
-          res.status(200).json({
-            success: false,
-            message: "Failed to send the SMS",
-          });
+          // Failed to send the SMS
         }
       }
     );
     requestHttps.on("error", (error) => {
-      res.status(400).json({
-        success: false,
-        error: error,
-      });
+        // error
     });
     requestHttps.end();
   },

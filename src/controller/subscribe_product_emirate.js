@@ -7,15 +7,25 @@ exports.getSubscribeProductEmirate = async (req, res, next) => {
     .populate("product")
     .populate("service");
 
-   // console.log(subscribeProductEmirate);
-    let x ; 
-    subscribeProductEmirate.forEach(element => {
-     // console.log(element);
-    });
+  //  // console.log(subscribeProductEmirate);
+  //   let x ; 
+  //   subscribeProductEmirate.forEach(element => {
+  //    // console.log(element);
+  //   });
     
-
-
   res.status(200).json(subscribeProductEmirate);
+};
+
+exports.searchSubscribeProductEmirate = async (req, res, next) => {
+  let service = await Service.find({ event: req.params.Id });
+  let subscribeProductEmirate = await SubscribeProductEmirate.find({ service: req.params.serviceId , emirate: req.params.emirateId  })
+    .populate("product")
+    .populate("service");
+
+  res.status(200).json({
+    service : service , 
+    products :  subscribeProductEmirate
+  });
 };
 
 

@@ -87,18 +87,6 @@ exports.getProductByCompanyAndByServiceId = async (req, res, next) => {
   res.status(200).json(product);
 };
 
-exports.getProductByTourismProgram = async (req, res, next) => {
-  const page = req.params.page;
-  const limit = req.params.limit;
-  const tourismProgram = req.params.tourismProgram;
-  let product = await Product.find({ tourismProgram: tourismProgram })
-    .populate("company", "-password")
-    .populate("emirate", "-_id")
-    .limit(limit * 1)
-    .skip((page - 1) * limit);
-  z;
-  res.status(200).json(product);
-};
 
 exports.getProductById = async (req, res, next) => {
   let product = await Product.find({ _id: req.params.productId }).populate(
