@@ -1,8 +1,9 @@
 const _ = require("lodash");
 const { Book } = require("../models/book");
+const { HistoryReplaceCompany } = require("../models/history_replace_company");
 const { validateAddBook } = require("../validations/validations");
 const orderId = require("order-id")("key");
-var send_notification = require('../helpers/send_notification');
+var send_notification = require("../helpers/send_notification");
 var constants = require("../helpers/constants");
 
 exports.getBook = async (req, res, next) => {
@@ -92,7 +93,18 @@ exports.updateStatusCompany = async (req, res, next) => {
         let hours = date_ob.getHours();
         let minutes = date_ob.getMinutes();
         let seconds = date_ob.getSeconds();
-        const createdAt = year +  "-" + month + "-" +  date +" " +hours + ":" +  minutes + ":" + seconds;
+        const createdAt =
+          year +
+          "-" +
+          month +
+          "-" +
+          date +
+          " " +
+          hours +
+          ":" +
+          minutes +
+          ":" +
+          seconds;
 
         if (req.user.typeCompany == "1" || req.user.typeCompany == "2") {
           send_notification.sendNotificationUpdatedStatus(
@@ -106,7 +118,7 @@ exports.updateStatusCompany = async (req, res, next) => {
             getTitleEn,
             req.body.status, // statusCompany
             0
-          ) ;
+          );
         } else {
           send_notification.sendNotificationUpdatedStatus(
             req,
@@ -119,8 +131,7 @@ exports.updateStatusCompany = async (req, res, next) => {
             getTitle,
             getTitleEn,
             req.body.status // statusOrganizedCompany
-          ) ;
-
+          );
         }
       } else {
         res.status(200).json({
@@ -141,17 +152,19 @@ exports.updateStatusCompany = async (req, res, next) => {
 
 exports.replaceCompany = async (req, res, next) => {
   let book = await Book.find({ orderId: req.body.orderId });
+  let fromCompany;
 
   for (const key in book[0].cart) {
     //console.log(book[0].cart[key].id);
     if (book[0].cart[key].id == req.body.itemId) {
       book[0].cart[key].company = req.body.company;
       book[0].cart[key].statusCompany = constants.PENDING;
+      fromCompany = book[0].cart[key].company;
     }
   }
 
   Book.updateOne({ orderId: req.body.orderId }, { $set: book[0] })
-    .then((result) => {
+    .then(async (result) => {
       console.log("Re result");
       console.log(result);
       if (result) {
@@ -160,6 +173,28 @@ exports.replaceCompany = async (req, res, next) => {
           success: true,
           cart: book[0].cart,
         });
+        // save to history
+        let date_ob = new Date();
+        const historyReplaceCompany = new HistoryReplaceCompany({
+          form: fromCompany,
+          to: req.body.company,
+          orderId: req.body.orderId,
+          orderItem: req.body.itemId,
+          createAt: date_ob,
+        });
+
+        await historyReplaceCompany.save();
+
+        // todo : should send notification to user oder
+
+        send_notification.sendNotificationBooking(
+          req,
+          req.body.cart,
+          fromCompany,
+          date_ob,
+          1,
+          1
+        );
       } else {
         res.status(200).json({
           message: "الحساب غير موجود | user not exists",
@@ -188,7 +223,7 @@ exports.replaceOrganizedCompany = async (req, res, next) => {
   }
 
   Book.updateOne({ orderId: req.body.orderId }, { $set: book[0] })
-    .then((result) => {
+    .then(async (result) => {
       console.log("Re result");
       console.log(result);
       if (result) {
@@ -197,6 +232,28 @@ exports.replaceOrganizedCompany = async (req, res, next) => {
           success: true,
           cart: book[0].cart,
         });
+
+        // save to history
+        let date_ob = new Date();
+        const historyReplaceCompany = new HistoryReplaceCompany({
+          form: book[0].organizingCompanyId,
+          to: req.body.organizingCompanyId,
+          orderId: req.body.orderId,
+          orderItem: "",
+          createAt: date_ob,
+        });
+
+        await historyReplaceCompany.save();
+
+        // todo : should send notification to user oder
+        send_notification.sendNotificationBooking(
+          req,
+          req.body.cart,
+          req.body.organizingCompanyId,
+          date_ob,
+          1,
+          1
+        );
       } else {
         res.status(200).json({
           message: "الحساب غير موجود | user not exists",
@@ -253,21 +310,32 @@ exports.addBook = async (req, res, next) => {
 
   const result = await book.save();
 
-    res.status(200).json({
+  res.status(200).json({
     success: true,
     result: result,
   });
 
   // todo : should send notification to user oder
-  send_notification.sendNotificationBooking(req, req.body.cart, req.user._id, createdAt, 1, 1);
+  send_notification.sendNotificationBooking(
+    req,
+    req.body.cart,
+    req.user._id,
+    createdAt,
+    1,
+    1
+  );
   if (req.body.organizingCompanyId == "") {
   } else {
-    send_notification.sendNotificationBooking(req, req.body.cart, organizingCompanyId, createdAt, 1, 1);
+    send_notification.sendNotificationBooking(
+      req,
+      req.body.cart,
+      organizingCompanyId,
+      createdAt,
+      1,
+      1
+    );
   }
-
 };
-
-
 
 exports.searchOrderCompany = async (req, res, next) => {
   console.log("searchOrderCompany");
@@ -310,6 +378,3 @@ exports.deleteBook = async (req, res, next) => {
   });
   d;
 };
-
-
-

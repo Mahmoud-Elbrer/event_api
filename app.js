@@ -21,6 +21,7 @@ require("./src/startup/routes")(app);
 require("./src/startup/config")();
 require("./src/startup/db")();
 require("./src/startup/paypal_config")();
+//require("./src/startup/socket");
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
