@@ -4,6 +4,7 @@ const { HistoryReplaceCompany } = require("../models/history_replace_company");
 const { validateAddBook } = require("../validations/validations");
 const orderId = require("order-id")("key");
 var send_notification = require("../helpers/send_notification");
+var installment = require("../controller/installment");
 var constants = require("../helpers/constants");
 
 exports.getBook = async (req, res, next) => {
@@ -86,25 +87,7 @@ exports.updateStatusCompany = async (req, res, next) => {
           cart: book[0].cart,
         });
 
-        let date_ob = new Date();
-        let date = ("0" + date_ob.getDate()).slice(-2);
-        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-        let year = date_ob.getFullYear();
-        let hours = date_ob.getHours();
-        let minutes = date_ob.getMinutes();
-        let seconds = date_ob.getSeconds();
-        const createdAt =
-          year +
-          "-" +
-          month +
-          "-" +
-          date +
-          " " +
-          hours +
-          ":" +
-          minutes +
-          ":" +
-          seconds;
+        let createdAt = new Date();
 
         if (req.user.typeCompany == "1" || req.user.typeCompany == "2") {
           send_notification.sendNotificationUpdatedStatus(
@@ -275,30 +258,16 @@ exports.addBook = async (req, res, next) => {
   // const { error } = validateAddBook(req.body);
   // if (error) return res.status(400).send(error.details[0].message);
 
-  let date_ob = new Date();
-  let date = ("0" + date_ob.getDate()).slice(-2);
-  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-  let year = date_ob.getFullYear();
-  let hours = date_ob.getHours();
-  let minutes = date_ob.getMinutes();
-  let seconds = date_ob.getSeconds();
-  const createdAt =
-    year +
-    "-" +
-    month +
-    "-" +
-    date +
-    " " +
-    hours +
-    ":" +
-    minutes +
-    ":" +
-    seconds;
+  console.log(req.body);
+
+  let createdAt = new Date();
 
   const id = orderId.generate();
 
   const book = new Book({
     user: req.user._id,
+    paymentMethod: req.body.paymentMethod,
+    typePaymentMethod: req.body.typePaymentMethod,
     paymentId: req.body.paymentId,
     totalCartAmount: req.body.totalCartAmount,
     organizingCompanyId: req.body.organizingCompanyId,
@@ -309,6 +278,69 @@ exports.addBook = async (req, res, next) => {
   });
 
   const result = await book.save();
+
+  if (req.body.typePaymentMethod == constants.DeferredPaymentMethod) {
+    var amount = (req.body.totalCartAmount + req.body.organizingCompanyIdAmount) / 12;
+    if (req.body.paymentId == "") {
+      installment.addInstallment(
+        req,
+        res,
+        result._id,
+        amount,
+        createdAt ,
+        constants.NotPaid,
+        req.body.paymentMethod,
+        next
+      );
+    } else {
+      installment.addInstallment(
+        req,
+        res,
+        result._id,
+        amount,
+        createdAt,
+        constants.Paid,
+        req.body.paymentMethod,
+        next
+      );
+    }
+
+    // deferred payment
+    for (let index = 1; index <= 11; index++) {
+      console.log("looping");
+      console.log(index);
+      req.body.paymentId = "";
+
+      var now = new Date();
+      var nextMonthDate;
+      if (now.getMonth() == 11) {
+        var nextMonthDate = new Date(
+          now.getFullYear() + index,
+          now.getMonth() + index,
+          now.getDay()
+        );
+      } else {
+        var nextMonthDate = new Date(
+          now.getFullYear(),
+          now.getMonth() + index,
+          now.getDay()
+        );
+      }
+
+      console.log(nextMonthDate);
+
+      installment.addInstallment(
+        req,
+        res,
+        result._id,
+        amount,
+        nextMonthDate,
+        constants.NotPaid,
+        "",
+        next
+      );
+    }
+  }
 
   res.status(200).json({
     success: true,
@@ -329,7 +361,7 @@ exports.addBook = async (req, res, next) => {
     send_notification.sendNotificationBooking(
       req,
       req.body.cart,
-      organizingCompanyId,
+      req.body.organizingCompanyId,
       createdAt,
       1,
       1

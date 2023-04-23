@@ -4,3 +4,23 @@ module.exports = Object.freeze({
     REJECTED: 3 , 
     EXECUTED: 4 , 
 });
+
+
+// module.exports = Object.freeze({
+//     Paid: 1,
+//     NotPaid: 0,
+// });
+
+module.exports = Object.freeze({
+    DeferredPaymentMethod: 1,
+    NotDeferredPaymentMethod: 2,
+
+
+    Paid: 1,
+    NotPaid: 0,
+});
+
+
+
+
+

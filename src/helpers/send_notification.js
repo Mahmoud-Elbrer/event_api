@@ -66,10 +66,10 @@ module.exports = {
         notification.save();
       });
 
-      send_sms.sendSms(
-        "0521479726",
-        title + " " + cart[key]["title"] + " " + cart[key]["titleEn"]
-      );
+      // send_sms.sendSms(
+      //   "0521479726",
+      //   title + " " + cart[key]["title"] + " " + cart[key]["titleEn"]
+      // );
     }
   },
 

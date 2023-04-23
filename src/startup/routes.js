@@ -11,6 +11,7 @@ var emirateRouter = require("../routes/emirate");
 var rateRouter = require("../routes/rate");
 var paypalRouter = require("../routes/paypal");
 var uploadImageRouter = require("../routes/uploadImage");
+var installmentRouter = require("../routes/installment");
 // type product
 var blackoutDateRouter = require("../routes/blackout_date");
 var typeSelectionProductRouter = require("../routes/type_selection_product");
@@ -38,6 +39,7 @@ module.exports = function (app) {
   app.use("/api/rate", rateRouter);
   app.use("/api/paypal", paypalRouter);
   app.use("/api/uploadImage", uploadImageRouter);
+  app.use("/api/installment", installmentRouter);
   // type product
   app.use("/api/blackoutDate", blackoutDateRouter);
   app.use("/api/typeSelectionProduct", typeSelectionProductRouter);

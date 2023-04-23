@@ -6,8 +6,12 @@ const bookSchema = new mongoose.Schema({
     ref: "User",
     //require: true,
   },
-  paymentMethode: {
+  paymentMethod: {
     type: String,
+    require: true,
+  },
+  typePaymentMethod: {
+    type: Number,
     require: true,
   },
   paymentId: {
