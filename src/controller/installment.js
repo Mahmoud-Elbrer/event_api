@@ -1,11 +1,28 @@
 const _ = require("lodash");
 const { Installment } = require("../models/installment");
+const { Book } = require("../models/book");
 const { validateAddInstallment } = require("../validations/validations");
+var constants = require("../helpers/constants");
 
-exports.getInstallment = async (req, res, next) => {
-  let installment = await Installment.find();
+exports.getBookInstallment = async (req, res, next) => {
+  let book = await Book.find();
 
-  res.status(200).json(installment);
+  var newAr = [];
+  for (let index = 0; index < book.length; index++) {
+    if(book[index].typePaymentMethod == constants.DeferredPaymentMethod){
+   //   book  =  book[index].id ; 
+      var object = {
+        book:  book[index].id,
+        orderId:  book[index].orderId,
+        createdAt: book[index].createdAt,
+      };
+      newAr.push(object);
+    }
+  }
+  
+ // let installment = await Installment.find();
+
+  res.status(200).json(newAr);
 };
 
 exports.getInstallmentByOrderId = async (req, res, next) => {
@@ -46,17 +63,20 @@ exports.addInstallment = async (
   await installment.save();
 };
 
-exports.updateInstallment = async (req, res, next) => {
+exports.updateInstallment = async (req, res, next) => {  
   let createdAt = new Date();
 
   const newInstallment = {
-    _id: req.body.Id,
+    id: req.body.id,
     status: req.body.status,
     createdAt: createdAt,
-    paymentMethod: req.body.paymentMethod,
+    paymentMethod:req.body.paymentMethod,
+    referenceNumber:req.body.referenceNumber,
   };
 
-  Installment.updateOne({ _id: req.body.Id }, { $set: newInstallment })
+  console.log(newInstallment);
+
+  Installment.updateOne({ _id: req.body.id }, { $set: newInstallment })
     .then((result) => {
       console.log("Re result");
       console.log(result);

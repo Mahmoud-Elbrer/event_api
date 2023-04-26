@@ -257,9 +257,6 @@ exports.replaceOrganizedCompany = async (req, res, next) => {
 exports.addBook = async (req, res, next) => {
   // const { error } = validateAddBook(req.body);
   // if (error) return res.status(400).send(error.details[0].message);
-
-  console.log(req.body);
-
   let createdAt = new Date();
 
   const id = orderId.generate();
@@ -282,33 +279,13 @@ exports.addBook = async (req, res, next) => {
   if (req.body.typePaymentMethod == constants.DeferredPaymentMethod) {
     var amount = (req.body.totalCartAmount + req.body.organizingCompanyIdAmount) / 12;
     if (req.body.paymentId == "") {
-      installment.addInstallment(
-        req,
-        res,
-        result._id,
-        amount,
-        createdAt ,
-        constants.NotPaid,
-        req.body.paymentMethod,
-        next
-      );
+      installment.addInstallment( req, res, result._id, amount, createdAt , constants.NotPaid, req.body.paymentMethod, next  );
     } else {
-      installment.addInstallment(
-        req,
-        res,
-        result._id,
-        amount,
-        createdAt,
-        constants.Paid,
-        req.body.paymentMethod,
-        next
-      );
+      installment.addInstallment(  req,  res, result._id,  amount, createdAt, constants.Paid,  req.body.paymentMethod,   next  );
     }
 
     // deferred payment
     for (let index = 1; index <= 11; index++) {
-      console.log("looping");
-      console.log(index);
       req.body.paymentId = "";
 
       var now = new Date();
@@ -327,18 +304,9 @@ exports.addBook = async (req, res, next) => {
         );
       }
 
-      console.log(nextMonthDate);
+      //console.log(nextMonthDate);
 
-      installment.addInstallment(
-        req,
-        res,
-        result._id,
-        amount,
-        nextMonthDate,
-        constants.NotPaid,
-        "",
-        next
-      );
+      installment.addInstallment( req, res,result._id, amount, nextMonthDate, constants.NotPaid,  "",  next  );
     }
   }
 
@@ -348,14 +316,7 @@ exports.addBook = async (req, res, next) => {
   });
 
   // todo : should send notification to user oder
-  send_notification.sendNotificationBooking(
-    req,
-    req.body.cart,
-    req.user._id,
-    createdAt,
-    1,
-    1
-  );
+  send_notification.sendNotificationBooking(req,req.body.cart,req.user._id, createdAt, 1, 1 );
   if (req.body.organizingCompanyId == "") {
   } else {
     send_notification.sendNotificationBooking(

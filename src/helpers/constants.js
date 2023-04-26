@@ -18,6 +18,10 @@ module.exports = Object.freeze({
 
     Paid: 1,
     NotPaid: 0,
+
+
+    Cash: 1,
+    Online: 2,
 });
 
 
