@@ -42,6 +42,13 @@ const productSelectionSchema = new mongoose.Schema({
   categoriesCost: {
     type: Array,
   },
+  choices: {
+    type: Array,
+  },
+  choicesEn: {
+    type: Array,
+  },
+  
 });
 
 const ProductSelection = mongoose.model("ProductSelection", productSelectionSchema);

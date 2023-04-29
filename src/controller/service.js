@@ -20,6 +20,7 @@ exports.getServiceByEventId = async (req, res, next) => {
 };
 
 exports.addService = async (req, res, next) => {
+ console.log(req.body);
  const { error } = validateAddService(req.body);
  if (error) return res.status(400).send(error.details[0].message);
 

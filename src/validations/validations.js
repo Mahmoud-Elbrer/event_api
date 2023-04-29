@@ -55,6 +55,7 @@ exports.validateAddService = function (book) {
     name: Joi.string().required(),
     productType: Joi.string().required(),
     nameEn: Joi.string().required(),
+    isPercent: Joi.boolean(),
     // img: Joi.string(),
   });
   return schema.validate(book);

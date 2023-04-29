@@ -32,16 +32,7 @@ exports.getInstallmentByOrderId = async (req, res, next) => {
 };
 
 // calling form other method
-exports.addInstallment = async (
-  req,
-  res,
-  bookId,
-  amount,
-  date,
-  status,
-  paymentMethod,
-  next
-) => {
+exports.addInstallment = async (req,res,bookId,amount,date,status,paymentMethod,next) => {
   let createdAt;
   if (req.body.paymentId == "") {
     createdAt = "";

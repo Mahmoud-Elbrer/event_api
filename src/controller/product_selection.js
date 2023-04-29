@@ -49,9 +49,9 @@ exports.addProductSelection = async (req, res, next) => {
 
     // services: req.body.selectionDescriptionEn,
     // servicesEn: req.body.selectionDescriptionEn,
-    categories: req.body.selectionDescriptionEn,
-    categoriesEn: req.body.selectionDescriptionEn,
-    categoriesCost: req.body.selectionDescriptionEn,
+    categories: req.body.categories,
+    categoriesEn: req.body.categoriesEn,
+    categoriesCost: req.body.categoriesCost,
 
     cost: req.body.cost,
     img: req.files[1] && req.files[1].filename ? req.files[1].filename : '',
@@ -60,6 +60,8 @@ exports.addProductSelection = async (req, res, next) => {
     img3: req.files[3] && req.files[3].filename ? req.files[3].filename : '',
     img4: req.files[4] && req.files[4].filename ? req.files[4].filename : '',
     img5: req.files[5] && req.files[5].filename ? req.files[5].filename : '',
+    choices: req.body.choices,
+    choicesEn: req.body.choicesEn,
   });
 
   await productSelection.save();
