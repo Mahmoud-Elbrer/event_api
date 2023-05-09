@@ -23,8 +23,3 @@ module.exports = Object.freeze({
     Cash: 1,
     Online: 2,
 });
-
-
-
-
-

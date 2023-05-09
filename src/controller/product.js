@@ -87,7 +87,6 @@ exports.getProductByCompanyAndByServiceId = async (req, res, next) => {
   res.status(200).json(product);
 };
 
-
 exports.getProductById = async (req, res, next) => {
   let product = await Product.find({ _id: req.params.productId }).populate(
     "service"
@@ -131,8 +130,8 @@ exports.addProduct = async (req, res, next) => {
   console.log("after");
   console.log(req.body.services);
 
-  // // const { error } = validateAddProduct(req.body);
-  // // if (error) return res.status(400).send(error.details[0].message);
+  // const { error } = validateAddProduct(req.body);
+  // if (error) return res.status(400).send(error.details[0].message);
 
   var src = fs.createReadStream(req.file.path);
   var dest = fs.createWriteStream(
@@ -168,7 +167,7 @@ exports.addProduct = async (req, res, next) => {
     location: req.body.location,
     locationEn: req.body.locationEn,
     longitude: req.body.longitude,
-    Latitude: req.body.Latitude,
+    latitude: req.body.latitude,
     images: req.file.originalname,
   });
 

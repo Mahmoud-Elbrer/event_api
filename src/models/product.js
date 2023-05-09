@@ -107,7 +107,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  Latitude: {
+  latitude: {
     type: String,
     require: true,
   },

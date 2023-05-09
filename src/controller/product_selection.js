@@ -26,19 +26,6 @@ exports.addProductSelection = async (req, res, next) => {
   // const { error } = validateAddProductSelection(req.body);
   // if (error) return res.status(400).send(error.details[0].message);
 
-  // var src = fs.createReadStream(req.file.path);
-  // var dest = fs.createWriteStream(
-  //   "public/images/product/" + req.file.originalname
-  // );
-  // src.pipe(dest);
-  // src.on("end", function () {
-  //   fs.unlinkSync(req.file.path);
-  //   //res.json("OK: received " + req.file.originalname);
-  // });
-  // src.on("error", function (err) {
-  //   res.json("Something went wrong!");
-  // });
-
   const productSelection = new ProductSelection({
     product: req.body.product,
     typeSelectionProduct: req.body.typeSelectionProduct,
@@ -70,35 +57,6 @@ exports.addProductSelection = async (req, res, next) => {
     success: true,
   });
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

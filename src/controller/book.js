@@ -257,7 +257,7 @@ exports.replaceOrganizedCompany = async (req, res, next) => {
 exports.addBook = async (req, res, next) => {
   // const { error } = validateAddBook(req.body);
   // if (error) return res.status(400).send(error.details[0].message);
-  let createdAt = new Date();
+  let now = new Date();
 
   const id = orderId.generate();
 
@@ -270,7 +270,7 @@ exports.addBook = async (req, res, next) => {
     organizingCompanyId: req.body.organizingCompanyId,
     organizingCompanyIdAmount: req.body.organizingCompanyIdAmount,
     orderId: orderId.getTime(id),
-    createdAt: createdAt,
+    createdAt: now,
     cart: req.body.cart,
   });
 
@@ -279,16 +279,16 @@ exports.addBook = async (req, res, next) => {
   if (req.body.typePaymentMethod == constants.DeferredPaymentMethod) {
     var amount = (req.body.totalCartAmount + req.body.organizingCompanyIdAmount) / 12;
     if (req.body.paymentId == "") {
-      installment.addInstallment( req, res, result._id, amount, createdAt , constants.NotPaid, req.body.paymentMethod, next  );
+      installment.addInstallment( req, res, result._id, amount, now , constants.NotPaid, req.body.paymentMethod, next  );
     } else {
-      installment.addInstallment(  req,  res, result._id,  amount, createdAt, constants.Paid,  req.body.paymentMethod,   next  );
+      installment.addInstallment(  req,  res, result._id,  amount, now, constants.Paid,  req.body.paymentMethod,   next  );
     }
 
     // deferred payment
     for (let index = 1; index <= 11; index++) {
       req.body.paymentId = "";
 
-      var now = new Date();
+      //var now = new Date();
       var nextMonthDate;
       if (now.getMonth() == 11) {
         var nextMonthDate = new Date(
