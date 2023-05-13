@@ -41,11 +41,12 @@ app.use(function (err, req, res, next) {
 });
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
 
 // payload too large when upload image
 app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit:50000 }));
+app.use(bodyParser.raw({ limit: '10mb'}) );
 
 // parse application/json
 app.use(bodyParser.json());
