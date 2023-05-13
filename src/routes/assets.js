@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-
-
-
 //Controllers
 const Assets = require("../controller/assets");
 
