@@ -1,9 +1,9 @@
-module.exports = Object.freeze({
-    PENDING: 1,
-    ACCEPTED: 2,
-    REJECTED: 3 , 
-    EXECUTED: 4 , 
-});
+// module.exports = Object.freeze({
+//     PENDING: 1,
+//     ACCEPTED: 2,
+//     REJECTED: 3 , 
+//     EXECUTED: 4 , 
+// });
 
 
 // module.exports = Object.freeze({
@@ -12,6 +12,14 @@ module.exports = Object.freeze({
 // });
 
 module.exports = Object.freeze({
+
+    PENDING: 1,
+    ACCEPTED: 2,
+    REJECTED: 3 , 
+    EXECUTED: 4 , 
+
+
+
     DeferredPaymentMethod: 1,
     NotDeferredPaymentMethod: 2,
 

@@ -141,7 +141,7 @@ exports.replaceCompany = async (req, res, next) => {
     //console.log(book[0].cart[key].id);
     if (book[0].cart[key].id == req.body.itemId) {
       book[0].cart[key].company = req.body.company;
-      book[0].cart[key].statusCompany = 1;
+      book[0].cart[key].statusCompany = constants.PENDING;
       fromCompany = book[0].cart[key].company;
     }
   }
