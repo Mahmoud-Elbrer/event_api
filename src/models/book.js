@@ -157,9 +157,11 @@ const bookSchema = new mongoose.Schema({
       },
       statusCompany: {
         type: Number,
+        default : 1
       },
       statusOrganizedCompany: {
         type: Number,
+        default : 1
       },
     },
   ],

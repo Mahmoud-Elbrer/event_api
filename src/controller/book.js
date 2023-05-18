@@ -141,7 +141,7 @@ exports.replaceCompany = async (req, res, next) => {
     //console.log(book[0].cart[key].id);
     if (book[0].cart[key].id == req.body.itemId) {
       book[0].cart[key].company = req.body.company;
-      book[0].cart[key].statusCompany = constants.PENDING;
+      book[0].cart[key].statusCompany = 1;
       fromCompany = book[0].cart[key].company;
     }
   }
@@ -229,14 +229,7 @@ exports.replaceOrganizedCompany = async (req, res, next) => {
         await historyReplaceCompany.save();
 
         // todo : should send notification to user oder
-        send_notification.sendNotificationBooking(
-          req,
-          req.body.cart,
-          req.body.organizingCompanyId,
-          date_ob,
-          1,
-          1
-        );
+        send_notification.sendNotificationBooking(req,req.body.cart, req.body.organizingCompanyId, date_ob, 1,  1 );
       } else {
         res.status(200).json({
           message: "الحساب غير موجود | user not exists",
