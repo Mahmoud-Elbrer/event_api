@@ -92,3 +92,23 @@ exports.updateInstallment = async (req, res, next) => {
       });
     });
 };
+
+
+
+exports.addCompanyInstallment = async (companyId,res,bookId,amount,date,status,paymentMethod,next) => {
+
+  const installment = new Installment({
+    user: companyId,
+    book: bookId,
+    date: date,
+    amount: amount,
+    paymentMethod: paymentMethod,
+    referenceNumber: '',
+    status: status,
+    createdAt: '',
+  });
+
+  await installment.save();
+};
+
+

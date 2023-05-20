@@ -269,6 +269,12 @@ exports.addBook = async (req, res, next) => {
 
   const result = await book.save();
 
+
+  res.status(200).json({
+    success: true,
+    result: result,
+  });
+
   if (req.body.typePaymentMethod == constants.DeferredPaymentMethod) {
     var amount = (req.body.totalCartAmount + req.body.organizingCompanyIdAmount) / 12;
     if (req.body.paymentId == "") {
@@ -298,28 +304,23 @@ exports.addBook = async (req, res, next) => {
       }
 
       //console.log(nextMonthDate);
-
       installment.addInstallment( req, res,result._id, amount, nextMonthDate, constants.NotPaid,  "",  next  );
+    }
+    // Installment for eny company
+    for (let index = 0; index < req.body.cart.length; index++) {
+      var amountCompany  =  req.body.cart[index].price /  12 ; 
+     installment.addCompanyInstallment( req.body.cart[index].company, res,result._id, amountCompany, nextMonthDate, constants.NotPaid,  "",  next  );
+     console.log('logs');
     }
   }
 
-  res.status(200).json({
-    success: true,
-    result: result,
-  });
+
 
   // todo : should send notification to user oder
-  send_notification.sendNotificationBooking(req,req.body.cart,req.user._id, createdAt, 1, 1 );
+  send_notification.sendNotificationBooking(req,req.body.cart,req.user._id, now, 1, 1 );
   if (req.body.organizingCompanyId == "") {
   } else {
-    send_notification.sendNotificationBooking(
-      req,
-      req.body.cart,
-      req.body.organizingCompanyId,
-      createdAt,
-      1,
-      1
-    );
+    send_notification.sendNotificationBooking(req,req.body.cart,req.body.organizingCompanyId, now, 1,  1 );
   }
 };
 
