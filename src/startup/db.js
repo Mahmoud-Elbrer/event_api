@@ -3,9 +3,12 @@ const winston = require("winston");
 
 module.exports = function () {
   // server db
-  mongoose.connect("mongodb://admin:mama121232@213.190.4.53:27017/admin",{ useUnifiedTopology: true }).then((result) => {
+  mongoose.connect("mongodb://event:event@213.190.4.53:27017/admin",{ useUnifiedTopology: true }).then((result) => {
       winston.info("Connection to MongoDB .. " + result.Error);
     });
+  // mongoose.connect("mongodb://admin:mama121232@213.190.4.53:27017/admin",{ useUnifiedTopology: true }).then((result) => {
+  //     winston.info("Connection to MongoDB .. " + result.Error);
+  //   });
 
     // localhost
   // mongoose.connect("mongodb://localhost/eventDB" ,  { useNewUrlParser: true } ).then((result) => {
