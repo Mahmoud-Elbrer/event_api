@@ -274,7 +274,8 @@ exports.addBook = async (req, res, next) => {
     success: true,
     result: result,
   });
-
+ 
+  // if there Installment user 
   if (req.body.typePaymentMethod == constants.DeferredPaymentMethod) {
     var amount = (req.body.totalCartAmount + req.body.organizingCompanyIdAmount) / 12;
     if (req.body.paymentId == "") {
