@@ -3,9 +3,9 @@ const winston = require("winston");
 
 module.exports = function () {
   // server db
-  mongoose.connect("mongodb://event:event@213.190.4.53:27017/event",{ useUnifiedTopology: true }).then((result) => {
-      winston.info("Connection to MongoDB .. " + result.Error);
-    });
+  // mongoose.connect("mongodb://event:event@213.190.4.53:27017/event",{ useUnifiedTopology: true }).then((result) => {
+  //     winston.info("Connection to MongoDB .. " + result.Error);
+  //   });
 
     // localhost
   // mongoose.connect("mongodb://localhost/eventDB" ,  { useNewUrlParser: true } ).then((result) => {
@@ -13,10 +13,9 @@ module.exports = function () {
   // });
 
   //cloud mongodb
-  // mongoose.connect("mongodb+srv://mahmoud:6MDW5FMNfmUa4xSj@cluster0.5tjuslb.mongodb.net/test",{ useUnifiedTopology: true }).then((result) => {
-  //     winston.info("Connection to MongoDB .. " + result.Error);
-  //   });
-
+  mongoose.connect("mongodb+srv://mahmoud:6MDW5FMNfmUa4xSj@cluster0.5tjuslb.mongodb.net/test",{ useUnifiedTopology: true }).then((result) => {
+      winston.info("Connection to MongoDB .. " + result.Error);
+    });
 };
 
 // var MongoClient = require("mongodb").MongoClient,

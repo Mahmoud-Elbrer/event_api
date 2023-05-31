@@ -12,6 +12,9 @@ var rateRouter = require("../routes/rate");
 var paypalRouter = require("../routes/paypal");
 var uploadImageRouter = require("../routes/uploadImage");
 var installmentRouter = require("../routes/installment");
+var myFatoorahRouter = require("../routes/myFatoorah");
+var multiVendorsRouter = require("../routes/multiVendors");
+var transactionMoneyRouter = require("../routes/transaction_money");
 // type product
 var blackoutDateRouter = require("../routes/blackout_date");
 var typeSelectionProductRouter = require("../routes/type_selection_product");
@@ -40,6 +43,9 @@ module.exports = function (app) {
   app.use("/api/paypal", paypalRouter);
   app.use("/api/uploadImage", uploadImageRouter);
   app.use("/api/installment", installmentRouter);
+  app.use("/api/myFatoorah", myFatoorahRouter);
+  app.use("/api/multiVendors", multiVendorsRouter);
+  app.use("/api/transactionMoney", transactionMoneyRouter);
   // type product
   app.use("/api/blackoutDate", blackoutDateRouter);
   app.use("/api/typeSelectionProduct", typeSelectionProductRouter);

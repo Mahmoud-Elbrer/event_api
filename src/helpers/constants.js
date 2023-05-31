@@ -17,6 +17,7 @@ module.exports = Object.freeze({
     ACCEPTED: 2,
     REJECTED: 3 , 
     EXECUTED: 4 , 
+    PAID_PAYMENT: 5 , 
 
 
  //  type payment method

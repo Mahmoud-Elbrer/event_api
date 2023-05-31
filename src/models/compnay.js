@@ -49,6 +49,11 @@ const companySchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  supplierCode: {
+    type: String,
+    // require: true,
+  },
+  
   isAdmin: Boolean,
 });
 
