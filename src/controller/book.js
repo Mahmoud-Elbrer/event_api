@@ -20,24 +20,28 @@ exports.getOrderCompany = async (req, res, next) => {
 
   var newAr = [];
   for (var index in book) {
-    for (const key in book[index].cart) {
-      if (
-        book[index].cart[key]["company"] == req.user._id &&
-        book[index].cart[key]["statusCompany"] == req.params.status
-      ) {
-        var cartUser = book[index].cart[key];
-        var bookUser = book[index].user;
-        var orderId = book[index].orderId;
-        var organizingCompanyId = book[index].organizingCompanyId;
-        var object = {
-          user: bookUser,
-          orderId: orderId,
-          organizingCompany: organizingCompanyId,
-          item: cartUser,
-        };
-        newAr.push(object);
+    // this ti check if product in available 
+    if(book[index].available ==  true ){
+      for (const key in book[index].cart) {
+        if (
+          book[index].cart[key]["company"] == req.user._id &&
+          book[index].cart[key]["statusCompany"] == req.params.status
+        ) {
+          var cartUser = book[index].cart[key];
+          var bookUser = book[index].user;
+          var orderId = book[index].orderId;
+          var organizingCompanyId = book[index].organizingCompanyId;
+          var object = {
+            user: bookUser,
+            orderId: orderId,
+            organizingCompany: organizingCompanyId,
+            item: cartUser,
+          };
+          newAr.push(object);
+        }
       }
     }
+    
   }
 
   //console.log(newAr);
@@ -46,9 +50,10 @@ exports.getOrderCompany = async (req, res, next) => {
 };
 
 exports.getOrganizedCorporateOrder = async (req, res, next) => {
-  let book = await Book.find({ organizingCompanyId: req.user._id }); //  63ad97e6d5110219b7d199a0
+  let book = await Book.find({  $and: [ {organizingCompanyId: req.user._id}  , {available: true} ]  } ); //  63ad97e6d5110219b7d199a0
   // let book = await Book.find({ organizingCompanyId: "63ad976ad5110219b7d1999d" });
 
+  console.log("book");
   console.log(book);
   res.status(200).json(book);
 };
@@ -364,5 +369,29 @@ exports.deleteBook = async (req, res, next) => {
   res.status(200).json({
     success: true,
   });
-  d;
+
+};
+
+
+
+exports.makeOrderAvailable = async (req, res, next) => {
+  console.log("makeOrderAvailable");
+  let book = await Book.find({ _id: req.params.Id });
+
+  book[0].available = true;
+
+  Book.updateOne({ _id: req.params.Id }, { $set: book[0] })
+    .then(async (result) => {
+        res.status(200).json({
+          message: "تم التحديث بنجاح | Update completed successfully",
+          success: true,
+        });
+
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: "Error Connection  " + err,
+        success: false,
+      });
+    });
 };

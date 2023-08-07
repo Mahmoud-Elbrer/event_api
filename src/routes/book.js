@@ -12,6 +12,7 @@ router.get("/organizedCorporateOrder/:status", [auth], Book.getOrganizedCorporat
 router.put("/updateStatusCompany/", [auth], Book.updateStatusCompany);
 router.post("/replace/replaceCompany", [auth], Book.replaceCompany);
 router.post("/replace/replaceOrganizedCompany", [auth], Book.replaceOrganizedCompany);
+router.post("/available/:Id", [auth], Book.makeOrderAvailable);
 router.post("/",[auth], Book.addBook);
 router.get("/searchOrderCompany/code/:code", [auth], Book.searchOrderCompany);
 router.delete("/:Id", [auth], Book.deleteBook);

@@ -3,12 +3,13 @@ const router = express.Router();
 
 //Controllers
 const MyFatoorah = require("../controller/myFatoorah");
+const auth = require("../middleware/auth");
 
 
 //Routes
-router.post("/", MyFatoorah.sendPayment);
-router.get("/paymentCallBack", MyFatoorah.paymentCallBack);
-router.get("/paymentErrorUrlCallBack/error", MyFatoorah.paymentErrorUrlCallBack);
+router.post("/", [auth] , MyFatoorah.sendPayment);
+router.get("/paymentCallBack/success/:resultId/:user", MyFatoorah.paymentCallBack);
+router.get("/paymentErrorUrlCallBack/error/:resultId", MyFatoorah.paymentErrorUrlCallBack);
 router.get("/paymentStatus/:paymentId", MyFatoorah.paymentStatus);
 // router.delete("/:Id", Assets.deleteAssets);
 

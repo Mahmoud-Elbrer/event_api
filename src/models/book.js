@@ -28,6 +28,10 @@ const bookSchema = new mongoose.Schema({
   organizingCompanyIdAmount: {
     type: String,
   },
+  available: {
+    type: Boolean,
+    default : false
+  },
   orderId: {
     type: Number,
     require: true,

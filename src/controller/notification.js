@@ -15,9 +15,7 @@ exports.getNotification = async (req, res, next) => {
 
   res.status(200).json(notification);
 };
-// 6367b0426204b92607a80d3b
-// 6367b0426204b92607a80d3b
-//6364b5c953566a395538cb67
+
 exports.deleteNotification = async (req, res, next) => {
   const result = await Notification.deleteOne({ _id: req.params.id });
 

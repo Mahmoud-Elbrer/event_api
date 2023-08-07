@@ -33,6 +33,11 @@ exports.payToCompany = async (req, res, next) => {
       .post(variables.Myfatoorah_API_URL + "/v2/TransferBalance", DATA, HEADER)
       .then(async (response) => {
         if (response.status === 200 || response.status === 201) {
+          console.log("------------DONE----------");
+          // console.log(response.data.IsSuccess);
+          console.log(book[0].cart[key]._id);
+          console.log(response.data);
+          console.log(DATA);
           if (response.data.IsSuccess == true) {
             // TODO : update status
             book[0].cart[key].statusCompany = constants.PAID_PAYMENT;
@@ -51,7 +56,11 @@ exports.payToCompany = async (req, res, next) => {
           }
         }
       })
-      .catch((e) => {});
+      .catch((e) => {
+        console.log("------------Fail----------");
+        console.log(book[0].cart[key]._id);
+        //console.log(e);
+      });
   }
 
   res.status(200).json({
