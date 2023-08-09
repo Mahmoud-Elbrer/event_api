@@ -376,11 +376,11 @@ exports.deleteBook = async (req, res, next) => {
 
 exports.makeOrderAvailable = async (req, res, next) => {
   console.log("makeOrderAvailable");
-  let book = await Book.find({ _id: req.params.Id });
+  let book = await Book.find({ orderId: req.params.Id });
 
   book[0].available = true;
 
-  Book.updateOne({ _id: req.params.Id }, { $set: book[0] })
+  Book.updateOne({ orderId: req.params.Id }, { $set: book[0] })
     .then(async (result) => {
         res.status(200).json({
           message: "تم التحديث بنجاح | Update completed successfully",
