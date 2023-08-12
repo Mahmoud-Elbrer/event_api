@@ -147,6 +147,8 @@ exports.replaceCompany = async (req, res, next) => {
     if (book[0].cart[key].id == req.body.itemId) {
       book[0].cart[key].company = req.body.company;
       book[0].cart[key].statusCompany = constants.PENDING;
+      // update soon
+      book[0].cart[key].statusOrganizedCompany = constants.PENDING;
       fromCompany = book[0].cart[key].company;
     }
   }
@@ -371,7 +373,6 @@ exports.deleteBook = async (req, res, next) => {
   });
 
 };
-
 
 
 exports.makeOrderAvailable = async (req, res, next) => {
