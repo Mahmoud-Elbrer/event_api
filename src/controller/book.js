@@ -8,7 +8,9 @@ var installment = require("../controller/installment");
 var constants = require("../helpers/constants");
 
 exports.getBook = async (req, res, next) => {
-  let book = await Book.find({ user: req.user._id });
+  //let book = await Book.find({ user: req.user._id });
+  let book = await Book.find();
+
 
   res.status(200).json(book);
 };
