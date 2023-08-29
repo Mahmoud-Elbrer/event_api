@@ -167,4 +167,82 @@ module.exports = {
       notification.save();
     });
   },
+
+
+
+
+  sendNotificationBookingOnOrderAvailable: async function (
+    req,
+    cart,
+    userId,
+    createdAt,
+    statusCompany,
+    statusOrganizedCompany
+  ) {
+    for (const key in cart) {
+      console.log("i am in sendNotificationBookingOnOrderAvailable");
+      console.log(cart[key]["company"]);
+
+      let user = await Firebase.findOne({ user: cart[key]["company"] });
+
+      let title = "You Have request | لديك طلب ";
+
+
+      //console.log(user.token);
+
+     var toke = user.token;
+      var message = {
+        to: toke, // token[0].firebaseToken,
+        notification: {
+          title: title,
+          body: cart[key]["titleEn"] + " | " + cart[key]["title"],
+        },
+
+        data: {
+          title: title,
+          body: req.body,
+        },
+      };
+
+      fcm.send(message, function (err, response) {
+        console.log("In Fcm");
+        if (err) console.log(err);
+
+
+        req.senderId = userId;
+        req.receiverId = cart[key]["company"];
+        req.title = title;
+        req.body = cart[key]["titleEn"] + " | " + cart[key]["title"];
+        req.orderId = cart[key]["orderId"];
+        req.createdAt = createdAt;
+        // req.body.itemId = cart[key]["cart"][];
+        req.statusCompany = statusCompany;
+        req.statusOrganizedCompany = statusOrganizedCompany;
+        const notification = Notification(
+          _.pick(req, [
+            "senderId",
+            "receiverId",
+            "orderId",
+            "itemId",
+            "createdAt",
+            "title",
+            "body",
+            "statusCompany",
+            "statusOrganizedCompany",
+          ])
+        );
+
+        console.log("Done Save notification Fcm");
+
+        notification.save();
+      });
+
+      // send_sms.sendSms(
+      //   "0521479726",
+      //   title + " " + cart[key]["title"] + " " + cart[key]["titleEn"]
+      // );
+    }
+  },
+
+
 };

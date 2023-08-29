@@ -390,6 +390,14 @@ exports.makeOrderAvailable = async (req, res, next) => {
           success: true,
         });
 
+        let now = new Date();
+          // todo : should send notification to user oder
+  send_notification.sendNotificationBookingOnOrderAvailable(book[0],book[0].cart,req.user._id, now, 1, 1 );
+  if (req.body.organizingCompanyId == "") {
+  } else {
+    send_notification.sendNotificationBookingOnOrderAvailable(book[0],book[0].cart,book[0].organizingCompanyId, now, 1,  1 );
+  }
+
     })
     .catch((err) => {
       res.status(404).json({
